@@ -1,0 +1,25 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "6be6506e-65b9-6344-8d47-d84a4f500275",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+    "6be6506e-65b9-6344-8d47-d84a4f500275" : {
+
+    }
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "6be6506e-65b9-6344-8d47-d84a4f500275" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "080E7716-4C75-4E0D-A630-F24135CEBBC6",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "6be6506e-65b9-6344-8d47-d84a4f500275" : "XyGolf\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "XunYing_Golf",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "IOS\/XunYing_Golf\/XunYing_Golf.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/192.168.1.119\/svn\/XyGolf",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "6be6506e-65b9-6344-8d47-d84a4f500275"
+    }
+  ]
+}
