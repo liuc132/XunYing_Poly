@@ -19,7 +19,7 @@
 #import "AppDelegate.h"
 #import "GetRequestIPAddress.h"
 #import "AFHTTPRequestOperationManager.h"
-//#import "GpsLocation.h"
+#import "GetParagram.h"
 
 extern NSString *CTSettingCopyMyPhoneNumber();
 //extern BOOL allowDownCourt;
@@ -45,9 +45,16 @@ extern NSString *CTSettingCopyMyPhoneNumber();
 @property (strong, nonatomic) DBCon *dbCon;
 @property (strong, nonatomic) DataTable *logInPerson;
 @property (strong, nonatomic) DataTable *logPersonInf;
+@property (strong, nonatomic) UIImageView *subImage2;
+@property (strong, nonatomic) UIImageView *launchImageView;
+@property (assign, nonatomic) NSInteger   waitImageCount;
+@property (assign, nonatomic) BOOL        canJumpToVC;
+@property (strong, nonatomic) NSTimer     *refreshTheLaunchImageTimer;
 
 
 @property (strong, nonatomic) AFHTTPRequestOperationManager *requestManager;
+
+@property (strong, nonatomic) dispatch_source_t timer;
 
 @property (strong, nonatomic) IBOutlet UITextField *account;
 
@@ -112,15 +119,61 @@ extern NSString *CTSettingCopyMyPhoneNumber();
     //
     [self settingNetWork];
     //
-    NSTimeInterval period = 1.0;
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-    dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
-    dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, period * NSEC_PER_SEC, 1 * NSEC_PER_SEC);
-    dispatch_source_set_event_handler(timer, ^{
-        NSLog(@"enter dispatch_timer test");
-    });
-    dispatch_resume(timer);
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enterCreateGrpVC:) name:@"canEnterCreatGrp" object:nil];
+    //
+    if (!self.whetherBack) {
+        [self setLaunchAnimation];
+    }
+    //
+    self.waitImageCount = 0;
+}
+
+- (void)enterCreateGrpVC:(NSNotification *)sender{
+    NSLog(@"info:%@",sender.userInfo);
+    if ([sender.userInfo[@"enterCreateGrp"] integerValue] == 1) {
+        self.canJumpToVC = YES;
+    }
+}
+
+- (void)setLaunchAnimation{
+    self.launchImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight)];
+    self.launchImageView.image = [UIImage imageNamed:@"enterBackImage"];
+    [self.view addSubview:self.launchImageView];
+    //
+    UIImageView *subImage1 = [[UIImageView alloc] initWithFrame:CGRectMake(ScreenWidth/2 - ScreenWidth/4, ScreenHeight/2 - ScreenWidth/4, ScreenWidth/2, ScreenWidth/2)];
+    subImage1.image = [UIImage imageNamed:@"enter_image"];
+    [self.launchImageView addSubview:subImage1];
+    //
+    self.subImage2 = [[UIImageView alloc] initWithFrame:CGRectMake(ScreenWidth/2 - ScreenWidth/4, ScreenHeight/2 - ScreenWidth/4, ScreenWidth/2, ScreenWidth/2)];
+    self.subImage2.image = [UIImage imageNamed:@"enter_circle"];
+    [self.launchImageView addSubview:self.subImage2];
     
+     CGAffineTransform transform= CGAffineTransformMakeRotation(M_PI*0.38);
+    
+    self.subImage2.transform = transform;
+    //
+    [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(rotationTheSubImage2) userInfo:nil repeats:YES];
+    //
+    self.refreshTheLaunchImageTimer = [NSTimer timerWithTimeInterval:0.01 target:self selector:@selector(rotationTheSubImage2) userInfo:nil repeats:YES];
+//    [self.refreshTheLaunchImageTimer fire];
+}
+
+- (void)rotationTheSubImage2{
+    self.waitImageCount++;
+    if (self.canJumpToVC && (self.waitImageCount >= 200)) {
+        self.canJumpToVC = NO;
+        [self.refreshTheLaunchImageTimer invalidate];
+        //执行跳转
+        [self performSegueWithIdentifier:@"jumpToCreateGroup" sender:nil];
+    }
+    //
+    static float angle;
+    angle += 0.02;//angle角度 double angle;
+    if (angle > 6.28) {//大于 M_PI*2(360度) 角度再次从0开始
+        angle = 0;
+    }
+    CGAffineTransform transform=CGAffineTransformMakeRotation(angle);
+    self.subImage2.transform = transform;
 }
 
 - (void)settingNetWork
@@ -249,7 +302,10 @@ extern NSString *CTSettingCopyMyPhoneNumber();
     [super viewDidDisappear:animated];
     //
     [self.view removeGestureRecognizer:self.tap];
+    //当要离开当前界面时候，将启动显示的动画界面移除
+    [self.launchImageView removeFromSuperview];
     //
+//    [[NSTimer alloc] invalidate];
 #ifdef DEBUG_MODE
     NSLog(@"holeType:%@  holeCount:%ld",self.curHoleName,(long)self.customerCount);
 #endif
@@ -290,7 +346,6 @@ extern NSString *CTSettingCopyMyPhoneNumber();
 {
     [super viewWillDisappear:animated];
     
-//    self.navigationController.navigationBarHidden = NO;
 }
 
 
@@ -320,125 +375,111 @@ extern NSString *CTSettingCopyMyPhoneNumber();
     [self performSegueWithIdentifier:@"settingIPAddress" sender:nil];
 }
 
-#pragma -mark getCaddyCartInf
--(void)getCaddyCartInf
-{
-//    NSLog(@"enter getCaddyCartInf");
-    __weak typeof(self) wealSelf = self;
-    //删除保存在内存中的以前的数据
-    //前九洞，后九洞，十八洞
-    [self.dbCon ExecNonQuery:@"delete from tbl_threeTypeHoleInf"];
-    [self.dbCon ExecNonQuery:@"delete from tbl_cartInf"];
-    [self.dbCon ExecNonQuery:@"delete from tbl_caddyInf"];
-    //获取到URL
-    NSString *caddyCartURLStr;
-    caddyCartURLStr = [GetRequestIPAddress getCaddyCartInfURL];
-    
-    dispatch_time_t time = dispatch_time ( DISPATCH_TIME_NOW , 1ull * NSEC_PER_SEC ) ;
-    dispatch_after(time, dispatch_get_main_queue(), ^{
-        //start request
-        [HttpTools getHttp:caddyCartURLStr forParams:nil success:^(NSData *nsData){
-            //        NSLog(@"successfully request");
-//            NSDictionary *receiveDic = [NSJSONSerialization JSONObjectWithData:nsData options:NSJSONReadingMutableLeaves error:nil];
-            NSDictionary *receiveDic;
-            receiveDic = (NSDictionary *)nsData;
-#ifdef DEBUG_MODE
-            NSLog(@"caddy count:%ld",[receiveDic[@"Msg"][@"caddys"] count]);
-#endif
-            //获取到当前的球车
-            NSArray *allCarts = receiveDic[@"Msg"][@"carts"];
-            //        NSDictionary *oneCart = [[NSDictionary alloc] init];
-            for (NSDictionary *eachCart in allCarts) {
-                NSMutableArray *eachCartParam = [[NSMutableArray alloc] initWithObjects:eachCart[@"carcod"],eachCart[@"carnum"],eachCart[@"carsea"], nil];
-                //tbl_cartInf(carcod text,carnum text,carsea text)
-                [wealSelf.dbCon ExecNonQuery:@"insert into tbl_cartInf(carcod,carnum,carsea) values(?,?,?)" forParameter:eachCartParam];
-            }
-            //保存所有可用球童的信息
-            NSArray *allCaddies = receiveDic[@"Msg"][@"caddys"];
-            for (NSDictionary *eachCaddy in allCaddies) {
-                NSMutableArray *eachCaddyParam = [[NSMutableArray alloc] initWithObjects:eachCaddy[@"cadcod"],eachCaddy[@"cadnam"],eachCaddy[@"cadnum"],eachCaddy[@"cadsex"],eachCaddy[@"empcod"], nil];
-                //tbl_caddyInf(cadcod text,cadnam text,cadnum text,cadsex text,empcod text)
-                [self.dbCon ExecNonQuery:@"insert into tbl_caddyInf(cadcod,cadnam,cadnum,cadsex,empcod) values(?,?,?,?,?)" forParameter:eachCaddyParam];
-            }
-            
-            //保存三种类型的球洞的参数
-            NSArray *allHoles = receiveDic[@"Msg"][@"holes"];
-            for (NSDictionary *eachTypeHole in allHoles) {
-                NSMutableArray *eachHoleParam = [[NSMutableArray alloc] initWithObjects:eachTypeHole[@"pdcod"],eachTypeHole[@"pdind"],eachTypeHole[@"pdnam"],eachTypeHole[@"pdpcod"],eachTypeHole[@"pdtag"],eachTypeHole[@"pdtcod"], nil];
-                [self.dbCon ExecNonQuery:@"insert into tbl_threeTypeHoleInf(pdcod,pdind,pdnam,pdpcod,pdtag,pdtcod) values(?,?,?,?,?,?)" forParameter:eachHoleParam];
-            }
-            //执行查询数据库中的参数的例子
-            //    DataTable *table = [[DataTable alloc] init];
-            //    table = [dbCon ExecDataTable:@"select *from tbl_logPerson"];
-            //    NSLog(@"Table.Rows[0]:%@",table.Rows[0][@"code"]);
-//            DataTable *threeHolesInf;// = [[DataTable alloc]init];
-//            threeHolesInf = [self.dbCon ExecDataTable:@"select *from tbl_threeTypeHoleInf"];
-            //NSLog(@"top9:%@\n down9:%@\n all:%@",threeHolesInf.Rows[0],threeHolesInf.Rows[1],threeHolesInf.Rows[2]);
-            //        NSLog(@"holeInf:%@",threeHolesInf);
-            //NSLog(@"end store the three holes information");
-            
-            
-            
-        }failure:^(NSError *err){
-#ifdef DEBUG_MODE
-            NSLog(@"caddyCartInf request failed");
-#endif
-            
-        }];
-    });
+//#pragma -mark getCaddyCartInf
+//-(void)getCaddyCartInf
+//{
+////    NSLog(@"enter getCaddyCartInf");
+//    __weak typeof(self) wealSelf = self;
+//    //删除保存在内存中的以前的数据
+//    //前九洞，后九洞，十八洞
+//    [self.dbCon ExecNonQuery:@"delete from tbl_threeTypeHoleInf"];
+//    [self.dbCon ExecNonQuery:@"delete from tbl_cartInf"];
+//    [self.dbCon ExecNonQuery:@"delete from tbl_caddyInf"];
+//    //获取到URL
+//    NSString *caddyCartURLStr;
+//    caddyCartURLStr = [GetRequestIPAddress getCaddyCartInfURL];
 //    
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        
+//    dispatch_time_t time = dispatch_time ( DISPATCH_TIME_NOW , 1ull * NSEC_PER_SEC ) ;
+//    dispatch_after(time, dispatch_get_main_queue(), ^{
+//        //start request
+//        [HttpTools getHttp:caddyCartURLStr forParams:nil success:^(NSData *nsData){
+//            NSDictionary *receiveDic;
+//            receiveDic = (NSDictionary *)nsData;
+//#ifdef DEBUG_MODE
+//            NSLog(@"caddy count:%ld",[receiveDic[@"Msg"][@"caddys"] count]);
+//#endif
+//            //获取到当前的球车
+//            NSArray *allCarts = receiveDic[@"Msg"][@"carts"];
+//            //        NSDictionary *oneCart = [[NSDictionary alloc] init];
+//            for (NSDictionary *eachCart in allCarts) {
+//                NSMutableArray *eachCartParam = [[NSMutableArray alloc] initWithObjects:eachCart[@"carcod"],eachCart[@"carnum"],eachCart[@"carsea"], nil];
+//                //tbl_cartInf(carcod text,carnum text,carsea text)
+//                [wealSelf.dbCon ExecNonQuery:@"insert into tbl_cartInf(carcod,carnum,carsea) values(?,?,?)" forParameter:eachCartParam];
+//            }
+//            //保存所有可用球童的信息
+//            NSArray *allCaddies = receiveDic[@"Msg"][@"caddys"];
+//            for (NSDictionary *eachCaddy in allCaddies) {
+//                NSMutableArray *eachCaddyParam = [[NSMutableArray alloc] initWithObjects:eachCaddy[@"cadcod"],eachCaddy[@"cadnam"],eachCaddy[@"cadnum"],eachCaddy[@"cadsex"],eachCaddy[@"empcod"], nil];
+//                //tbl_caddyInf(cadcod text,cadnam text,cadnum text,cadsex text,empcod text)
+//                [self.dbCon ExecNonQuery:@"insert into tbl_caddyInf(cadcod,cadnam,cadnum,cadsex,empcod) values(?,?,?,?,?)" forParameter:eachCaddyParam];
+//            }
+//            
+//            //保存三种类型的球洞的参数
+//            NSArray *allHoles = receiveDic[@"Msg"][@"holes"];
+//            for (NSDictionary *eachTypeHole in allHoles) {
+//                NSMutableArray *eachHoleParam = [[NSMutableArray alloc] initWithObjects:eachTypeHole[@"pdcod"],eachTypeHole[@"pdind"],eachTypeHole[@"pdnam"],eachTypeHole[@"pdpcod"],eachTypeHole[@"pdtag"],eachTypeHole[@"pdtcod"], nil];
+//                [self.dbCon ExecNonQuery:@"insert into tbl_threeTypeHoleInf(pdcod,pdind,pdnam,pdpcod,pdtag,pdtcod) values(?,?,?,?,?,?)" forParameter:eachHoleParam];
+//            }
+//        }failure:^(NSError *err){
+//#ifdef DEBUG_MODE
+//            NSLog(@"caddyCartInf request failed");
+//#endif
+//            
+//        }];
 //    });
-    
-}
-#pragma -mark getCustomInf
--(void)getCustomInf
-{
-//    NSLog(@"enter getCustomInf");
-    __weak typeof(self) weakSelf = self;
-    
-    //delete the old data in the database
-    [self.dbCon ExecNonQuery:@"delete from tbl_CustomerNumbers"];
-    
-    //
-    NSString *customURLStr;
-    customURLStr = [GetRequestIPAddress getCustomInfURL];
-    
-    dispatch_time_t time = dispatch_time ( DISPATCH_TIME_NOW , 1ull * NSEC_PER_SEC ) ;
-    
-    dispatch_after(time, dispatch_get_main_queue(), ^{
-        //start request
-        [HttpTools getHttp:customURLStr forParams:nil success:^(NSData *nsData){
-#ifdef DEBUG_MODE
-            NSLog(@"request successfully");
-#endif
-//            NSDictionary *receiveDic = [NSJSONSerialization JSONObjectWithData:nsData options:NSJSONReadingMutableLeaves error:nil];
-            NSDictionary *receiveDic;
-            receiveDic = (NSDictionary *)nsData;
-            //
-            NSString *cusNumberString;// = [[NSString alloc] init];
-            cusNumberString = receiveDic[@"Msg"];
-            NSArray *cusNumberArray = [cusNumberString componentsSeparatedByString:@";"];//拆分接收到的数据
-            //将数据加载到创建的数据库中
-            //            dispatch_async(dispatch_get_main_queue(), ^{
-            //first text,second text,third text,fourth text
-            [weakSelf.dbCon ExecNonQuery:@"INSERT INTO tbl_CustomerNumbers(first,second,third,fourth) VALUES(?,?,?,?)" forParameter:(NSMutableArray *)cusNumberArray];
-            //            });
-            
-            
-        }failure:^(NSError *err){
-#ifdef DEBUG_MODE
-            NSLog(@"request fail");
-#endif
-            
-        }];
-    });
-//    dispatch_sync( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0),^{
-//        
+////    
+////    dispatch_async(dispatch_get_main_queue(), ^{
+////        
+////    });
+//    
+//}
+//#pragma -mark getCustomInf
+//-(void)getCustomInf
+//{
+////    NSLog(@"enter getCustomInf");
+//    __weak typeof(self) weakSelf = self;
+//    
+//    //delete the old data in the database
+//    [self.dbCon ExecNonQuery:@"delete from tbl_CustomerNumbers"];
+//    
+//    //
+//    NSString *customURLStr;
+//    customURLStr = [GetRequestIPAddress getCustomInfURL];
+//    
+//    dispatch_time_t time = dispatch_time ( DISPATCH_TIME_NOW , 1ull * NSEC_PER_SEC ) ;
+//    
+//    dispatch_after(time, dispatch_get_main_queue(), ^{
+//        //start request
+//        [HttpTools getHttp:customURLStr forParams:nil success:^(NSData *nsData){
+//#ifdef DEBUG_MODE
+//            NSLog(@"request successfully");
+//#endif
+////            NSDictionary *receiveDic = [NSJSONSerialization JSONObjectWithData:nsData options:NSJSONReadingMutableLeaves error:nil];
+//            NSDictionary *receiveDic;
+//            receiveDic = (NSDictionary *)nsData;
+//            //
+//            NSString *cusNumberString;// = [[NSString alloc] init];
+//            cusNumberString = receiveDic[@"Msg"];
+//            NSArray *cusNumberArray = [cusNumberString componentsSeparatedByString:@";"];//拆分接收到的数据
+//            //将数据加载到创建的数据库中
+//            //            dispatch_async(dispatch_get_main_queue(), ^{
+//            //first text,second text,third text,fourth text
+//            [weakSelf.dbCon ExecNonQuery:@"INSERT INTO tbl_CustomerNumbers(first,second,third,fourth) VALUES(?,?,?,?)" forParameter:(NSMutableArray *)cusNumberArray];
+//            //            });
+//            
+//            
+//        }failure:^(NSError *err){
+//#ifdef DEBUG_MODE
+//            NSLog(@"request fail");
+//#endif
+//            
+//        }];
 //    });
-    
-}
+////    dispatch_sync( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0),^{
+////        
+////    });
+//    
+//}
 
 
 -(void)backgroundTap:(id)sender
@@ -520,18 +561,15 @@ extern NSString *CTSettingCopyMyPhoneNumber();
                             }
                         }
                         //
-                        NSMutableArray *logPersonInf = [[NSMutableArray alloc] initWithObjects:recDic[@"Msg"][@"logemp"][@"empcod"],recDic[@"Msg"][@"logemp"][@"empjob"],recDic[@"Msg"][@"logemp"][@"empnam"],recDic[@"Msg"][@"logemp"][@"empnum"],recDic[@"Msg"][@"logemp"][@"empsex"],recDic[@"Msg"][@"logemp"][@"cadShowNum"], nil];
-                        //将数据加载到创建的数据库中
-                        [weakSelf.dbCon ExecNonQuery:@"INSERT INTO tbl_logPerson(code,job,name,number,sex,caddyLogIn) VALUES(?,?,?,?,?,?)" forParameter:logPersonInf];
+                        NSMutableArray *logPersonInf = [[NSMutableArray alloc] initWithObjects:recDic[@"Msg"][@"logemp"][@"cadCode"],recDic[@"Msg"][@"logemp"][@"empcod"],recDic[@"Msg"][@"logemp"][@"empjob"],recDic[@"Msg"][@"logemp"][@"empnam"],recDic[@"Msg"][@"logemp"][@"empnum"],recDic[@"Msg"][@"logemp"][@"empsex"],recDic[@"Msg"][@"logemp"][@"cadShowNum"], nil];
+                        //将数据加载到创建的数据库中cadCode text,empCode
+                        [weakSelf.dbCon ExecNonQuery:@"INSERT INTO tbl_logPerson(cadCode,empCode,job,name,number,sex,caddyLogIn) VALUES(?,?,?,?,?,?,?)" forParameter:logPersonInf];
                         //
                         dispatch_async(dispatch_get_main_queue(), ^{
                             //进入建组界面，发送获取参数（球童，球车，球场的球洞），之后发送
-                            [weakSelf getCaddyCartInf];
+                            [GetParagram getCaddyCartInf];
                             //获取客户信息
-                            [weakSelf getCustomInf];
-                            //关闭activityIndicator
-//                            [weakSelf.activityIndicatorView stopAnimating];
-//                            weakSelf.activityIndicatorView.hidden = YES;
+                            [GetParagram getCustomInf];
                             //
                             dispatch_async(dispatch_get_main_queue(), ^{
                                 NSString *value;
@@ -571,9 +609,9 @@ extern NSString *CTSettingCopyMyPhoneNumber();
                                     //
                                     if(recDic[@"Msg"][@"group"][@"grocod"] != nil)
                                     {
-                                        NSMutableArray *logPersonInf = [[NSMutableArray alloc] initWithObjects:recDic[@"Msg"][@"logemp"][@"empcod"],recDic[@"Msg"][@"logemp"][@"empjob"],recDic[@"Msg"][@"logemp"][@"empnam"],recDic[@"Msg"][@"logemp"][@"empnum"],recDic[@"Msg"][@"logemp"][@"empsex"],recDic[@"Msg"][@"logemp"][@"cadShowNum"], nil];
-                                        //将数据加载到创建的数据库中
-                                        [weakSelf.dbCon ExecNonQuery:@"INSERT INTO tbl_logPerson(code,job,name,number,sex,caddyLogIn) VALUES(?,?,?,?,?,?)" forParameter:logPersonInf];
+                                        NSMutableArray *logPersonInf = [[NSMutableArray alloc] initWithObjects:recDic[@"Msg"][@"logemp"][@"cadCode"],recDic[@"Msg"][@"logemp"][@"empcod"],recDic[@"Msg"][@"logemp"][@"empjob"],recDic[@"Msg"][@"logemp"][@"empnam"],recDic[@"Msg"][@"logemp"][@"empnum"],recDic[@"Msg"][@"logemp"][@"empsex"],recDic[@"Msg"][@"logemp"][@"cadShowNum"], nil];
+                                        //将数据加载到创建的数据库中cadCode text,empCode
+                                        [weakSelf.dbCon ExecNonQuery:@"INSERT INTO tbl_logPerson(cadCode,empCode,job,name,number,sex,caddyLogIn) VALUES(?,?,?,?,?,?,?)" forParameter:logPersonInf];
                                         //组建获取到的组信息的数组
                                         NSMutableArray *groupInfArray = [[NSMutableArray alloc] initWithObjects:recDic[@"Msg"][@"group"][@"grocod"],recDic[@"Msg"][@"group"][@"groind"],recDic[@"Msg"][@"group"][@"grolev"],recDic[@"Msg"][@"group"][@"gronum"],recDic[@"Msg"][@"group"][@"grosta"],recDic[@"Msg"][@"group"][@"hgcod"],recDic[@"Msg"][@"group"][@"onlinestatus"],recDic[@"Msg"][@"group"][@"createdate"],recDic[@"Msg"][@"group"][@"timestamps"], nil];
                                         //将数据加载到创建的数据库中
@@ -608,8 +646,8 @@ extern NSString *CTSettingCopyMyPhoneNumber();
                                         }
                                         //
                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                            [weakSelf getCaddyCartInf];
-                                            [weakSelf getCustomInf];
+                                            [GetParagram getCaddyCartInf];
+                                            [GetParagram getCustomInf];
                                         });
                                         
                                     }
@@ -782,9 +820,9 @@ extern NSString *CTSettingCopyMyPhoneNumber();
                 //创建登录人信息数组
                 //1sex cadShowNum 1empcod 1empnam 1empnum 1empjob
                 //code text,job text,name text,number text,sex text,caddyLogIn text
-                NSMutableArray *logPersonInf = [[NSMutableArray alloc] initWithObjects:recDictionary[@"logemp"][@"empcod"],recDictionary[@"logemp"][@"empjob"],recDictionary[@"logemp"][@"empnam"],recDictionary[@"logemp"][@"empnum"],recDictionary[@"logemp"][@"empsex"],recDictionary[@"logemp"][@"cadShowNum"], nil];
-                //将数据加载到创建的数据库中
-                [self.dbCon ExecNonQuery:@"INSERT INTO tbl_logPerson(code,job,name,number,sex,caddyLogIn) VALUES(?,?,?,?,?,?)" forParameter:logPersonInf];
+                NSMutableArray *logPersonInf = [[NSMutableArray alloc] initWithObjects:recDic[@"Msg"][@"logemp"][@"cadCode"],recDic[@"Msg"][@"logemp"][@"empcod"],recDic[@"Msg"][@"logemp"][@"empjob"],recDic[@"Msg"][@"logemp"][@"empnam"],recDic[@"Msg"][@"logemp"][@"empnum"],recDic[@"Msg"][@"logemp"][@"empsex"],recDic[@"Msg"][@"logemp"][@"cadShowNum"], nil];
+                //将数据加载到创建的数据库中cadCode text,empCode
+                [weakSelf.dbCon ExecNonQuery:@"INSERT INTO tbl_logPerson(cadCode,empCode,job,name,number,sex,caddyLogIn) VALUES(?,?,?,?,?,?,?)" forParameter:logPersonInf];
                 
                 //执行查询功能
 #ifdef DEBUG_MODE
@@ -818,9 +856,9 @@ extern NSString *CTSettingCopyMyPhoneNumber();
                 //
                 dispatch_async(dispatch_get_main_queue(), ^{
                     //进入建组界面，发送获取参数（球童，球车，球场的球洞），之后发送
-                    [weakSelf getCaddyCartInf];
+                    [GetParagram getCaddyCartInf];
                     //获取客户信息
-                    [weakSelf getCustomInf];
+                    [GetParagram getCustomInf];
                     //关闭activityIndicator
                     [self.activityIndicatorView stopAnimating];
                     self.activityIndicatorView.hidden = YES;
@@ -1031,12 +1069,12 @@ extern NSString *CTSettingCopyMyPhoneNumber();
                 //                    ucHolePosition = 2;
                 //                }
                 
-                
+                  
                 if(recDic[@"Msg"][@"group"][@"grocod"] != nil)
                 {
-                    NSMutableArray *logPersonInf = [[NSMutableArray alloc] initWithObjects:recDic[@"Msg"][@"logemp"][@"empcod"],recDic[@"Msg"][@"logemp"][@"empjob"],recDic[@"Msg"][@"logemp"][@"empnam"],recDic[@"Msg"][@"logemp"][@"empnum"],recDic[@"Msg"][@"logemp"][@"empsex"],recDic[@"Msg"][@"logemp"][@"cadShowNum"], nil];
-                    //将数据加载到创建的数据库中
-                    [weakSelf.dbCon ExecNonQuery:@"INSERT INTO tbl_logPerson(code,job,name,number,sex,caddyLogIn) VALUES(?,?,?,?,?,?)" forParameter:logPersonInf];
+                    NSMutableArray *logPersonInf = [[NSMutableArray alloc] initWithObjects:recDic[@"Msg"][@"logemp"][@"cadCode"],recDic[@"Msg"][@"logemp"][@"empcod"],recDic[@"Msg"][@"logemp"][@"empjob"],recDic[@"Msg"][@"logemp"][@"empnam"],recDic[@"Msg"][@"logemp"][@"empnum"],recDic[@"Msg"][@"logemp"][@"empsex"],recDic[@"Msg"][@"logemp"][@"cadShowNum"], nil];
+                    //将数据加载到创建的数据库中cadCode text,empCode
+                    [weakSelf.dbCon ExecNonQuery:@"INSERT INTO tbl_logPerson(cadCode,empCode,job,name,number,sex,caddyLogIn) VALUES(?,?,?,?,?,?,?)" forParameter:logPersonInf];
                     //组建获取到的组信息的数组
                     NSMutableArray *groupInfArray = [[NSMutableArray alloc] initWithObjects:recDic[@"Msg"][@"group"][@"grocod"],recDic[@"Msg"][@"group"][@"groind"],recDic[@"Msg"][@"group"][@"grolev"],recDic[@"Msg"][@"group"][@"gronum"],recDic[@"Msg"][@"group"][@"grosta"],recDic[@"Msg"][@"group"][@"hgcod"],recDic[@"Msg"][@"group"][@"onlinestatus"],recDic[@"Msg"][@"group"][@"createdate"],recDic[@"Msg"][@"group"][@"timestamps"], nil];
                     //将数据加载到创建的数据库中
@@ -1065,8 +1103,8 @@ extern NSString *CTSettingCopyMyPhoneNumber();
                     }
                     //
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        [weakSelf getCaddyCartInf];
-                        [weakSelf getCustomInf];
+                        [GetParagram getCaddyCartInf];
+                        [GetParagram getCustomInf];
                     });
                     
                 }

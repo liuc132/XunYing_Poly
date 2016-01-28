@@ -24,6 +24,7 @@
 		5B13BB5A1C22682900D1B8D9 /* HaveResultMode.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B13BB591C22682900D1B8D9 /* HaveResultMode.m */; };
 		5B13BB5D1C22687000D1B8D9 /* CellViewNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B13BB5C1C22687000D1B8D9 /* CellViewNode.m */; };
 		5B15560A1C401E4600E059B0 /* XunYing_Golf.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 5B1556091C401E4600E059B0 /* XunYing_Golf.entitlements */; };
+		5B16DE771C59F4C600188E2D /* GetParagram.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B16DE761C59F4C600188E2D /* GetParagram.m */; };
 		5B33ACF71C27F6D60073737F /* SlowBallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B33ACF61C27F6D60073737F /* SlowBallViewController.m */; };
 		5B33DDE91C2136AE00C62DF7 /* HeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B33DDE61C2136AE00C62DF7 /* HeadView.m */; };
 		5B33DDEA1C2136AE00C62DF7 /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B33DDE81C2136AE00C62DF7 /* MessageCell.m */; };
@@ -174,6 +175,8 @@
 		5B13BB5B1C22687000D1B8D9 /* CellViewNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CellViewNode.h; path = viewController/CellViewNode.h; sourceTree = "<group>"; };
 		5B13BB5C1C22687000D1B8D9 /* CellViewNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CellViewNode.m; path = viewController/CellViewNode.m; sourceTree = "<group>"; };
 		5B1556091C401E4600E059B0 /* XunYing_Golf.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = XunYing_Golf.entitlements; sourceTree = "<group>"; };
+		5B16DE751C59F4C600188E2D /* GetParagram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GetParagram.h; path = Controller/GetParagram.h; sourceTree = "<group>"; };
+		5B16DE761C59F4C600188E2D /* GetParagram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GetParagram.m; path = Controller/GetParagram.m; sourceTree = "<group>"; };
 		5B33ACF51C27F6D60073737F /* SlowBallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SlowBallViewController.h; path = viewController/SlowBallViewController.h; sourceTree = "<group>"; };
 		5B33ACF61C27F6D60073737F /* SlowBallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SlowBallViewController.m; path = viewController/SlowBallViewController.m; sourceTree = "<group>"; };
 		5B33DDE51C2136AE00C62DF7 /* HeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeadView.h; sourceTree = "<group>"; };
@@ -507,6 +510,15 @@
 			name = offlineMapData;
 			sourceTree = "<group>";
 		};
+		5B16DE741C59F46900188E2D /* LogInGetParam */ = {
+			isa = PBXGroup;
+			children = (
+				5B16DE751C59F4C600188E2D /* GetParagram.h */,
+				5B16DE761C59F4C600188E2D /* GetParagram.m */,
+			);
+			name = LogInGetParam;
+			sourceTree = "<group>";
+		};
 		5B2856471BAAA8A600C33DCF /* createGroup */ = {
 			isa = PBXGroup;
 			children = (
@@ -600,6 +612,7 @@
 		5B52F40D1B9D740F004BA338 /* logInInterface */ = {
 			isa = PBXGroup;
 			children = (
+				5B16DE741C59F46900188E2D /* LogInGetParam */,
 				5B4E33E21BAFE6C7000693B3 /* waitToPlay */,
 				5B2856471BAAA8A600C33DCF /* createGroup */,
 				5BC76F4C1B9FD6F8004ABBAF /* activityIndicator */,
@@ -1315,6 +1328,7 @@
 				5BD90A331C3D036A0059D82C /* NSString+MD5Addition.m in Sources */,
 				5BC136B31B93EFD500FF1CB1 /* TOUCHkitView.m in Sources */,
 				5BDEA6BC1C584B5600D3234A /* GetRequestIPAddress.m in Sources */,
+				5B16DE771C59F4C600188E2D /* GetParagram.m in Sources */,
 				5BD6D69F1BD6359A001524DB /* BLMessageProvider.m in Sources */,
 				5BD90A321C3D036A0059D82C /* UIDevice+IdentifierAddition.m in Sources */,
 				5BE650921C3FAED80019EC8E /* UIProgressView+AFNetworking.m in Sources */,

@@ -508,7 +508,8 @@
     
     //4.添加进去，并且刷新数据
     [_cellFrameDatas addObject:cellFrame];
-    [_chatView reloadData];
+    //将相应的对话信息给显示出来
+    //[_chatView reloadData];
     
     //5.自动滚到最后一行
     NSIndexPath *lastPath = [NSIndexPath indexPathForRow:_cellFrameDatas.count - 1 inSection:0];

@@ -15,4 +15,6 @@
 @property (strong, nonatomic) NSString *curHoleName;
 @property (nonatomic) NSInteger customerCount;
 
+@property (assign, nonatomic) BOOL    whetherBack;
+
 @end

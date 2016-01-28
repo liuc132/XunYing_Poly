@@ -18,6 +18,10 @@
 #import "LogInViewController.h"
 #import "UIDevice+IdentifierAddition.h"
 #import "KeychainItemWrapper.h"
+#import "GetRequestIPAddress.h"
+#import "GetParagram.h"
+#import "LogInViewController.h"
+
 
 @interface AppDelegate ()<CLLocationManagerDelegate>
 {
@@ -27,6 +31,7 @@
     BOOL                       m_bRun;
 }
 @property (strong, nonatomic) DBCon *dbCon;
+@property (strong, nonatomic) DataTable *logInCount;
 @property (nonatomic)         BOOL  changeState;
 
 
@@ -34,6 +39,7 @@
 @property (strong, nonatomic) KeychainItemWrapper *keychainWrapper;
 //
 @property (strong, nonatomic) UIImageView   *launchAnimateImage;
+@property (strong, nonatomic) UIImageView   *subImage2;
 
 @end
 
@@ -42,11 +48,19 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    
+    //
     [self initLocalDB];
     // Override point for customization after application launch.
     _window = [[WINDOW_CLASS alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     self.dbCon = [[DBCon alloc]init];
+    self.logInCount = [[DataTable alloc] init];
+    //查询数据库
+    self.logInCount = [self.dbCon ExecDataTable:@"select *from tbl_NamePassword"];
+    
+    //请求接口：是否可以建组，是否可以下场
+    [self requestWhetherDownOrCreatGrp];
     //
     self.rootVC = [[LogInViewController alloc]init];
     self.rootVC = [[UIStoryboard storyboardWithName:@"Main" bundle:nil]instantiateInitialViewController];
@@ -54,7 +68,8 @@
     
     [self.window makeKeyAndVisible];
     
-    
+    [self setLaunchAnimation];
+    //
     NSLog(@"%@",launchOptions);
     self.changeState = NO;
     
@@ -103,36 +118,185 @@
         });
         
     }
-    //登录的时候请求登录是否可建组、可下场接口，如果已经有了球洞组，则启动心跳，在第一个界面中进行判断并跳转
-    
-    //启动时的动画
-//    self.launchAnimateImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight)];
-//    [self.launchAnimateImage setImage:[UIImage imageNamed:@"enterBackImage"]];
-//    //添加动画
-////    [self performSelector:@selector(scale_1) withObject:nil afterDelay:0.0f];
-//    [self.window addSubview:self.launchAnimateImage];
-////    [self.window bringSubviewToFront:self.launchAnimateImage];
-//    UIImageView *allIconImage = [[UIImageView alloc] initWithFrame:CGRectMake(ScreenWidth/2 - 120, ScreenHeight/2 - 120, 240, 240)];
-//    [allIconImage setImage:[UIImage imageNamed:@"enter_icon"]];
-//    [self.launchAnimateImage addSubview:allIconImage];
-//    //
-//    UIImageView *circleImage = [[UIImageView alloc] initWithFrame:CGRectMake(ScreenWidth/2 - 120, ScreenHeight/2 - 120, 240, 240)];
-//    [circleImage setImage:[UIImage imageNamed:@"enter_circle"]];
-//    [allIconImage addSubview:circleImage];
-//    //
-//    CGAffineTransform endAngle = CGAffineTransformMakeRotation(M_PI);
-//    [UIView animateWithDuration:9.6f animations:^{
-//        circleImage.transform = endAngle;
-//        
-//    }completion:^(BOOL finished){
-//        NSLog(@"finish animate");
-//        
-//    }];
-//    //
-//    [self.launchAnimateImage removeFromSuperview];
-    
     return YES;
 }
+
+- (void)setLaunchAnimation{
+    self.launchAnimateImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight)];
+    self.launchAnimateImage.image = [UIImage imageNamed:@"enterBackImage"];
+    [self.window addSubview:self.launchAnimateImage];
+    [self.window bringSubviewToFront:self.launchAnimateImage];
+    //
+    UIImageView *subImage1 = [[UIImageView alloc] initWithFrame:CGRectMake(ScreenWidth/2 - ScreenWidth/4, ScreenHeight/2 - ScreenWidth/4, ScreenWidth/2, ScreenWidth/2)];
+    subImage1.image = [UIImage imageNamed:@"enter_image"];
+    [self.launchAnimateImage addSubview:subImage1];
+    //
+    self.subImage2 = [[UIImageView alloc] initWithFrame:CGRectMake(ScreenWidth/2 - ScreenWidth/4, ScreenHeight/2 - ScreenWidth/4, ScreenWidth/2, ScreenWidth/2)];
+    self.subImage2.image = [UIImage imageNamed:@"enter_circle"];
+    [self.launchAnimateImage addSubview:self.subImage2];
+    //
+    [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(rotationTheSubImage2) userInfo:nil repeats:YES];
+}
+
+- (void)rotationTheSubImage2{
+    static float angle;
+    angle += 0.02;//angle角度 double angle;
+    if (angle > 6.28) {//大于 M_PI*2(360度) 角度再次从0开始
+        angle = 0;
+    }
+    CGAffineTransform transform=CGAffineTransformMakeRotation(angle);
+    self.subImage2.transform = transform;
+}
+#pragma  -mark 请求是否可以建组，是否可以下场的接口
+- (void)requestWhetherDownOrCreatGrp
+{
+    __weak typeof(self) weakSelf = self;
+    //如果本地没有保存到登录人的账户，密码；则返回
+    if (!self.logInCount.Rows.count) {
+        return;
+    }
+    //获取到mid号码
+    NSString *theMid;
+    theMid = [GetRequestIPAddress getUniqueID];
+    theMid = [NSString stringWithFormat:@"I_IMEI_%@",theMid];
+    //获取到下场接口
+    NSString *downFieldURLStr;
+    downFieldURLStr = [GetRequestIPAddress getDecideCreateGrpAndDownFieldURL];
+    //构建请求接口的参数 theMid,@"mid",logCaddyStr,@"username",password,@"pwd",@"0",@"panmull",@"0",@"forceLogin"
+    NSMutableDictionary *theReqParam = [[NSMutableDictionary alloc] initWithObjectsAndKeys:theMid,@"mid",self.logInCount.Rows[self.logInCount.Rows.count - 1][@"user"],@"username",self.logInCount.Rows[self.logInCount.Rows.count - 1][@"password"],@"pwd",@"0",@"panmull",@"0",@"forceLogin", nil];
+    //开始接口请求
+    [HttpTools getHttp:downFieldURLStr forParams:theReqParam success:^(NSData *nsData) {
+        NSDictionary *recDic;
+        recDic = (NSDictionary *)nsData;
+        
+        [weakSelf.launchAnimateImage removeFromSuperview];
+//        [[NSTimer alloc] invalidate];
+        
+        if ([recDic[@"Code"] integerValue] > 0) {
+            //对相应的数据进行保存,并执行通知
+            [self.dbCon ExecDataTable:@"delete from tbl_groupInf"];
+            [self.dbCon ExecDataTable:@"delete from tbl_holeInf"];
+            [self.dbCon ExecDataTable:@"delete from tbl_CustomersInfo"];
+            //
+            //获取到球洞信息，并将相应的信息保存到内存中
+            NSArray *allHolesInfo = recDic[@"Msg"][@"holes"];
+            for (NSDictionary *eachHole in allHolesInfo) {
+                NSMutableArray *eachHoleParam = [[NSMutableArray alloc] initWithObjects:eachHole[@"forecasttime"],eachHole[@"gronum"],eachHole[@"holcod"],eachHole[@"holcue"],eachHole[@"holfla"],eachHole[@"holgro"],eachHole[@"holind"],eachHole[@"hollen"],eachHole[@"holnam"],eachHole[@"holnum"],eachHole[@"holspe"],eachHole[@"holsta"],eachHole[@"nowgroups"],eachHole[@"stan1"],eachHole[@"stan2"],eachHole[@"stan3"],eachHole[@"stan4"],eachHole[@"usestatus"],eachHole[@"x"],eachHole[@"y"], nil];
+                [weakSelf.dbCon ExecNonQuery:@"INSERT INTO tbl_holeInf(forecasttime,gronum,holcod,holcue,holfla,holgro,holind,hollen,holnam,holenum,holspe,holsta,nowgroups,stan1,stan2,stan3,stan4,usestatus,x,y) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" forParameter:eachHoleParam];
+            }
+            //
+            NSString *value1;
+            NSDictionary *allEmps;
+            allEmps = recDic[@"Msg"];
+            value1 = [allEmps objectForKey:@"logemp"];
+            
+            if (![value1  isEqual: @"null"]) {
+                NSMutableArray *logPersonInf = [[NSMutableArray alloc] initWithObjects:recDic[@"Msg"][@"logemp"][@"cadCode"],recDic[@"Msg"][@"logemp"][@"empcod"],recDic[@"Msg"][@"logemp"][@"empjob"],recDic[@"Msg"][@"logemp"][@"empnam"],recDic[@"Msg"][@"logemp"][@"empnum"],recDic[@"Msg"][@"logemp"][@"empsex"],recDic[@"Msg"][@"logemp"][@"cadShowNum"], nil];
+                //将数据加载到创建的数据库中cadCode text,empCode
+                [weakSelf.dbCon ExecNonQuery:@"INSERT INTO tbl_logPerson(cadCode,empCode,job,name,number,sex,caddyLogIn) VALUES(?,?,?,?,?,?,?)" forParameter:logPersonInf];
+                //执行通知
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"canEnterCreatGrp" object:nil userInfo:@{@"enterCreateGrp":@"1"}];
+            }
+            
+            //
+            NSString *groupValue = [recDic[@"Msg"] objectForKey:@"group"];
+            if([(NSNull *)groupValue isEqual: @"null"])//
+            {
+                //[self logIn];
+            }
+            else//
+            {
+                [self.dbCon ExecDataTable:@"delete from tbl_selectCart"];
+                //获取到登录小组的所有客户的信息
+                NSArray *allCustomers = recDic[@"Msg"][@"group"][@"cuss"];
+                for (NSDictionary *eachCus in allCustomers) {
+                    NSMutableArray *eachCusParam = [[NSMutableArray alloc] initWithObjects:eachCus[@"bansta"],eachCus[@"bantim"],eachCus[@"cadcod"],eachCus[@"carcod"],eachCus[@"cuscod"],eachCus[@"cuslev"],eachCus[@"cusnam"],eachCus[@"cusnum"],eachCus[@"cussex"],eachCus[@"depsta"],eachCus[@"endtim"],eachCus[@"grocod"],eachCus[@"memnum"],eachCus[@"padcod"],eachCus[@"phone"],eachCus[@"statim"], nil];
+                    [weakSelf.dbCon ExecNonQuery:@"insert into tbl_CustomersInfo(bansta,bantim,cadcod,carcod,cuscod,cuslev,cusnam,cusnum,cussex,depsta,endtim,grocod,memnum,padcod,phone,statim) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" forParameter:eachCusParam];
+                }
+                //将所选择的球车的信息保存下来
+                //保存添加的球车的信息 tbl_selectCart(carcod text,carnum text,carsea text)
+                NSArray *allSelectedCartsArray = recDic[@"Msg"][@"group"][@"cars"];
+                for (NSDictionary *eachCart in allSelectedCartsArray) {
+                    NSMutableArray *selectedCart = [[NSMutableArray alloc] initWithObjects:eachCart[@"carcod"],eachCart[@"carnum"],eachCart[@"carsea"], nil];
+                    [weakSelf.dbCon ExecNonQuery:@"insert into tbl_selectCart(carcod,carnum,carsea) values(?,?,?)" forParameter:selectedCart];
+                }
+                //此处的数据还没有传递到需要的地方去
+                //self.customerCount = [recDic[@"Msg"][@"group"][@"cuss"] count] - 1;
+                //self.curHoleName = recDic[@"Msg"][@"group"][@"hgcod"];
+                
+                
+                if(recDic[@"Msg"][@"group"][@"grocod"] != nil)
+                {
+                    NSMutableArray *logPersonInf = [[NSMutableArray alloc] initWithObjects:recDic[@"Msg"][@"logemp"][@"cadCode"],recDic[@"Msg"][@"logemp"][@"empcod"],recDic[@"Msg"][@"logemp"][@"empjob"],recDic[@"Msg"][@"logemp"][@"empnam"],recDic[@"Msg"][@"logemp"][@"empnum"],recDic[@"Msg"][@"logemp"][@"empsex"],recDic[@"Msg"][@"logemp"][@"cadShowNum"], nil];
+                    //将数据加载到创建的数据库中cadCode text,empCode
+                    [weakSelf.dbCon ExecNonQuery:@"INSERT INTO tbl_logPerson(cadCode,empCode,job,name,number,sex,caddyLogIn) VALUES(?,?,?,?,?,?,?)" forParameter:logPersonInf];
+                    //组建获取到的组信息的数组
+                    NSMutableArray *groupInfArray = [[NSMutableArray alloc] initWithObjects:recDic[@"Msg"][@"group"][@"grocod"],recDic[@"Msg"][@"group"][@"groind"],recDic[@"Msg"][@"group"][@"grolev"],recDic[@"Msg"][@"group"][@"gronum"],recDic[@"Msg"][@"group"][@"grosta"],recDic[@"Msg"][@"group"][@"hgcod"],recDic[@"Msg"][@"group"][@"onlinestatus"],recDic[@"Msg"][@"group"][@"createdate"],recDic[@"Msg"][@"group"][@"timestamps"], nil];
+                    //将数据加载到创建的数据库中
+                    //grocod text,groind text,grolev text,gronum text,grosta text,hgcod text,onlinestatus text
+                    [weakSelf.dbCon ExecNonQuery:@"insert into  tbl_groupInf(grocod,groind,grolev,gronum,grosta,hgcod,onlinestatus,createdate,timestamps)values(?,?,?,?,?,?,?,?,?)" forParameter:groupInfArray];
+                    //
+                    //                    DataTable *table;// = [[DataTable alloc] init];
+                    //
+                    //                    table = [strongSelf.dbCon ExecDataTable:@"select *from tbl_groupInf"];
+                    //                    NSLog(@"table:%@",table);
+                    //
+                    HeartBeatAndDetectState *heartBeat = [[HeartBeatAndDetectState alloc] init];
+                    if(![heartBeat checkState])
+                    {
+                        [heartBeat initHeartBeat];//启动心跳服务
+                        [heartBeat enableHeartBeat];
+                    }
+                    //                    [[NSNotificationCenter defaultCenter] postNotificationName:@"allowDown" object:nil userInfo:@{@"allowDown":@"1"}];
+                    
+                    //weakSelf.haveGroupNotDown = YES;
+                    //获取到球洞信息，并将相应的信息保存到内存中
+                    NSArray *allHolesInfo = recDic[@"Msg"][@"holes"];
+                    for (NSDictionary *eachHole in allHolesInfo) {
+                        NSMutableArray *eachHoleParam = [[NSMutableArray alloc] initWithObjects:eachHole[@"forecasttime"],eachHole[@"gronum"],eachHole[@"holcod"],eachHole[@"holcue"],eachHole[@"holfla"],eachHole[@"holgro"],eachHole[@"holind"],eachHole[@"hollen"],eachHole[@"holnam"],eachHole[@"holnum"],eachHole[@"holspe"],eachHole[@"holsta"],eachHole[@"nowgroups"],eachHole[@"stan1"],eachHole[@"stan2"],eachHole[@"stan3"],eachHole[@"stan4"],eachHole[@"usestatus"],eachHole[@"x"],eachHole[@"y"], nil];
+                        [weakSelf.dbCon ExecNonQuery:@"INSERT INTO tbl_holeInf(forecasttime,gronum,holcod,holcue,holfla,holgro,holind,hollen,holnam,holenum,holspe,holsta,nowgroups,stan1,stan2,stan3,stan4,usestatus,x,y) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" forParameter:eachHoleParam];
+                    }
+                    //
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [GetParagram getCustomInf];
+                        [GetParagram getCaddyCartInf];
+                    });
+                    
+                }
+                else
+                {
+                    [weakSelf.dbCon ExecNonQuery:@"delete from tbl_taskInfo"];
+                }
+                
+            }
+        }
+        else if ([recDic[@"Code"] integerValue] == -2){
+            
+        }
+        else if ([recDic[@"Code"] integerValue] == -4){
+            
+        }
+        else//否则提示错误信息
+        {
+            NSString *errStr;
+            errStr = recDic[@"Msg"];
+            UIAlertView *errAlertV = [[UIAlertView alloc] initWithTitle:errStr message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+            [errAlertV show];
+            
+        }
+        
+        
+    } failure:^(NSError *err) {
+        
+        [weakSelf.launchAnimateImage removeFromSuperview];
+        NSLog(@"网络请求失败");
+        UIAlertView *errAlert = [[UIAlertView alloc] initWithTitle:@"网络请求失败" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+        [errAlert show];
+        
+    }];
+    
+}
+
 
 -(NSString *) gen_uuid
 {
@@ -208,7 +372,7 @@
     [dbCon ExecDataTable:@"create table if not exists tbl_NamePassword(user text,password text,logOutOrNot text)"];
     
     //创建登录人信息列表 sex cadShowNum empcod empnam empnum empjob
-    [dbCon ExecDataTable:@"create table if not exists tbl_logPerson(code text,job text,name text,number text,sex text,caddyLogIn text)"];
+    [dbCon ExecDataTable:@"create table if not exists tbl_logPerson(cadCode text,empCode text,job text,name text,number text,sex text,caddyLogIn text)"];
     //球洞信息
     [dbCon ExecDataTable:@"create table if not exists tbl_holeInf(forecasttime text,gronum text,holcod text,holcue text,holfla text,holgro text,holind text,hollen text,holnam text,holenum text,holspe text,holsta text,nowgroups text,stan1 text,stan2 text,stan3 text,stan4 text,usestatus text,x text,y text)"];
     //其他球员的信息，用于通讯

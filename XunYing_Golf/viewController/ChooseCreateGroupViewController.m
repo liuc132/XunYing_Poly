@@ -18,6 +18,8 @@
 #import "ActivityIndicatorView.h"
 #import "WaitToPlayTableViewController.h"
 #import "GetRequestIPAddress.h"
+#import "LogInViewController.h"
+#import "GetParagram.h"
 
 //extern unsigned char ucCusCounts;
 //extern unsigned char ucHolePosition;
@@ -87,9 +89,10 @@
 
 - (void)backToLogInView
 {
+    [GetParagram willLogOutHandle];
+    
     self.backOrNext = NO;
     [self performSegueWithIdentifier:@"backToLogInSegue" sender:nil];
-    
 }
 
 
@@ -165,7 +168,7 @@
 
 - (IBAction)backToLogInFace:(UIBarButtonItem *)sender {
     
-    
+    //
     self.backOrNext = NO;
     dispatch_async(dispatch_get_main_queue(), ^{
         //[self dismissViewControllerAnimated:YES completion:nil];
@@ -303,9 +306,9 @@
                     createTim = [grpInfDic objectForKey:@"group"];
                     if(((NSNull *)createTim != [NSNull null]) && (![createTim  isEqual: @"null"]))
                     {
-                        NSMutableArray *logPersonInf = [[NSMutableArray alloc] initWithObjects:recDic[@"Msg"][@"logemp"][@"empcod"],recDic[@"Msg"][@"logemp"][@"empjob"],recDic[@"Msg"][@"logemp"][@"empnam"],recDic[@"Msg"][@"logemp"][@"empnum"],recDic[@"Msg"][@"logemp"][@"empsex"],recDic[@"Msg"][@"logemp"][@"cadShowNum"], nil];
-                        //将数据加载到创建的数据库中
-                        [strongSelf.LogDbcon ExecNonQuery:@"INSERT INTO tbl_logPerson(code,job,name,number,sex,caddyLogIn) VALUES(?,?,?,?,?,?)" forParameter:logPersonInf];
+                        NSMutableArray *logPersonInf = [[NSMutableArray alloc] initWithObjects:recDic[@"Msg"][@"logemp"][@"cadCode"],recDic[@"Msg"][@"logemp"][@"empcod"],recDic[@"Msg"][@"logemp"][@"empjob"],recDic[@"Msg"][@"logemp"][@"empnam"],recDic[@"Msg"][@"logemp"][@"empnum"],recDic[@"Msg"][@"logemp"][@"empsex"],recDic[@"Msg"][@"logemp"][@"cadShowNum"], nil];
+                        //将数据加载到创建的数据库中cadCode text,empCode
+                        [weakSelf.LogDbcon ExecNonQuery:@"INSERT INTO tbl_logPerson(cadCode,empCode,job,name,number,sex,caddyLogIn) VALUES(?,?,?,?,?,?,?)" forParameter:logPersonInf];
                         //组建获取到的组信息的数组
                         NSMutableArray *groupInfArray = [[NSMutableArray alloc] initWithObjects:recDic[@"Msg"][@"group"][@"grocod"],recDic[@"Msg"][@"group"][@"groind"],recDic[@"Msg"][@"group"][@"grolev"],recDic[@"Msg"][@"group"][@"gronum"],recDic[@"Msg"][@"group"][@"grosta"],recDic[@"Msg"][@"group"][@"hgcod"],recDic[@"Msg"][@"group"][@"onlinestatus"],recDic[@"Msg"][@"group"][@"createdate"],recDic[@"Msg"][@"group"][@"timestamps"], nil];
                         //将数据加载到创建的数据库中
@@ -549,6 +552,12 @@
         waitToPlay.QRCodeEnable = YES;
         waitToPlay.cusCardArray = self.QRcusCard;
     }
+    //
+    LogInViewController *logVC = segue.destinationViewController;
+    if ([segue.identifier isEqualToString:@"backToLogInSegue"]) {
+        logVC.whetherBack = YES;
+    }
+    
     
 }
 
