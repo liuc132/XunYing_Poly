@@ -76,15 +76,14 @@ typedef NS_ENUM(NSInteger,holePosition) {
 @property(strong, nonatomic)NSArray *simulationGPSData;
 @property(strong, nonatomic)NSMutableDictionary *checkCreatGroupState;
 //
-//@property (strong, nonatomic) CLLocationManager *locationManager;
-//@property (strong, nonatomic) CLLocation *getGPSLocation;
 @property (strong, nonatomic) UITapGestureRecognizer *creatGrpTap;
 //
 @property (strong, nonatomic) NSMutableArray         *allCartsViewArray;
 @property (strong, nonatomic) NSMutableArray         *allCaddiesViewArray;
 
-@property (strong, nonatomic) ViewController *mapViewController;
 @property (strong, nonatomic) UIActivityIndicatorView   *stateIndicator;
+
+@property (strong, nonatomic) UITextField     *activeField;
 
 @property (strong, nonatomic) IBOutlet UIView *subDetailView;
 @property (strong, nonatomic) IBOutlet UILabel *detailLabel;
@@ -196,7 +195,64 @@ typedef NS_ENUM(NSInteger,holePosition) {
     self.stateIndicator.layer.cornerRadius = 20;
     [self.view addSubview:self.stateIndicator];
     self.stateIndicator.hidden = YES;
+    //
+    [self registerForKeyboardNotifications];
     
+}
+
+// Call this method somewhere in your view controller setup code.
+- (void)registerForKeyboardNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
+    
+}
+
+// Called when the UIKeyboardDidShowNotification is sent.
+- (void)keyboardWasShown:(NSNotification*)aNotification
+{
+    __weak typeof(self) weakSelf = self;
+    //
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
+    self.createGrpScrollView.contentInset = contentInsets;
+    self.createGrpScrollView.scrollIndicatorInsets = contentInsets;
+    
+    // If active text field is hidden by keyboard, scroll it so it's visible
+    // Your app might not need or want this behavior.
+    CGRect aRect = self.createGrpScrollView.frame;
+    aRect.size.height -= kbSize.height;
+    if (!CGRectContainsPoint(aRect, self.activeField.frame.origin) ) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.createGrpScrollView scrollRectToVisible:weakSelf.activeField.frame animated:YES];
+        });
+        
+    }
+}
+
+// Called when the UIKeyboardWillHideNotification is sent
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+{
+    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+    self.createGrpScrollView.contentInset = contentInsets;
+    self.createGrpScrollView.scrollIndicatorInsets = contentInsets;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    self.activeField = textField;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    self.activeField = nil;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -505,7 +561,21 @@ typedef NS_ENUM(NSInteger,holePosition) {
     theMid = [GetRequestIPAddress getUniqueID];
     theMid = [NSString stringWithFormat:@"I_IMEI_%@",theMid];
     //
-    NSMutableDictionary *createGroupParameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:theMid,@"mid",@"",@"gronum",selectedCus,@"cus",allAddCarts,@"car",self.theThreeHolesInf.Rows[self.theSelectedHolePosition][@"pdtag"],@"hole",allAddCaddies,@"cad",self.userData.Rows[0][@"caddyLogIn"],@"cadShow",self.userData.Rows[0][@"code"],@"user", nil];
+    NSString *courseTag;
+    switch (self.theSelectedHolePosition) {
+        case 0:
+            courseTag = @"north";
+            break;
+            
+        case 1:
+            courseTag = @"south";
+            break;
+        default:
+            courseTag = @"north";
+            break;
+    }
+    //
+    NSMutableDictionary *createGroupParameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:theMid,@"mid",@"",@"gronum",selectedCus,@"cus",allAddCarts,@"car",@"all",@"hole",allAddCaddies,@"cad",self.userData.Rows[0][@"caddyLogIn"],@"cadShow",self.userData.Rows[0][@"empCode"],@"user",courseTag,@"coursetag", nil];
     //
     __weak typeof(self) weakself = self;
     //
@@ -726,37 +796,37 @@ typedef NS_ENUM(NSInteger,holePosition) {
 //    }];
 //}
 
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
-{
-    CGRect frame = textField.frame;
-    
-    int _offset = frame.origin.y + 230 - (self.view.frame.size.height - 216.0);//iPhone键盘高度216，iPad的为352
-    NSLog(@"_offset:%d",_offset);
-    
-    if (_offset <= 0) {
-        [UIView animateWithDuration:0.3 animations:^{
-            CGRect frame = self.view.frame;
-            frame.origin.y = _offset;
-            self.view.frame = frame;
-        }];
-        
-    }
-    
-    
-    return YES;
-}
-
-
-- (BOOL)textFieldShouldEndEditing:(UITextField *)textField
-{
-    [UIView animateWithDuration:0.3 animations:^{
-        CGRect frame = self.view.frame;
-        frame.origin.y = 0.0;
-        self.view.frame = frame;
-    }];
-    
-    return YES;
-}
+//- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+//{
+//    CGRect frame = textField.frame;
+//    
+//    int _offset = frame.origin.y + 230 - (self.view.frame.size.height - 216.0);//iPhone键盘高度216，iPad的为352
+//    NSLog(@"_offset:%d",_offset);
+//    
+//    if (_offset <= 0) {
+//        [UIView animateWithDuration:0.3 animations:^{
+//            CGRect frame = self.view.frame;
+//            frame.origin.y = _offset;
+//            self.view.frame = frame;
+//        }];
+//        
+//    }
+//    
+//    
+//    return YES;
+//}
+//
+//
+//- (BOOL)textFieldShouldEndEditing:(UITextField *)textField
+//{
+//    [UIView animateWithDuration:0.3 animations:^{
+//        CGRect frame = self.view.frame;
+//        frame.origin.y = 0.0;
+//        self.view.frame = frame;
+//    }];
+//    
+//    return YES;
+//}
 
 
 

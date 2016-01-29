@@ -263,7 +263,7 @@ typedef enum ChangeReason{
     [dataFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSString *curDeviceDate = [dataFormatter stringFromDate:[NSDate date]];
     
-    NSMutableDictionary *changeCartParam = [[NSMutableDictionary alloc] initWithObjectsAndKeys:theMid,@"mid",self.groupInfo.Rows[0][@"grocod"],@"grocod",self.logPerson.Rows[0][@"code"],@"empcod",self.changeReasonStr,@"reason",self.cartInfo.Rows[0][@"carcod"],@"carcod",curDeviceDate,@"subtim", nil];
+    NSMutableDictionary *changeCartParam = [[NSMutableDictionary alloc] initWithObjectsAndKeys:theMid,@"mid",self.groupInfo.Rows[0][@"grocod"],@"grocod",self.logPerson.Rows[0][@"empCode"],@"empcod",self.changeReasonStr,@"reason",self.cartInfo.Rows[0][@"carcod"],@"carcod",curDeviceDate,@"subtim", nil];
     //
     NSString *changeCartURLStr;
     changeCartURLStr = [GetRequestIPAddress getChangeCartURL];

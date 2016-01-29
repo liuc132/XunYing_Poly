@@ -306,6 +306,8 @@
                     createTim = [grpInfDic objectForKey:@"group"];
                     if(((NSNull *)createTim != [NSNull null]) && (![createTim  isEqual: @"null"]))
                     {
+                        [self.LogDbcon ExecDataTable:@"delete from tbl_logPerson"];
+                        //
                         NSMutableArray *logPersonInf = [[NSMutableArray alloc] initWithObjects:recDic[@"Msg"][@"logemp"][@"cadCode"],recDic[@"Msg"][@"logemp"][@"empcod"],recDic[@"Msg"][@"logemp"][@"empjob"],recDic[@"Msg"][@"logemp"][@"empnam"],recDic[@"Msg"][@"logemp"][@"empnum"],recDic[@"Msg"][@"logemp"][@"empsex"],recDic[@"Msg"][@"logemp"][@"cadShowNum"], nil];
                         //将数据加载到创建的数据库中cadCode text,empCode
                         [weakSelf.LogDbcon ExecNonQuery:@"INSERT INTO tbl_logPerson(cadCode,empCode,job,name,number,sex,caddyLogIn) VALUES(?,?,?,?,?,?,?)" forParameter:logPersonInf];

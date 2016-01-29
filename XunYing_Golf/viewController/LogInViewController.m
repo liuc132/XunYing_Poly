@@ -45,6 +45,7 @@ extern NSString *CTSettingCopyMyPhoneNumber();
 @property (strong, nonatomic) DBCon *dbCon;
 @property (strong, nonatomic) DataTable *logInPerson;
 @property (strong, nonatomic) DataTable *logPersonInf;
+@property (strong, nonatomic) DataTable *grpInfoTable;
 @property (strong, nonatomic) UIImageView *subImage2;
 @property (strong, nonatomic) UIImageView *launchImageView;
 @property (assign, nonatomic) NSInteger   waitImageCount;
@@ -96,14 +97,17 @@ extern NSString *CTSettingCopyMyPhoneNumber();
     //
     self.logInPerson = [[DataTable alloc] init];
     self.logPersonInf = [[DataTable alloc] init];
+    self.grpInfoTable = [[DataTable alloc] init];
+    //
+    self.logInPerson = [self.dbCon ExecDataTable:@"select *from tbl_NamePassword"];
     //
     self.showNetWorkErr = YES;
     //
 #ifdef DEBUG_MODE
     NSLog(@"logPersonInf:%@",self.logInPerson);
 #endif
-    //
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(canDownCourt:) name:@"allowDown" object:nil];
+    
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(canDownCourt:) name:@"allowDown" object:nil];
     //
     self.forceLogInAlert = [[UIAlertView alloc]initWithTitle:@"是否强制登录" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     self.forceLogInAlert.tag = 1;
@@ -121,18 +125,71 @@ extern NSString *CTSettingCopyMyPhoneNumber();
     //
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enterCreateGrpVC:) name:@"canEnterCreatGrp" object:nil];
     //
-    if (!self.whetherBack) {
+    if (!self.whetherBack && ([self.logInPerson.Rows count])) {
         [self setLaunchAnimation];
     }
     //
     self.waitImageCount = 0;
 }
-
+//self.canEnterCreatGrp,@"enterCreateGrp",self.enableHeartBeat,@"enableHeartBeat"
 - (void)enterCreateGrpVC:(NSNotification *)sender{
     NSLog(@"info:%@",sender.userInfo);
     if ([sender.userInfo[@"enterCreateGrp"] integerValue] == 1) {
         self.canJumpToVC = YES;
+        //
+        self.grpInfoTable = [self.dbCon ExecDataTable:@"select *from tbl_groupInf"];
     }
+    if ([sender.userInfo[@"enableHeartBeat"] integerValue] == 1) {
+        HeartBeatAndDetectState *heartBeat = [[HeartBeatAndDetectState alloc] init];
+        
+        [heartBeat initHeartBeat];//启动心跳服务
+        [heartBeat enableHeartBeat];
+    }
+    //如果网络请求失败，则将转圈动画给去掉
+    if ([sender.userInfo[@"requestServerFail"] integerValue] == 1) {
+        //关掉定时器
+        [self.refreshTheLaunchImageTimer invalidate];
+        //动画图形去掉
+        [self.launchImageView removeFromSuperview];
+        [self.subImage2 removeFromSuperview];
+        
+    }
+    
+//    if (!self.canReceiveNotification) {
+//        return;
+//    }
+    
+    //
+    if ([sender.userInfo[@"allowDown"] isEqualToString:@"1"]) {
+        [self.refreshTheLaunchImageTimer invalidate];
+        //
+        [self.activityIndicatorView stopAnimating];
+        self.activityIndicatorView.hidden = YES;
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+        //
+        [self performSegueWithIdentifier:@"ToMainMapView" sender:nil];
+    }
+    else if([sender.userInfo[@"waitToAllow"] isEqualToString:@"1"])
+    {
+        [self.refreshTheLaunchImageTimer invalidate];
+        //
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+        [self.activityIndicatorView stopAnimating];
+        self.activityIndicatorView.hidden = YES;
+        [self performSegueWithIdentifier:@"shouldWaitToAllow" sender:nil];
+    }
+//    //若没有退出则直接跳转到建组方式的界面（手动，二维码等）
+//    else if([self.logInPerson.Rows count]) {
+//        [[NSNotificationCenter defaultCenter] removeObserver:self];
+//        [self checkCurStateOnServer];
+//        if([self.logInPerson.Rows[[self.logInPerson.Rows count] - 1][@"logOutOrNot"] boolValue])
+//        {
+//            [self.activityIndicatorView stopAnimating];
+//            self.activityIndicatorView.hidden = YES;
+//            //
+//            [self performSegueWithIdentifier:@"jumpToCreateGroup" sender:nil];
+//        }
+//    }
 }
 
 - (void)setLaunchAnimation{
@@ -152,10 +209,11 @@ extern NSString *CTSettingCopyMyPhoneNumber();
     
     self.subImage2.transform = transform;
     //
-    [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(rotationTheSubImage2) userInfo:nil repeats:YES];
+//    [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(rotationTheSubImage2) userInfo:nil repeats:YES];
     //
     self.refreshTheLaunchImageTimer = [NSTimer timerWithTimeInterval:0.01 target:self selector:@selector(rotationTheSubImage2) userInfo:nil repeats:YES];
-//    [self.refreshTheLaunchImageTimer fire];
+    [self.refreshTheLaunchImageTimer fire];
+    [[NSRunLoop mainRunLoop] addTimer:self.refreshTheLaunchImageTimer forMode:NSDefaultRunLoopMode];
 }
 
 - (void)rotationTheSubImage2{
@@ -163,8 +221,10 @@ extern NSString *CTSettingCopyMyPhoneNumber();
     if (self.canJumpToVC && (self.waitImageCount >= 200)) {
         self.canJumpToVC = NO;
         [self.refreshTheLaunchImageTimer invalidate];
-        //执行跳转
-        [self performSegueWithIdentifier:@"jumpToCreateGroup" sender:nil];
+        if (!self.grpInfoTable.Rows.count) {
+            //执行跳转
+            [self performSegueWithIdentifier:@"jumpToCreateGroup" sender:nil];
+        }
     }
     //
     static float angle;
@@ -194,38 +254,7 @@ extern NSString *CTSettingCopyMyPhoneNumber();
 -(void)canDownCourt:(NSNotification *)sender
 {
 //    NSLog(@"sender:%@",sender);
-    if (!self.canReceiveNotification) {
-        return;
-    }
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    //
-    if ([sender.userInfo[@"allowDown"] isEqualToString:@"1"]) {
-        [self.activityIndicatorView stopAnimating];
-        self.activityIndicatorView.hidden = YES;
-        //检查心跳是否在继续
-//        HeartBeatAndDetectState *heartBeat = [[HeartBeatAndDetectState alloc]init];
-//        [heartBeat initHeartBeat];
-//        [heartBeat enableHeartBeat];
-        //
-        [self performSegueWithIdentifier:@"ToMainMapView" sender:nil];
-    }
-    else if([sender.userInfo[@"waitToAllow"] isEqualToString:@"1"])
-    {
-        [self.activityIndicatorView stopAnimating];
-        self.activityIndicatorView.hidden = YES;
-        [self performSegueWithIdentifier:@"shouldWaitToAllow" sender:nil];
-    }
-    //若没有退出则直接跳转到建组方式的界面（手动，二维码等）
-    else if([self.logInPerson.Rows count]) {
-        [self checkCurStateOnServer];
-        if([self.logInPerson.Rows[[self.logInPerson.Rows count] - 1][@"logOutOrNot"] boolValue])
-        {
-            [self.activityIndicatorView stopAnimating];
-            self.activityIndicatorView.hidden = YES;
-            //
-            [self performSegueWithIdentifier:@"jumpToCreateGroup" sender:nil];
-        }
-    }
+    
 
 }
 
@@ -538,6 +567,7 @@ extern NSString *CTSettingCopyMyPhoneNumber();
                         [self.dbCon ExecDataTable:@"delete from tbl_CustomersInfo"];
                         [self.dbCon ExecDataTable:@"delete from tbl_selectCart"];
                         [self.dbCon ExecDataTable:@"delete from tbl_addCaddy"];
+                        [self.dbCon ExecDataTable:@"delete from tbl_logPerson"];
                         //获取到登录小组的所有客户的信息
                         NSString *value;
                         value = [NSString stringWithFormat:@"%@",recDic[@"Msg"][@"group"]];
@@ -621,8 +651,8 @@ extern NSString *CTSettingCopyMyPhoneNumber();
                                         //删除之前保存的数据
                                         [self.dbCon ExecNonQuery:@"delete from tbl_groupHeartInf"];
                                         //
-                                        NSMutableArray *cusGrpArray = [[NSMutableArray alloc] initWithObjects:recDic[@"Msg"][@"group"][@"grocod"],recDic[@"Msg"][@"group"][@"grosta"],recDic[@"Msg"][@"group"][@"nextgrodistime"],recDic[@"Msg"][@"group"][@"nowblocks"],recDic[@"Msg"][@"group"][@"nowholcod"],recDic[@"Msg"][@"group"][@"nowholnum"],recDic[@"Msg"][@"group"][@"pladur"],recDic[@"Msg"][@"group"][@"stahol"],recDic[@"Msg"][@"group"][@"statim"],recDic[@"Msg"][@"group"][@"stddur"], nil];
-                                        [weakSelf.dbCon ExecNonQuery:@"insert into tbl_groupHeartInf(grocod,grosta,nextgrodistime,nowblocks,nowholcod,nowholnum,pladur,stahol,statim,stddur) values(?,?,?,?,?,?,?,?,?,?)" forParameter:cusGrpArray];
+                                        NSMutableArray *cusGrpArray = [[NSMutableArray alloc] initWithObjects:recDic[@"Msg"][@"group"][@"grocod"],recDic[@"Msg"][@"group"][@"grosta"],recDic[@"Msg"][@"group"][@"nextgrodistime"],recDic[@"Msg"][@"group"][@"nowblocks"],recDic[@"Msg"][@"group"][@"nowholcod"],recDic[@"Msg"][@"group"][@"nowholnum"],recDic[@"Msg"][@"group"][@"pladur"],recDic[@"Msg"][@"group"][@"stahol"],recDic[@"Msg"][@"group"][@"statim"],recDic[@"Msg"][@"group"][@"stddur"],recDic[@"Msg"][@"group"][@"coursegrouptag"], nil];
+                                        [weakSelf.dbCon ExecNonQuery:@"insert into tbl_groupHeartInf(grocod,grosta,nextgrodistime,nowblocks,nowholcod,nowholnum,pladur,stahol,statim,stddur,coursegrouptag) values(?,?,?,?,?,?,?,?,?,?,?)" forParameter:cusGrpArray];
                                         
                                         //                    DataTable *table;// = [[DataTable alloc] init];
                                         //

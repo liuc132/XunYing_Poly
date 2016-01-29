@@ -285,10 +285,10 @@ typedef enum eventOrder{
                     
                     if([receiveDic[@"Code"] isEqualToNumber:[NSNumber numberWithInt:-1]])
                     {
-                        NSString *errStr;
-                        errStr = [NSString stringWithFormat:@"%@",receiveDic[@"Msg"]];
-                        UIAlertView *hasGrpFailAlert = [[UIAlertView alloc] initWithTitle:errStr message:nil delegate:weakSelf cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
-                        [hasGrpFailAlert show];
+//                        NSString *errStr;
+//                        errStr = [NSString stringWithFormat:@"%@",receiveDic[@"Msg"]];
+//                        UIAlertView *hasGrpFailAlert = [[UIAlertView alloc] initWithTitle:errStr message:nil delegate:weakSelf cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+//                        [hasGrpFailAlert show];
                         NSLog(@"fail");
                     }
                     
@@ -299,10 +299,10 @@ typedef enum eventOrder{
                     }
                     else if ([receiveDic[@"Code"] isEqualToNumber:[NSNumber numberWithInt:-3]])
                     {
-                        NSString *errStr;
-                        errStr = [NSString stringWithFormat:@"%@",receiveDic[@"Msg"]];
-                        UIAlertView *hasGrpFailAlert = [[UIAlertView alloc] initWithTitle:errStr message:nil delegate:weakSelf cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
-                        [hasGrpFailAlert show];
+//                        NSString *errStr;
+//                        errStr = [NSString stringWithFormat:@"%@",receiveDic[@"Msg"]];
+//                        UIAlertView *hasGrpFailAlert = [[UIAlertView alloc] initWithTitle:errStr message:nil delegate:weakSelf cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+//                        [hasGrpFailAlert show];
                         NSLog(@"The mid is illegal");
                     }
                     
@@ -471,8 +471,17 @@ typedef enum eventOrder{
                         //从服务器中返回来的信息，在此处保存
                         //组信息
                         //tbl_groupHeartInf(grocod text,grosta text,nextgrodistime text,nowblocks text,nowholcod text,nowholnum text,pladur text,stahol text,statim text,stddur text)
-                        NSMutableArray *groupInfArray = [[NSMutableArray alloc] initWithObjects:messegaDic[@"groinfo"][@"grocod"],messegaDic[@"groinfo"][@"grosta"],messegaDic[@"groinfo"][@"nextgrodistime"],messegaDic[@"groinfo"][@"nowblocks"],messegaDic[@"groinfo"][@"nowholcod"],messegaDic[@"groinfo"][@"nowholnum"],messegaDic[@"groinfo"][@"pladur"],messegaDic[@"groinfo"][@"stahol"],messegaDic[@"groinfo"][@"statim"],messegaDic[@"groinfo"][@"stddur"], nil];
-                        [weakSelf.lcDBCon ExecNonQuery:@"insert into tbl_groupHeartInf(grocod,grosta,nextgrodistime,nowblocks,nowholcod,nowholnum,pladur,stahol,statim,stddur) values(?,?,?,?,?,?,?,?,?,?)" forParameter:groupInfArray];
+                        NSMutableArray *groupInfArray = [[NSMutableArray alloc] initWithObjects:messegaDic[@"groinfo"][@"grocod"],messegaDic[@"groinfo"][@"grosta"],messegaDic[@"groinfo"][@"nextgrodistime"],messegaDic[@"groinfo"][@"nowblocks"],messegaDic[@"groinfo"][@"nowholcod"],messegaDic[@"groinfo"][@"nowholnum"],messegaDic[@"groinfo"][@"pladur"],messegaDic[@"groinfo"][@"stahol"],messegaDic[@"groinfo"][@"statim"],messegaDic[@"groinfo"][@"stddur"],messegaDic[@"groinfo"][@"coursegrouptag"], nil];
+                        [weakSelf.lcDBCon ExecNonQuery:@"insert into tbl_groupHeartInf(grocod,grosta,nextgrodistime,nowblocks,nowholcod,nowholnum,pladur,stahol,statim,stddur,coursegrouptag) values(?,?,?,?,?,?,?,?,?,?,?)" forParameter:groupInfArray];
+                        //通过获取到的coursegrouptag的信息，通知球场及相应的需要刷新的界面选择是否要切换球场
+                        NSDictionary *switchCourseWord = [[NSDictionary alloc] initWithObjectsAndKeys:messegaDic[@"groinfo"][@"coursegrouptag"],@"curCourseTag",messegaDic[@"groinfo"][@"statim"],@"startTime", nil];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"whetherCanSwitchCourse" object:nil userInfo:switchCourseWord];
+                        //
+                        NSDictionary *switchCourseWord1 = [[NSDictionary alloc] initWithObjectsAndKeys:messegaDic[@"groinfo"][@"coursegrouptag"],@"curCourseTag1",messegaDic[@"groinfo"][@"statim"],@"startTime1", nil];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"whetherCanSwitchCourse1" object:nil userInfo:switchCourseWord1];
+                        //
+                        
+                        
                         //当前所在球洞的位置信息
                         NSMutableArray *locHoleInf = [[NSMutableArray alloc] initWithObjects:messegaDic[@"lochole"][@"holcod"],messegaDic[@"lochole"][@"holnum"], nil];
                         [weakSelf.lcDBCon ExecNonQuery:@"insert into tbl_locHole(holcod,holnum) values(?,?)" forParameter:locHoleInf];
@@ -536,7 +545,7 @@ typedef enum eventOrder{
                         //组装需要发送的数据
                         weakSelf.finalDic = [[NSMutableDictionary alloc] initWithObjectsAndKeys:self.allowDownStr,@"allowDown",weakSelf.waitToAllow,@"waitToAllow", nil];
                         //发送通知到LogIn界面
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"allowDown" object:nil userInfo:weakSelf.finalDic];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"canEnterCreatGrp" object:nil userInfo:weakSelf.finalDic];
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"readyDown" object:nil userInfo:@{@"readyDown":weakSelf.haveDetectedDownEnable}];
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"whereToGo" object:nil userInfo:weakSelf.finalDic];
                     }

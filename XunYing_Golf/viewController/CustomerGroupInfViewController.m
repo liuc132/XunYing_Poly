@@ -26,6 +26,11 @@
 @property (strong, nonatomic) DataTable *allHoleInfo;
 @property (strong, nonatomic) DataTable *curSelectedCustomers;
 @property (strong, nonatomic) DataTable *selectedCartInfo;
+@property (strong, nonatomic) DataTable *heartGroInfo;
+
+@property (assign, nonatomic) NSInteger         theCourseIndex;
+@property (strong, nonatomic) NSString          *curCourseTag;
+@property (strong, nonatomic) NSString          *startTime;
 
 @property (strong, nonatomic) NSArray   *playStateArray;
 
@@ -88,6 +93,27 @@
     self.allHoleInfo   = [[DataTable alloc] init];
     self.curSelectedCustomers = [[DataTable alloc] init];
     self.selectedCartInfo     = [[DataTable alloc] init];
+    self.heartGroInfo         = [[DataTable alloc] init];
+    //
+    self.startTime = [[NSString alloc] init];
+    //
+    self.heartGroInfo = [self.cusGroupDBCon ExecDataTable:@"select *from tbl_groupHeartInf"];
+    
+    if ([self.heartGroInfo.Rows count]) {
+        self.curCourseTag = self.heartGroInfo.Rows[0][@"coursegrouptag"];
+        self.startTime    = self.heartGroInfo.Rows[0][@"statim"];
+    }
+    else
+        self.curCourseTag = @"north";
+    //判断
+    if ([self.curCourseTag isEqualToString:@"north"]) {
+        self.theCourseIndex = 0;
+    }
+    else if ([self.curCourseTag isEqualToString:@"south"])
+    {
+        self.theCourseIndex = 1;
+    }
+    
     //初始化球洞状态 0正常 1较慢 2慢 3前方有慢组 4球洞较慢 5球洞慢
     self.playStateArray = [[NSArray alloc] initWithObjects:@"正常",@"较慢",@"慢",@"前方有慢组",@"球洞较慢",@"球洞慢", nil];
     //setting uiscrollView
@@ -98,21 +124,7 @@
     self.cusInfScrollView.showsVerticalScrollIndicator = YES;
     self.cusInfScrollView.indicatorStyle = UIScrollViewIndicatorStyleDefault;
     self.cusInfScrollView.contentInset = UIEdgeInsetsMake(0, 0, 85, 0);
-    //查询相应的信息
-    dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        weakSelf.cusGroupInf = [weakSelf.cusGroupDBCon ExecDataTable:@"select *from tbl_groupHeartInf"];
-        weakSelf.padInfTable = [weakSelf.cusGroupDBCon ExecDataTable:@"select *from tbl_padInfo"];
-        weakSelf.locInfTable = [weakSelf.cusGroupDBCon ExecDataTable:@"select *from tbl_locHole"];
-        weakSelf.curGrpCaddies   = [weakSelf.cusGroupDBCon ExecDataTable:@"select *from tbl_addCaddy"];
-        weakSelf.groupInfo   = [weakSelf.cusGroupDBCon ExecDataTable:@"select *from tbl_groupInf"];
-        weakSelf.allHoleInfo = [weakSelf.cusGroupDBCon ExecDataTable:@"select *from tbl_holeInf"];
-        weakSelf.curSelectedCustomers = [weakSelf.cusGroupDBCon ExecDataTable:@"select *from tbl_CustomersInfo"];
-        weakSelf.selectedCartInfo     = [weakSelf.cusGroupDBCon ExecDataTable:@"select *from tbl_selectCart"];
-        //将相应的信息显示出来
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf constructDisInf];
-        });
-    });
+    
     
     self.stateIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(ScreenWidth/2 - 100, ScreenHeight/2 - 100, 200, 200)];
     self.stateIndicator.backgroundColor = [UIColor HexString:@"0a0a0a" andAlpha:0.2];
@@ -124,8 +136,20 @@
 #ifdef DEBUG_MODE
     NSLog(@"finish search");
 #endif
+    //开启进度条显示
+    [self.stateIndicator startAnimating];
+    self.stateIndicator.hidden = NO;
+    //查询相应的信息
+    dispatch_time_t time = dispatch_time ( DISPATCH_TIME_NOW , 1ull * NSEC_PER_SEC ) ;
+    dispatch_after(time, dispatch_get_main_queue(), ^{
+        [weakSelf refreshAllData];
+    });
     
+    //
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ForceBackField:) name:@"forceBackField" object:nil];
+    //添加通知，接受心跳里边的相应的参数，进而来确定是否切换球场whetherCanSwitchCourse
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getWhetherSwitchCourse:) name:@"whetherCanSwitchCourse1" object:nil];
+    
     
 }
 
@@ -136,14 +160,74 @@
         [[NSNotificationCenter defaultCenter] removeObserver:self];
         //
         dispatch_async(dispatch_get_main_queue(), ^{
-//            UIAlertView *serverForceBackAlert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"您的小组已回场" delegate:weakSelf cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
-//            [serverForceBackAlert show];
-            
-            [weakSelf performSegueWithIdentifier:@"serVerBackField" sender:nil];
+            [weakSelf performSegueWithIdentifier:@"backToField" sender:nil];
         });
-        
-        
     }
+}
+
+- (void)getWhetherSwitchCourse:(NSNotification *)sender
+{
+    __weak typeof(self) weakSelf = self;
+    //
+    if (![sender.name isEqualToString:@"whetherCanSwitchCourse1"]) {
+        return;
+    }
+    //
+    self.curCourseTag = sender.userInfo[@"curCourseTag1"];
+    NSString *curStartTime;
+    curStartTime = sender.userInfo[@"startTime1"];
+    //判断
+    if ([self.curCourseTag isEqualToString:@"north"]) {
+        if (self.theCourseIndex == 0) {
+            if ([curStartTime isEqualToString:self.startTime]) {
+                return;
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.startTime = curStartTime;
+            });
+        }
+        self.theCourseIndex = 0;
+    }
+    else if ([self.curCourseTag isEqualToString:@"south"])
+    {
+        if (self.theCourseIndex ==1) {
+            if ([curStartTime isEqualToString:self.startTime]) {
+                return;
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.startTime = curStartTime;
+            });
+        }
+        self.theCourseIndex = 1;
+    }
+    
+    NSLog(@"startTime:%@  curStartTime:%@",self.startTime,curStartTime);
+    //开启进度条显示
+    [self.stateIndicator startAnimating];
+    self.stateIndicator.hidden = NO;
+    //更新数据
+    dispatch_time_t time = dispatch_time ( DISPATCH_TIME_NOW , 1ull * NSEC_PER_SEC ) ;
+    dispatch_after(time, dispatch_get_main_queue(), ^{
+        [weakSelf refreshAllData];
+    });
+    
+}
+
+- (void)refreshAllData{
+    
+    //
+    self.cusGroupInf = [self.cusGroupDBCon ExecDataTable:@"select *from tbl_groupHeartInf"];
+    self.padInfTable = [self.cusGroupDBCon ExecDataTable:@"select *from tbl_padInfo"];
+    self.locInfTable = [self.cusGroupDBCon ExecDataTable:@"select *from tbl_locHole"];
+    self.curGrpCaddies   = [self.cusGroupDBCon ExecDataTable:@"select *from tbl_addCaddy"];
+    self.groupInfo   = [self.cusGroupDBCon ExecDataTable:@"select *from tbl_groupInf"];
+    self.allHoleInfo = [self.cusGroupDBCon ExecDataTable:@"select *from tbl_holeInf"];
+    self.curSelectedCustomers = [self.cusGroupDBCon ExecDataTable:@"select *from tbl_CustomersInfo"];
+    self.selectedCartInfo     = [self.cusGroupDBCon ExecDataTable:@"select *from tbl_selectCart"];
+    //将相应的信息显示出来
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self constructDisInf];
+    });
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -394,6 +478,10 @@
         default:
             break;
     }
+    //关闭显示进度条
+    [self.stateIndicator stopAnimating];
+    self.stateIndicator.hidden = YES;
+    
 }
 
 
@@ -470,7 +558,7 @@
             {
                 NSString *errStr;
                 errStr = [NSString stringWithFormat:@"%@",recDic[@"Msg"]];
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:errStr delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:errStr message:@"" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
                 [alert show];
                 
             }

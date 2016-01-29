@@ -34,6 +34,8 @@
 @property (strong, nonatomic) DataTable *logInCount;
 @property (nonatomic)         BOOL  changeState;
 
+@property (strong, nonatomic) NSString *enableHeartBeat;
+@property (strong, nonatomic) NSString *canEnterCreatGrp;
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) KeychainItemWrapper *keychainWrapper;
@@ -59,8 +61,6 @@
     //查询数据库
     self.logInCount = [self.dbCon ExecDataTable:@"select *from tbl_NamePassword"];
     
-    //请求接口：是否可以建组，是否可以下场
-    [self requestWhetherDownOrCreatGrp];
     //
     self.rootVC = [[LogInViewController alloc]init];
     self.rootVC = [[UIStoryboard storyboardWithName:@"Main" bundle:nil]instantiateInitialViewController];
@@ -68,7 +68,11 @@
     
     [self.window makeKeyAndVisible];
     
-    [self setLaunchAnimation];
+    if (self.logInCount.Rows.count) {
+//        [self setLaunchAnimation];
+    }
+    //请求接口：是否可以建组，是否可以下场
+    [self requestWhetherDownOrCreatGrp];
     //
     NSLog(@"%@",launchOptions);
     self.changeState = NO;
@@ -135,7 +139,7 @@
     self.subImage2.image = [UIImage imageNamed:@"enter_circle"];
     [self.launchAnimateImage addSubview:self.subImage2];
     //
-    [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(rotationTheSubImage2) userInfo:nil repeats:YES];
+//    [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(rotationTheSubImage2) userInfo:nil repeats:YES];
 }
 
 - (void)rotationTheSubImage2{
@@ -151,6 +155,9 @@
 - (void)requestWhetherDownOrCreatGrp
 {
     __weak typeof(self) weakSelf = self;
+    //
+    self.canEnterCreatGrp = @"0";
+    self.enableHeartBeat  = @"0";
     //如果本地没有保存到登录人的账户，密码；则返回
     if (!self.logInCount.Rows.count) {
         return;
@@ -177,13 +184,7 @@
             [self.dbCon ExecDataTable:@"delete from tbl_groupInf"];
             [self.dbCon ExecDataTable:@"delete from tbl_holeInf"];
             [self.dbCon ExecDataTable:@"delete from tbl_CustomersInfo"];
-            //
-            //获取到球洞信息，并将相应的信息保存到内存中
-            NSArray *allHolesInfo = recDic[@"Msg"][@"holes"];
-            for (NSDictionary *eachHole in allHolesInfo) {
-                NSMutableArray *eachHoleParam = [[NSMutableArray alloc] initWithObjects:eachHole[@"forecasttime"],eachHole[@"gronum"],eachHole[@"holcod"],eachHole[@"holcue"],eachHole[@"holfla"],eachHole[@"holgro"],eachHole[@"holind"],eachHole[@"hollen"],eachHole[@"holnam"],eachHole[@"holnum"],eachHole[@"holspe"],eachHole[@"holsta"],eachHole[@"nowgroups"],eachHole[@"stan1"],eachHole[@"stan2"],eachHole[@"stan3"],eachHole[@"stan4"],eachHole[@"usestatus"],eachHole[@"x"],eachHole[@"y"], nil];
-                [weakSelf.dbCon ExecNonQuery:@"INSERT INTO tbl_holeInf(forecasttime,gronum,holcod,holcue,holfla,holgro,holind,hollen,holnam,holenum,holspe,holsta,nowgroups,stan1,stan2,stan3,stan4,usestatus,x,y) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" forParameter:eachHoleParam];
-            }
+            [self.dbCon ExecDataTable:@"delete from tbl_logPerson"];
             //
             NSString *value1;
             NSDictionary *allEmps;
@@ -194,10 +195,15 @@
                 NSMutableArray *logPersonInf = [[NSMutableArray alloc] initWithObjects:recDic[@"Msg"][@"logemp"][@"cadCode"],recDic[@"Msg"][@"logemp"][@"empcod"],recDic[@"Msg"][@"logemp"][@"empjob"],recDic[@"Msg"][@"logemp"][@"empnam"],recDic[@"Msg"][@"logemp"][@"empnum"],recDic[@"Msg"][@"logemp"][@"empsex"],recDic[@"Msg"][@"logemp"][@"cadShowNum"], nil];
                 //将数据加载到创建的数据库中cadCode text,empCode
                 [weakSelf.dbCon ExecNonQuery:@"INSERT INTO tbl_logPerson(cadCode,empCode,job,name,number,sex,caddyLogIn) VALUES(?,?,?,?,?,?,?)" forParameter:logPersonInf];
-                //执行通知
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"canEnterCreatGrp" object:nil userInfo:@{@"enterCreateGrp":@"1"}];
+                self.canEnterCreatGrp = @"1";
+                
             }
-            
+            //获取到球洞信息，并将相应的信息保存到内存中
+            NSArray *allHolesInfo = recDic[@"Msg"][@"holes"];
+            for (NSDictionary *eachHole in allHolesInfo) {
+                NSMutableArray *eachHoleParam = [[NSMutableArray alloc] initWithObjects:eachHole[@"forecasttime"],eachHole[@"gronum"],eachHole[@"holcod"],eachHole[@"holcue"],eachHole[@"holfla"],eachHole[@"holgro"],eachHole[@"holind"],eachHole[@"hollen"],eachHole[@"holnam"],eachHole[@"holnum"],eachHole[@"holspe"],eachHole[@"holsta"],eachHole[@"nowgroups"],eachHole[@"stan1"],eachHole[@"stan2"],eachHole[@"stan3"],eachHole[@"stan4"],eachHole[@"usestatus"],eachHole[@"x"],eachHole[@"y"], nil];
+                [weakSelf.dbCon ExecNonQuery:@"INSERT INTO tbl_holeInf(forecasttime,gronum,holcod,holcue,holfla,holgro,holind,hollen,holnam,holenum,holspe,holsta,nowgroups,stan1,stan2,stan3,stan4,usestatus,x,y) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" forParameter:eachHoleParam];
+            }
             //
             NSString *groupValue = [recDic[@"Msg"] objectForKey:@"group"];
             if([(NSNull *)groupValue isEqual: @"null"])//
@@ -241,12 +247,19 @@
                     //                    table = [strongSelf.dbCon ExecDataTable:@"select *from tbl_groupInf"];
                     //                    NSLog(@"table:%@",table);
                     //
-                    HeartBeatAndDetectState *heartBeat = [[HeartBeatAndDetectState alloc] init];
-                    if(![heartBeat checkState])
-                    {
-                        [heartBeat initHeartBeat];//启动心跳服务
-                        [heartBeat enableHeartBeat];
-                    }
+                    
+                    //
+//                    dispatch_time_t time = dispatch_time ( DISPATCH_TIME_NOW , 1ull * NSEC_PER_SEC ) ;
+//                    dispatch_after(time, dispatch_get_main_queue(), ^{
+//                        HeartBeatAndDetectState *heartBeat = [[HeartBeatAndDetectState alloc] init];
+//                        if(![heartBeat checkState])
+//                        {
+//                            [heartBeat initHeartBeat];//启动心跳服务
+//                            [heartBeat enableHeartBeat];
+//                        }
+//                    });
+                    self.enableHeartBeat = @"1";
+                    self.canEnterCreatGrp = @"0";
                     //                    [[NSNotificationCenter defaultCenter] postNotificationName:@"allowDown" object:nil userInfo:@{@"allowDown":@"1"}];
                     
                     //weakSelf.haveGroupNotDown = YES;
@@ -267,8 +280,11 @@
                 {
                     [weakSelf.dbCon ExecNonQuery:@"delete from tbl_taskInfo"];
                 }
-                
             }
+            //执行通知
+            NSDictionary *requestBackParam = [[NSDictionary alloc] initWithObjectsAndKeys:self.canEnterCreatGrp,@"enterCreateGrp",self.enableHeartBeat,@"enableHeartBeat", nil];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"canEnterCreatGrp" object:nil userInfo:requestBackParam];
         }
         else if ([recDic[@"Code"] integerValue] == -2){
             
@@ -292,6 +308,9 @@
         NSLog(@"网络请求失败");
         UIAlertView *errAlert = [[UIAlertView alloc] initWithTitle:@"网络请求失败" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
         [errAlert show];
+        //
+        NSDictionary *requestBackParam = [[NSDictionary alloc] initWithObjectsAndKeys:@"1",@"requestServerFail", nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"canEnterCreatGrp" object:nil userInfo:requestBackParam];
         
     }];
     
@@ -407,7 +426,7 @@
      nowblocks:所在球洞段号：1发球台 2球道 3果岭
      hgcod:球洞组（上九洞，下九洞，十八洞）
      */
-    [dbCon ExecDataTable:@"create table if not exists tbl_groupHeartInf(grocod text,grosta text,nextgrodistime text,nowblocks text,nowholcod text,nowholnum text,pladur text,stahol text,statim text,stddur text)"];
+    [dbCon ExecDataTable:@"create table if not exists tbl_groupHeartInf(grocod text,grosta text,nextgrodistime text,nowblocks text,nowholcod text,nowholnum text,pladur text,stahol text,statim text,stddur text,coursegrouptag text)"];
     //心跳中显示的当前的定位位置
     [dbCon ExecDataTable:@"create table if not exists tbl_locHole(holcod text,holnum text)"];
     //获取到移动设备的信息

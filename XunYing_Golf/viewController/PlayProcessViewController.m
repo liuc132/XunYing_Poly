@@ -44,12 +44,17 @@ typedef enum holeState{
 @property (strong, nonatomic) DataTable *cusGroInfEmp;
 @property (strong, nonatomic) DataTable *holePlanInfo;
 @property (strong, nonatomic) DataTable *holesInfo;
+@property (strong, nonatomic) DataTable *heartGroInfo;
 
 @property (strong, nonatomic) NSArray   *holePositionArray;
 @property (nonatomic)         NSInteger theSelectNum;
 @property (strong, nonatomic) NSArray   *holeStateArray;
 @property (strong, nonatomic) UIActivityIndicatorView *stateIndicator;
-
+//
+@property (assign, nonatomic) NSInteger         theCourseIndex;
+@property (assign, nonatomic) NSInteger         refreshFlag;
+@property (strong, nonatomic) NSString          *curCourseTag;
+@property (strong, nonatomic) NSString          *startTime;
 
 @property (strong, nonatomic) IBOutlet UIScrollView *playProcessScrollView;
 
@@ -111,6 +116,26 @@ typedef enum holeState{
     self.cusGroInfEmp = [[DataTable alloc] init];
     self.holePlanInfo = [[DataTable alloc] init];
     self.holesInfo    = [[DataTable alloc] init];
+    self.heartGroInfo = [[DataTable alloc] init];
+    //
+    self.heartGroInfo = [self.lcDbcon ExecDataTable:@"select *from tbl_groupHeartInf"];
+    
+    if ([self.heartGroInfo.Rows count]) {
+        self.curCourseTag = self.heartGroInfo.Rows[0][@"coursegrouptag"];
+        self.startTime    = self.heartGroInfo.Rows[0][@"statim"];
+    }
+    else
+        self.curCourseTag = @"north";
+    //判断
+    if ([self.curCourseTag isEqualToString:@"north"]) {
+        self.theCourseIndex = 0;
+    }
+    else if ([self.curCourseTag isEqualToString:@"south"])
+    {
+        self.theCourseIndex = 1;
+    }
+    //
+    self.refreshFlag = 1;
     //
     self.stateIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(ScreenWidth/2 - 100, ScreenHeight/2 - 100, 200, 200)];
     self.stateIndicator.backgroundColor = [UIColor HexString:@"0a0a0a" andAlpha:0.2];
@@ -130,6 +155,8 @@ typedef enum holeState{
     self.holeStateArray    = [[NSArray alloc] initWithObjects:@"正常",@"被完成",@"被跳过",@"被挂起",@"非法跳过",@"补打",@"补打完成",@"被补打",@"被预定", nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ForceBackField:) name:@"forceBackField" object:nil];
+    //添加通知，接受心跳里边的相应的参数，进而来确定是否切换球场whetherCanSwitchCourse
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getWhetherSwitchCourse:) name:@"whetherCanSwitchCourse" object:nil];
     
 }
 
@@ -148,6 +175,44 @@ typedef enum holeState{
         
         
     }
+}
+
+- (void)getWhetherSwitchCourse:(NSNotification *)sender
+{
+    self.curCourseTag = sender.userInfo[@"curCourseTag"];
+    NSString *curStartTime;
+    curStartTime = sender.userInfo[@"startTime"];
+    //
+    if (![sender.name isEqualToString:@"whetherCanSwitchCourse"]) {
+        return;
+    }
+    //判断
+    if ([self.curCourseTag isEqualToString:@"north"]) {
+        if (self.theCourseIndex == 0) {
+            if ([curStartTime isEqualToString:self.startTime]) {
+                return;
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.startTime = curStartTime;
+            });
+        }
+        self.theCourseIndex = 0;
+    }
+    else if ([self.curCourseTag isEqualToString:@"south"])
+    {
+        if (self.theCourseIndex ==1) {
+            if ([curStartTime isEqualToString:self.startTime]) {
+                return;
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.startTime = curStartTime;
+            });
+        }
+        self.theCourseIndex = 1;
+    }
+    //更新数据
+    [self GetPlayProcess];
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -566,6 +631,11 @@ wasOrderedState
                         
                     }failure:^(NSError *err){
                         NSLog(@"request failed");
+                        [self.stateIndicator stopAnimating];
+                        self.stateIndicator.hidden = YES;
+                        //
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"网络请求异常" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                        [alert show];
                     }];
                 });
                 

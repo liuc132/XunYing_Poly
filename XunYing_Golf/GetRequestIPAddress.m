@@ -418,7 +418,7 @@
     }//(interval text,ipAddr text,portNum text)
     else
     {
-        needMendHoleURL = [NSString stringWithFormat:@"http://%@:%@%@",theStoredData.Rows[0][@"ipAddr"],theStoredData.Rows[0][@"portNum"],MakeHoleCompleteStateSubURL];
+        needMendHoleURL = [NSString stringWithFormat:@"http://%@:%@%@",theStoredData.Rows[0][@"ipAddr"],theStoredData.Rows[0][@"portNum"],GetNeedMendHoleSubURL];
     }
     //
     return needMendHoleURL;

@@ -123,12 +123,28 @@
     theMid = [GetRequestIPAddress getUniqueID];
     theMid = [NSString stringWithFormat:@"I_IMEI_%@",theMid];
     //
+    NSString *playerSex;
+    switch ([self.userInf.Rows[0][@"sex"] integerValue]) {
+        case 1:
+            playerSex = @"男";
+            break;
+            
+        case 2:
+            playerSex = @"女";
+            break;
+            
+        default:
+            break;
+    }
+    //
+    //获取到心跳间隔时长
+    NSString *intervalTimeStr = [GetRequestIPAddress getIntervalTime];
+    NSInteger heartBeatInterval = [intervalTimeStr integerValue];
+    //
     switch (indexPath.row) {
         case 0:
             cell.textLabel.text = @"编号";
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",self.userInf.Rows[0][@"number"]];//@"095";
-            
-            
             
             break;
         case 1:
@@ -138,7 +154,7 @@
             break;
         case 2:
             cell.textLabel.text = @"性别";
-            cell.detailTextLabel.text = self.userInf.Rows[0][@"sex"]?@"男":@"女";
+            cell.detailTextLabel.text = playerSex;
             
             break;
         case 3:
@@ -148,13 +164,13 @@
             
             break;
         case 4:
-            cell.textLabel.text = @"当前平板";
+            cell.textLabel.text = @"当前设备";
             cell.detailTextLabel.text = theMid;
             
             break;
         case 5:
             cell.textLabel.text = @"心跳间隔时间";
-            cell.detailTextLabel.text = @"10秒";
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld秒",(long)heartBeatInterval];
             
             break;
         default:

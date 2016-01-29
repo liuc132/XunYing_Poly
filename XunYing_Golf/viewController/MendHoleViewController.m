@@ -52,6 +52,8 @@
 @property (strong, nonatomic) DataTable *logPerson;
 @property (strong, nonatomic) DataTable *holesInf;
 @property (strong, nonatomic) DataTable *mendHoleResult;
+@property (strong, nonatomic) DataTable *heartGrpInfo;
+
 @property (strong, nonatomic) DBCon     *lcDBCon;
 @property (strong, nonatomic) NSMutableArray *needMendHoles;
 @property (strong, nonatomic) NSDictionary *eventInfoDic;
@@ -72,11 +74,13 @@
     self.logPerson = [[DataTable alloc] init];
     self.holesInf  = [[DataTable alloc] init];
     self.mendHoleResult = [[DataTable alloc] init];
+    self.heartGrpInfo   = [[DataTable alloc] init];
     //
     self.toTaskDetailEnable =   NO;
     //在本地数据库中查询数据
     self.logPerson = [self.lcDBCon ExecDataTable:@"select *from tbl_logPerson"];
     self.holesInf  = [self.lcDBCon ExecDataTable:@"select *from tbl_holeInf"];
+    self.heartGrpInfo = [self.lcDBCon ExecDataTable:@"select *from tbl_groupHeartInf"];
     //测试用，初始化数据
     self.needMendHoles = [[NSMutableArray alloc] init];
     //
@@ -177,7 +181,7 @@
             NSLog(@"needMend:%@",needMendHoleDic);
             //
             if ([needMendHoleDic[@"Code"] intValue] > 0) {
-                self.mendHoleReqSuccess = YES;
+                weakSelf.mendHoleReqSuccess = YES;
                 //
                 NSArray *allNeedMend = needMendHoleDic[@"Msg"];
                 for (NSDictionary *eachNeedMendInfo in allNeedMend) {
@@ -195,15 +199,17 @@
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"没有需要补打的球洞" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
                 [alert show];
                 //
-                self.mendHoleReqSuccess = NO;
+                weakSelf.mendHoleReqSuccess = NO;
                 //同时执行跳转程序
+                [weakSelf dismissViewControllerAnimated:YES completion:nil];
                 //            [weakSelf performSegueWithIdentifier:@"mendHoleToList" sender:nil];
             }
             
             
         }failure:^(NSError *err){
             NSLog(@"getMendHole Failed");
-            
+            UIAlertView *errAlert = [[UIAlertView alloc] initWithTitle:@"网络请求异常" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+            [errAlert show];
             
         }];
     });
@@ -288,7 +294,7 @@
     NSString *mendHoles = [[NSString alloc] init];
     //
 //    if (self.needMendHoles) {
-//        <#statements#>
+//
 //    }
     //
     if([self.needMendHoles count] > 1)

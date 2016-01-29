@@ -387,7 +387,7 @@
     theMid = [GetRequestIPAddress getUniqueID];
     theMid = [NSString stringWithFormat:@"I_IMEI_%@",theMid];
     //组建跳动请求参数
-    NSMutableDictionary *jumpHoleParam = [[NSMutableDictionary alloc] initWithObjectsAndKeys:theMid,@"mid",self.logPerson.Rows[0][@"code"],@"code",self.holesInf.Rows[self.selectedJumpNum][@"holcod"],@"aplcod", nil];
+    NSMutableDictionary *jumpHoleParam = [[NSMutableDictionary alloc] initWithObjectsAndKeys:theMid,@"mid",self.logPerson.Rows[0][@"empCode"],@"code",self.holesInf.Rows[self.selectedJumpNum][@"holcod"],@"aplcod", nil];
     //
     NSString *jumpHoleURLStr;
     jumpHoleURLStr = [GetRequestIPAddress getJumpHoleURL];

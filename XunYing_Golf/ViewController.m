@@ -9,6 +9,8 @@
 #import "ViewController.h"
 #import <CoreLocation/CoreLocation.h>
 #import "XunYingPre.h"
+#import "DBCon.h"
+#import "DataTable.h"
 
 
 #define CLIENT_ID   @"gKbc4lH2K27McsAe"
@@ -34,7 +36,7 @@ GPSPoint currentGPS;
 
 
 
-
+@property(strong, nonatomic) AGSLocalTiledLayer     *backGroundLayer;
 @property(strong, nonatomic) AGSGDBFeatureTable     *localFeatureTable;
 @property(strong, nonatomic) AGSFeatureTableLayer   *localFeatureTableLayer;
 @property(strong, nonatomic) AGSGDBFeatureTable     *localHoleFeatureTable;
@@ -52,16 +54,17 @@ GPSPoint currentGPS;
 
 @property(strong, nonatomic) AGSLocator *locator;
 
-//heartBeat
-@property(strong, nonatomic) NSTimer *heartBeat;
-
 @property (strong, nonatomic) AGSQuery *query;
 @property (strong, nonatomic) AGSQueryTask *queryTask;
 @property (strong, nonatomic) AGSLocationDisplay *locationDis;
 
 @property (strong, nonatomic) AGSGeometryEngine *geometryEngineLocal;
 @property (strong, nonatomic) AGSPoint          *startPoint;
-
+//
+@property (assign, nonatomic) NSInteger         theCourseIndex;
+@property (strong, nonatomic) DBCon             *mapDbCon;
+@property (strong, nonatomic) DataTable         *groInfo;
+@property (strong, nonatomic) NSString          *curCourseTag;
 
 - (IBAction)whichButton:(UIButton *)sender;
 
@@ -72,12 +75,35 @@ GPSPoint currentGPS;
 @implementation ViewController
 FixedPoint gpsScreenPoint;
 
+/*
+ //    NSURL *mapUrl = [NSURL URLWithString:@"http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer"];
+ //    AGSTiledMapServiceLayer *tiledLyr = [AGSTiledMapServiceLayer tiledMapServiceLayerWithURL:mapUrl];
+ //    [self.mapView addMapLayer:tiledLyr withName:@"Tiled Layer"];
+ //
+ //    //Zooming to an initial envelope with the specified spatial reference of the map.
+ //    AGSSpatialReference *sr = [AGSSpatialReference spatialReferenceWithWKID:102100];
+ //    AGSEnvelope *env = [AGSEnvelope envelopeWithXmin:-13639984
+ //                                                ymin:4537387
+ //                                                xmax:-13606734
+ //                                                ymax:4558866
+ //                                    spatialReference:sr];
+ //    [self.mapView zoomToEnvelope:env animated:YES];
+ 
+ //    Zooming to an initial envelope with the specified spatial reference of the map. 上邦地图范围
+ //    AGSSpatialReference *sr = [AGSSpatialReference spatialReferenceWithWKID:3857];
+ //    AGSEnvelope *env = [AGSEnvelope envelopeWithXmin:11830220.9410906
+ //                                                ymin:3439691.60124628
+ //                                                xmax:11832488.6845279
+ //                                                ymax:3438114.33915628
+ //                                    spatialReference:sr];
+ //
+ //
+ //    [self.mapView zoomToEnvelope:env animated:YES];
+ */
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
-    __weak typeof(self) weakSelf = self;
-    
-    
+    // Do any additional setup after loading the view, typically from a nib.//
     NSError *error;
     [AGSRuntimeEnvironment setClientID:CLIENT_ID error:&error];
     if(error){
@@ -86,99 +112,101 @@ FixedPoint gpsScreenPoint;
     //enable standard level functionality in your app using your license code 这句话是将eris的logo给去掉
     AGSLicenseResult result = [[AGSRuntimeEnvironment license] setLicenseCode:@"runtimestandard,101,rux00000,none,gKbc4lH2K27McsAe"];
     NSLog(@"%ld",(long)result);
+    //
+    self.mapDbCon = [[DBCon alloc] init];
+    self.groInfo  = [[DataTable alloc] init];
+    //
+    self.groInfo = [self.mapDbCon ExecDataTable:@"select *from tbl_groupHeartInf"];
     
     
-    //add tiled layer  step1
-    NSString *path = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapData.bundle/xunying.tpk"];
-    AGSLocalTiledLayer *layer = [AGSLocalTiledLayer localTiledLayerWithPath:path];
-    //如果层被合适的初始化了之后，添加到地图
-    if(layer != nil && !layer.error)
-    {
-        [self.mapView addMapLayer:layer withName:@"Local Tiled Layer"];
+    if ([self.groInfo.Rows count]) {
+        self.curCourseTag = self.groInfo.Rows[0][@"coursegrouptag"];
     }
     else
+        self.curCourseTag = @"north";
+    //
+    //判断
+    if ([self.curCourseTag isEqualToString:@"north"]) {
+        self.theCourseIndex = 0;
+    }
+    else if ([self.curCourseTag isEqualToString:@"south"])
     {
-        [[[UIAlertView alloc]initWithTitle:@"could not load tile package" message:[layer.error localizedDescription] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil, nil]show];
+        self.theCourseIndex = 1;
+    }
+    
+    [self switchToCurCourse];
+    
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ForceBackField:) name:@"forceBackField" object:nil];
+    //添加通知，接受心跳里边的相应的参数，进而来确定是否切换球场whetherCanSwitchCourse
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getWhetherSwitchCourse:) name:@"whetherCanSwitchCourse" object:nil];
+    //
+    
+}
+
+- (void)ForceBackField:(NSNotification *)sender
+{
+    __weak typeof(self) weakSelf = self;
+    if ([sender.userInfo[@"forceBack"] isEqualToString:@"1"]) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+        //
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIAlertView *serverForceBackAlert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"您的小组已回场" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+            [serverForceBackAlert show];
+            
+            [weakSelf performSegueWithIdentifier:@"serVerBackField" sender:nil];
+        });
+        
         
     }
-    
-//    NSURL *mapUrl = [NSURL URLWithString:@"http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer"];
-//    AGSTiledMapServiceLayer *tiledLyr = [AGSTiledMapServiceLayer tiledMapServiceLayerWithURL:mapUrl];
-//    [self.mapView addMapLayer:tiledLyr withName:@"Tiled Layer"];
-//    
-//    //Zooming to an initial envelope with the specified spatial reference of the map.
-//    AGSSpatialReference *sr = [AGSSpatialReference spatialReferenceWithWKID:102100];
-//    AGSEnvelope *env = [AGSEnvelope envelopeWithXmin:-13639984
-//                                                ymin:4537387
-//                                                xmax:-13606734
-//                                                ymax:4558866
-//                                    spatialReference:sr];
-//    [self.mapView zoomToEnvelope:env animated:YES];
-    
-//    Zooming to an initial envelope with the specified spatial reference of the map. 上邦地图范围
-//    AGSSpatialReference *sr = [AGSSpatialReference spatialReferenceWithWKID:3857];
-//    AGSEnvelope *env = [AGSEnvelope envelopeWithXmin:11830220.9410906
-//                                                ymin:3439691.60124628
-//                                                xmax:11832488.6845279
-//                                                ymax:3438114.33915628
-//                                    spatialReference:sr];
-//    
-//    
-//    [self.mapView zoomToEnvelope:env animated:YES];
-    
-    //测试场地之花卉园地图范围
-    AGSSpatialReference *sr = [AGSSpatialReference spatialReferenceWithWKID:3857];
-    AGSEnvelope *env = [AGSEnvelope envelopeWithXmin:11856404.596390
-                                                ymin:3450433.501542
-                                                xmax:11856986.392327
-                                                ymax:3450038.812739
-                                    spatialReference:sr];
-    
-    
-    [self.mapView zoomToEnvelope:env animated:YES];
-//    //xunying_hole.geodatabase
-    NSError *hole_error;
-    NSString *holePath = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapData.bundle/xunying_hole.geodatabase"];
-    AGSGDBGeodatabase *gdbXunyinHole = [AGSGDBGeodatabase geodatabaseWithPath:holePath error:&hole_error];
-    if(hole_error){
-        NSLog(@"fail to open xunying_hole.geodatabase");
+}
+
+- (void)getWhetherSwitchCourse:(NSNotification *)sender
+{
+    self.curCourseTag = sender.userInfo[@"curCourseTag"];
+    //判断
+    if ([self.curCourseTag isEqualToString:@"north"]) {
+        if (self.theCourseIndex == 0) {
+            return;
+        }
+        self.theCourseIndex = 0;
     }
-    else{
-        self.localHoleFeatureTable = [[gdbXunyinHole featureTables] objectAtIndex:0];
-        self.localHoleFeatureTableLayer = [[AGSFeatureTableLayer alloc] initWithFeatureTable:self.localHoleFeatureTable];
-        self.localHoleFeatureTableLayer.delegate = self;
-        [self.mapView addMapLayer:self.localHoleFeatureTableLayer withName:@"Hole Feature Layer"];
-    }
-    //xunying.geodatabase
-    NSError *xunyingError;
-    NSString *xunyingPath = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapData.bundle/xunying.geodatabase"];
-    AGSGDBGeodatabase *gdb_xunying = [[AGSGDBGeodatabase alloc]initWithPath:xunyingPath error:&xunyingError];
-    //
-    if(xunyingError)
+    else if ([self.curCourseTag isEqualToString:@"south"])
     {
-        NSLog(@"open xunying.geodatabase error:%@",[xunyingError localizedDescription]);
+        if (self.theCourseIndex ==1) {
+            return;
+        }
+        self.theCourseIndex = 1;
     }
-    else{
-        //NSLog(@"open the geodatabase successfully");
-        self.localFeatureTable = [[gdb_xunying featureTables] objectAtIndex:0];
-        self.localFeatureTableLayer = [[AGSFeatureTableLayer alloc]initWithFeatureTable:self.localFeatureTable];
-        self.localFeatureTableLayer.delegate = self;
-        self.localFeatureTableLayer.opacity = 1;
-        
-        [self.mapView addMapLayer:self.localFeatureTableLayer withName:@"Xunying Fearue Layer"];
+    //
+    [self switchToCurCourse];
+    
+}
+
+- (void)switchToCurCourse{
+    switch (self.theCourseIndex) {
+        case 0://north
+            [self.mapView removeMapLayer:self.backGroundLayer];
+            [self.mapView removeMapLayer:self.localHoleFeatureTableLayer];
+            [self.mapView removeMapLayer:self.localFeatureTableLayer];
+            //
+            [self loadingNorthCourse];
+            
+            break;
+            
+        case 1://south
+            [self.mapView removeMapLayer:self.backGroundLayer];
+            [self.mapView removeMapLayer:self.localHoleFeatureTableLayer];
+            [self.mapView removeMapLayer:self.localFeatureTableLayer];
+            //
+            [self loadingSouthCourse];
+            
+            break;
+            
+        default:
+            break;
     }
-    //add graphicLayer
-    self.graphicLayer = [AGSGraphicsLayer graphicsLayer];
-    [self.mapView addMapLayer:self.graphicLayer withName:@"graphic Layer"];
-    
-    self.queryTask = [[AGSQueryTask alloc] init];
-    self.queryTask.delegate = self;
-    
-    self.confirmGetGPS = YES;
     //
-    self.mapView.touchDelegate = self;
-    //
-    
     //地图中的当前GPS定位点的位置信息点的显示
     [self.mapView.locationDisplay addObserver:self forKeyPath:@"autoPanMode" options:(NSKeyValueObservingOptionNew) context:NULL];
     //Listen to KVO notifications for map scale property
@@ -198,26 +226,143 @@ FixedPoint gpsScreenPoint;
     //preparing the gps sketch layer.
     self.gpsSketchLayer = [[AGSSketchGraphicsLayer alloc] initWithGeometry:nil];
     [self.mapView addMapLayer:self.gpsSketchLayer withName:@"Sketch layer"];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ForceBackField:) name:@"forceBackField" object:nil];
     
 }
 
-- (void)ForceBackField:(NSNotification *)sender
+- (void)loadingNorthCourse
 {
-    __weak typeof(self) weakSelf = self;
-    if ([sender.userInfo[@"forceBack"] isEqualToString:@"1"]) {
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
-        //
-        dispatch_async(dispatch_get_main_queue(), ^{
-            UIAlertView *serverForceBackAlert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"您的小组已回场" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
-            [serverForceBackAlert show];
-            
-            [weakSelf performSegueWithIdentifier:@"serVerBackField" sender:nil];
-        });
-        
+    //add tiled layer  step1
+    NSString *path = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapDataN.bundle/GolfPark.tpk"];
+    self.backGroundLayer = [AGSLocalTiledLayer localTiledLayerWithPath:path];
+    //如果层被合适的初始化了之后，添加到地图
+    if(self.backGroundLayer != nil && !self.backGroundLayer.error)
+    {
+        [self.mapView addMapLayer:self.backGroundLayer withName:@"Local Tiled Layer"];
+    }
+    else
+    {
+        [[[UIAlertView alloc]initWithTitle:@"could not load tile package" message:[self.backGroundLayer.error localizedDescription] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil, nil]show];
         
     }
+    //南场地图范围
+    AGSSpatialReference *sr = [AGSSpatialReference spatialReferenceWithWKID:3857];
+    AGSEnvelope *env = [AGSEnvelope envelopeWithXmin:11861791.6278988
+                                                ymin:3462004.13856762
+                                                xmax:11864185.8655044
+                                                ymax:3459644.15105187
+                                    spatialReference:sr];
+    
+    
+    [self.mapView zoomToEnvelope:env animated:YES];
+    //
+    NSError *hole_error;
+    NSString *holePath = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapDataN.bundle/hole.geodatabase"];
+    AGSGDBGeodatabase *gdbXunyinHole = [AGSGDBGeodatabase geodatabaseWithPath:holePath error:&hole_error];
+    if(hole_error){
+        NSLog(@"fail to open hole.geodatabase");
+    }
+    else{
+        self.localHoleFeatureTable = [[gdbXunyinHole featureTables] objectAtIndex:0];
+        self.localHoleFeatureTableLayer = [[AGSFeatureTableLayer alloc] initWithFeatureTable:self.localHoleFeatureTable];
+        self.localHoleFeatureTableLayer.delegate = self;
+        [self.mapView addMapLayer:self.localHoleFeatureTableLayer withName:@"Hole Feature Layer"];
+    }
+    //xunying.geodatabase
+    NSError *xunyingError;
+    NSString *xunyingPath = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapDataN.bundle/elements.geodatabase"];
+    AGSGDBGeodatabase *gdb_xunying = [[AGSGDBGeodatabase alloc]initWithPath:xunyingPath error:&xunyingError];
+    //
+    if(xunyingError)
+    {
+        NSLog(@"open elements.geodatabase error:%@",[xunyingError localizedDescription]);
+    }
+    else{
+        //NSLog(@"open the geodatabase successfully");
+        self.localFeatureTable = [[gdb_xunying featureTables] objectAtIndex:0];
+        self.localFeatureTableLayer = [[AGSFeatureTableLayer alloc]initWithFeatureTable:self.localFeatureTable];
+        self.localFeatureTableLayer.delegate = self;
+        self.localFeatureTableLayer.opacity = 1;
+        
+        [self.mapView addMapLayer:self.localFeatureTableLayer withName:@"Xunying Fearue Layer"];
+    }
+    //add graphicLayer
+    self.graphicLayer = [AGSGraphicsLayer graphicsLayer];
+    [self.mapView addMapLayer:self.graphicLayer withName:@"graphic Layer"];
+    
+    self.queryTask = [[AGSQueryTask alloc] init];
+    self.queryTask.delegate = self;
+    
+//    self.confirmGetGPS = YES;
+    //
+    self.mapView.touchDelegate = self;
+}
+
+- (void)loadingSouthCourse
+{
+    //add tiled layer  step1
+    NSString *path = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapDataS.bundle/GolfPark.tpk"];
+    self.backGroundLayer = [AGSLocalTiledLayer localTiledLayerWithPath:path];
+    //如果层被合适的初始化了之后，添加到地图
+    if(self.backGroundLayer != nil && !self.backGroundLayer.error)
+    {
+        [self.mapView addMapLayer:self.backGroundLayer withName:@"Local Tiled Layer"];
+    }
+    else
+    {
+        [[[UIAlertView alloc]initWithTitle:@"could not load tile package" message:[self.backGroundLayer.error localizedDescription] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil, nil]show];
+        
+    }
+    //南场地图范围
+    AGSSpatialReference *sr = [AGSSpatialReference spatialReferenceWithWKID:3857];
+    AGSEnvelope *env = [AGSEnvelope envelopeWithXmin:11862432.6286064
+                                                ymin:3460758.61837878
+                                                xmax:11863825.3657713
+                                                ymax:3458476.75189645
+                                    spatialReference:sr];
+    
+    
+    [self.mapView zoomToEnvelope:env animated:YES];
+    //
+    NSError *hole_error;
+    NSString *holePath = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapDataS.bundle/hole.geodatabase"];
+    AGSGDBGeodatabase *gdbXunyinHole = [AGSGDBGeodatabase geodatabaseWithPath:holePath error:&hole_error];
+    if(hole_error){
+        NSLog(@"fail to open hole.geodatabase");
+    }
+    else{
+        self.localHoleFeatureTable = [[gdbXunyinHole featureTables] objectAtIndex:0];
+        self.localHoleFeatureTableLayer = [[AGSFeatureTableLayer alloc] initWithFeatureTable:self.localHoleFeatureTable];
+        self.localHoleFeatureTableLayer.delegate = self;
+        [self.mapView addMapLayer:self.localHoleFeatureTableLayer withName:@"Hole Feature Layer"];
+    }
+    //xunying.geodatabase
+    NSError *xunyingError;
+    NSString *xunyingPath = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapDataS.bundle/elements.geodatabase"];
+    AGSGDBGeodatabase *gdb_xunying = [[AGSGDBGeodatabase alloc]initWithPath:xunyingPath error:&xunyingError];
+    //
+    if(xunyingError)
+    {
+        NSLog(@"open elements.geodatabase error:%@",[xunyingError localizedDescription]);
+    }
+    else{
+        //NSLog(@"open the geodatabase successfully");
+        self.localFeatureTable = [[gdb_xunying featureTables] objectAtIndex:0];
+        self.localFeatureTableLayer = [[AGSFeatureTableLayer alloc]initWithFeatureTable:self.localFeatureTable];
+        self.localFeatureTableLayer.delegate = self;
+        self.localFeatureTableLayer.opacity = 1;
+        
+        [self.mapView addMapLayer:self.localFeatureTableLayer withName:@"Xunying Fearue Layer"];
+    }
+    //add graphicLayer
+    self.graphicLayer = [AGSGraphicsLayer graphicsLayer];
+    [self.mapView addMapLayer:self.graphicLayer withName:@"graphic Layer"];
+    
+    self.queryTask = [[AGSQueryTask alloc] init];
+    self.queryTask.delegate = self;
+    
+//    self.confirmGetGPS = YES;
+    //
+    self.mapView.touchDelegate = self;
 }
 
 
@@ -384,6 +529,7 @@ FixedPoint gpsScreenPoint;
     sender.selected = NO;
     switch (index) {
         case 0: //自动测距
+            [self.chooseHoleView removeFromSuperview];
             
             break;
             //
@@ -395,6 +541,7 @@ FixedPoint gpsScreenPoint;
             break;
             //
         case 2: //手动测距
+            [self.chooseHoleView removeFromSuperview];
             
             break;
         default:
