@@ -72,11 +72,7 @@ typedef enum eventOrder{
     self.userData = [[DataTable alloc] init];
     self.groupInformation = [[DataTable alloc] init];
     
-//    self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(timelySend)];
-//    [self.displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     
-    //启动心跳功能
-//    [self enableHeartBeat];
 }
 
 - (void)DisAbleTimer:(NSNotification *)sender
@@ -202,8 +198,8 @@ typedef enum eventOrder{
         static unsigned char startCount = 0;
         
         //
-        weakSelf.groupInformation = [self.lcDBCon ExecDataTable:@"select *from tbl_groupInf"];
-        weakSelf.userData = [self.lcDBCon ExecDataTable:@"select *from tbl_logPerson"];
+        weakSelf.groupInformation = [weakSelf.lcDBCon ExecDataTable:@"select *from tbl_groupInf"];
+        weakSelf.userData = [weakSelf.lcDBCon ExecDataTable:@"select *from tbl_logPerson"];
         
         weakSelf.allowDownStr = @"0";
         weakSelf.finalDic = [[NSMutableDictionary alloc] init];
@@ -257,7 +253,7 @@ typedef enum eventOrder{
             //
             NSString *timestampsStr;
             if (weakSelf.groupInformation.Rows[0][@"timestamps"] != nil) {
-                timestampsStr = self.groupInformation.Rows[0][@"timestamps"];
+                timestampsStr = weakSelf.groupInformation.Rows[0][@"timestamps"];
             }
             else
             {
@@ -315,8 +311,8 @@ typedef enum eventOrder{
                             //
                             //                    [weakSelf.lcDBCon ExecNonQuery:@"delete from tbl_taskInfo"];
                             //
-                            NSDictionary *eventDic = eventInfo[0];
-                            NSString *observerName = [[NSString alloc] init];
+                            __block NSDictionary *eventDic = eventInfo[0];
+                            NSString *observerName;// = [[NSString alloc] init];
                             //                    NSMutableArray *taskInfo = [[NSMutableArray alloc] init];
                             //tbl_taskInfo(evecod text,evetyp text,evesta text,subtim text,result text,everea text,hantim text,oldCaddyCode text,newCaddyCode text,oldCartCode text,newCartCode text,jumpHoleCode text,toHoleCode text,destintime text,reqBackTime text,reHoleCode text,mendHoleCode text,ratifyHoleCode text,ratifyinTime text,selectedHoleCode text)
                             
@@ -443,7 +439,7 @@ typedef enum eventOrder{
                                     break;
                             }
                             
-                            
+                            observerName = nil;
                             //保存数据 tbl_taskInfo(evecod text,evetyp text,evesta text,subtim text,retime text,newCartNum text,rehole text)
                             dispatch_async(dispatch_get_main_queue(), ^{
                                 //                        DataTable *table111 = [[DataTable alloc] init];
@@ -455,6 +451,7 @@ typedef enum eventOrder{
                                 [[NSNotificationCenter defaultCenter] postNotificationName:@"displayTaskResult" object:nil userInfo:eventDic];
                                 //在详情视图界面也发送通知
                                 [[NSNotificationCenter defaultCenter] postNotificationName:@"detailRefresh" object:nil userInfo:eventDic];
+                                eventDic = nil;
                             });
                         }
                         
@@ -464,32 +461,38 @@ typedef enum eventOrder{
                         NSLog(@"reason Notice:%@",messegaDic[@"makeV"]);
 #endif
                         //删除之前保存的数据
-                        [self.lcDBCon ExecNonQuery:@"delete from tbl_groupHeartInf"];
-                        [self.lcDBCon ExecNonQuery:@"delete from tbl_locHole"];
-                        [self.lcDBCon ExecNonQuery:@"delete from tbl_padInfo"];
+                        [weakSelf.lcDBCon ExecNonQuery:@"delete from tbl_groupHeartInf"];
+                        [weakSelf.lcDBCon ExecNonQuery:@"delete from tbl_locHole"];
+                        [weakSelf.lcDBCon ExecNonQuery:@"delete from tbl_padInfo"];
                         
                         //从服务器中返回来的信息，在此处保存
                         //组信息
                         //tbl_groupHeartInf(grocod text,grosta text,nextgrodistime text,nowblocks text,nowholcod text,nowholnum text,pladur text,stahol text,statim text,stddur text)
                         NSMutableArray *groupInfArray = [[NSMutableArray alloc] initWithObjects:messegaDic[@"groinfo"][@"grocod"],messegaDic[@"groinfo"][@"grosta"],messegaDic[@"groinfo"][@"nextgrodistime"],messegaDic[@"groinfo"][@"nowblocks"],messegaDic[@"groinfo"][@"nowholcod"],messegaDic[@"groinfo"][@"nowholnum"],messegaDic[@"groinfo"][@"pladur"],messegaDic[@"groinfo"][@"stahol"],messegaDic[@"groinfo"][@"statim"],messegaDic[@"groinfo"][@"stddur"],messegaDic[@"groinfo"][@"coursegrouptag"], nil];
                         [weakSelf.lcDBCon ExecNonQuery:@"insert into tbl_groupHeartInf(grocod,grosta,nextgrodistime,nowblocks,nowholcod,nowholnum,pladur,stahol,statim,stddur,coursegrouptag) values(?,?,?,?,?,?,?,?,?,?,?)" forParameter:groupInfArray];
+                        groupInfArray = nil;
+                        
                         //通过获取到的coursegrouptag的信息，通知球场及相应的需要刷新的界面选择是否要切换球场
                         NSDictionary *switchCourseWord = [[NSDictionary alloc] initWithObjectsAndKeys:messegaDic[@"groinfo"][@"coursegrouptag"],@"curCourseTag",messegaDic[@"groinfo"][@"statim"],@"startTime", nil];
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"whetherCanSwitchCourse" object:nil userInfo:switchCourseWord];
+                        switchCourseWord = nil;
                         //
                         NSDictionary *switchCourseWord1 = [[NSDictionary alloc] initWithObjectsAndKeys:messegaDic[@"groinfo"][@"coursegrouptag"],@"curCourseTag1",messegaDic[@"groinfo"][@"statim"],@"startTime1", nil];
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"whetherCanSwitchCourse1" object:nil userInfo:switchCourseWord1];
+                        switchCourseWord1 = nil;
                         //
                         
                         
                         //当前所在球洞的位置信息
                         NSMutableArray *locHoleInf = [[NSMutableArray alloc] initWithObjects:messegaDic[@"lochole"][@"holcod"],messegaDic[@"lochole"][@"holnum"], nil];
                         [weakSelf.lcDBCon ExecNonQuery:@"insert into tbl_locHole(holcod,holnum) values(?,?)" forParameter:locHoleInf];
+                        locHoleInf = nil;
                         //移动设备的信息
                         NSDictionary *padInfDic = messegaDic[@"padinfo"][0];
                         //
                         NSMutableArray *padInf = [[NSMutableArray alloc] initWithObjects:padInfDic[@"padcod"],padInfDic[@"padnum"],padInfDic[@"padtag"], nil];
                         [weakSelf.lcDBCon ExecNonQuery:@"insert into tbl_padInfo(padcod,padnum,padtag) values(?,?,?)" forParameter:padInf];
+                        padInf = nil;
                         //
                         if([messegaDic[@"make"] isEqualToNumber:[NSNumber numberWithInt:-1]])
                         {
@@ -543,11 +546,12 @@ typedef enum eventOrder{
                             
                         }
                         //组装需要发送的数据
-                        weakSelf.finalDic = [[NSMutableDictionary alloc] initWithObjectsAndKeys:self.allowDownStr,@"allowDown",weakSelf.waitToAllow,@"waitToAllow", nil];
+                        weakSelf.finalDic = [[NSMutableDictionary alloc] initWithObjectsAndKeys:weakSelf.allowDownStr,@"allowDown",weakSelf.waitToAllow,@"waitToAllow", nil];
                         //发送通知到LogIn界面
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"canEnterCreatGrp" object:nil userInfo:weakSelf.finalDic];
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"readyDown" object:nil userInfo:@{@"readyDown":weakSelf.haveDetectedDownEnable}];
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"whereToGo" object:nil userInfo:weakSelf.finalDic];
+                        weakSelf.finalDic = nil;
                     }
                     
                 }failure:^(NSError *err){
@@ -557,6 +561,7 @@ typedef enum eventOrder{
                     weakSelf.finalDic = [[NSMutableDictionary alloc] initWithObjectsAndKeys:self.allowDownStr,@"allowDown",weakSelf.waitToAllow,@"waitToAllow", nil];
                     //发送通知到LogIn界面
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"allowDown" object:nil userInfo:weakSelf.finalDic];
+                    weakSelf.finalDic = nil;
                     
                 }];
             });
@@ -576,7 +581,6 @@ typedef enum eventOrder{
     
     
 }
-
 
 
 

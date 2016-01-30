@@ -15,7 +15,7 @@
 
 + (DataTable *)getStoredData
 {
-    DataTable *settingInfo = [[DataTable alloc] init];
+    DataTable *settingInfo;// = [[DataTable alloc] init];
     DBCon     *lcDBCon     = [[DBCon alloc] init];
     //
     settingInfo = [lcDBCon ExecDataTable:@"select *from tbl_SettingInfo"];
@@ -25,7 +25,7 @@
 
 + (DataTable *)getStoredUniqueID
 {
-    DataTable   *uniqueID   = [[DataTable alloc] init];
+    DataTable   *uniqueID;//   = [[DataTable alloc] init];
     DBCon       *DbCon      = [[DBCon alloc] init];
     //
     uniqueID = [DbCon ExecDataTable:@"select *from tbl_uniqueID"];
@@ -54,7 +54,7 @@
 {
     NSString *intervalTime;
     //
-    DataTable *theStoredData = [[DataTable alloc] init];
+    DataTable *theStoredData;// = [[DataTable alloc] init];
     theStoredData = [GetRequestIPAddress getStoredData];
     if (![theStoredData.Rows count]) {
         intervalTime = @"";
@@ -71,7 +71,7 @@
 {
     NSString *heartURL;
     //
-    DataTable *theStoredData = [[DataTable alloc] init];
+    DataTable *theStoredData;// = [[DataTable alloc] init];
     theStoredData = [GetRequestIPAddress getStoredData];
     if (![theStoredData.Rows count]) {
         heartURL = @"";
@@ -88,7 +88,7 @@
 {
     NSString *heartURL;
     //
-    DataTable *theStoredData = [[DataTable alloc] init];
+    DataTable *theStoredData;// = [[DataTable alloc] init];
     theStoredData = [GetRequestIPAddress getStoredData];
     if (![theStoredData.Rows count]) {
         heartURL = @"";
@@ -105,7 +105,7 @@
 {
     NSString *logInURL;
     //
-    DataTable *theStoredData = [[DataTable alloc] init];
+    DataTable *theStoredData;// = [[DataTable alloc] init];
     theStoredData = [GetRequestIPAddress getStoredData];
     if (![theStoredData.Rows count]) {
         logInURL = @"";
@@ -122,7 +122,7 @@
 {
     NSString *jumpHoleURL;
     //
-    DataTable *theStoredData = [[DataTable alloc] init];
+    DataTable *theStoredData;// = [[DataTable alloc] init];
     theStoredData = [GetRequestIPAddress getStoredData];
     if (![theStoredData.Rows count]) {
         jumpHoleURL = @"";
@@ -139,7 +139,7 @@
 {
     NSString *mendHoleURL;
     //
-    DataTable *theStoredData = [[DataTable alloc] init];
+    DataTable *theStoredData;// = [[DataTable alloc] init];
     theStoredData = [GetRequestIPAddress getStoredData];
     if (![theStoredData.Rows count]) {
         mendHoleURL = @"";
@@ -156,7 +156,7 @@
 {
     NSString *caddyCartURL;
     //
-    DataTable *theStoredData = [[DataTable alloc] init];
+    DataTable *theStoredData;// = [[DataTable alloc] init];
     theStoredData = [GetRequestIPAddress getStoredData];
     if (![theStoredData.Rows count]) {
         caddyCartURL = @"";
@@ -173,7 +173,7 @@
 {
     NSString *customURL;
     //
-    DataTable *theStoredData = [[DataTable alloc] init];
+    DataTable *theStoredData;// = [[DataTable alloc] init];
     theStoredData = [GetRequestIPAddress getStoredData];
     if (![theStoredData.Rows count]) {
         customURL = @"";
@@ -190,7 +190,7 @@
 {
     NSString *creatGrpURL;
     //
-    DataTable *theStoredData = [[DataTable alloc] init];
+    DataTable *theStoredData;// = [[DataTable alloc] init];
     theStoredData = [GetRequestIPAddress getStoredData];
     if (![theStoredData.Rows count]) {
         creatGrpURL = @"";
@@ -207,7 +207,7 @@
 {
     NSString *cancleWaitURL;
     //
-    DataTable *theStoredData = [[DataTable alloc] init];
+    DataTable *theStoredData;// = [[DataTable alloc] init];
     theStoredData = [GetRequestIPAddress getStoredData];
     if (![theStoredData.Rows count]) {
         cancleWaitURL = @"";
@@ -224,7 +224,7 @@
 {
     NSString *backFieldURL;
     //
-    DataTable *theStoredData = [[DataTable alloc] init];
+    DataTable *theStoredData;// = [[DataTable alloc] init];
     theStoredData = [GetRequestIPAddress getStoredData];
     if (![theStoredData.Rows count]) {
         backFieldURL = @"";
@@ -241,7 +241,7 @@
 {
     NSString *decideCreateGrpAndDownURL;
     //
-    DataTable *theStoredData = [[DataTable alloc] init];
+    DataTable *theStoredData;// = [[DataTable alloc] init];
     theStoredData = [GetRequestIPAddress getStoredData];
     if (![theStoredData.Rows count]) {
         decideCreateGrpAndDownURL = @"";
@@ -258,7 +258,7 @@
 {
     NSString *logOutURL;
     //
-    DataTable *theStoredData = [[DataTable alloc] init];
+    DataTable *theStoredData ;//= [[DataTable alloc] init];
     theStoredData = [GetRequestIPAddress getStoredData];
     if (![theStoredData.Rows count]) {
         logOutURL = @"";
@@ -275,7 +275,7 @@
 {
     NSString *changeCaddyURL;
     //
-    DataTable *theStoredData = [[DataTable alloc] init];
+    DataTable *theStoredData;// = [[DataTable alloc] init];
     theStoredData = [GetRequestIPAddress getStoredData];
     if (![theStoredData.Rows count]) {
         changeCaddyURL = @"";
@@ -292,7 +292,7 @@
 {
     NSString *changeCartURL;
     //
-    DataTable *theStoredData = [[DataTable alloc] init];
+    DataTable *theStoredData;// = [[DataTable alloc] init];
     theStoredData = [GetRequestIPAddress getStoredData];
     if (![theStoredData.Rows count]) {
         changeCartURL = @"";
@@ -309,7 +309,7 @@
 {
     NSString *playProcessURL;
     //
-    DataTable *theStoredData = [[DataTable alloc] init];
+    DataTable *theStoredData;// = [[DataTable alloc] init];
     theStoredData = [GetRequestIPAddress getStoredData];
     if (![theStoredData.Rows count]) {
         playProcessURL = @"";
@@ -326,7 +326,7 @@
 {
     NSString *leaveTimeURL;
     //
-    DataTable *theStoredData = [[DataTable alloc] init];
+    DataTable *theStoredData;// = [[DataTable alloc] init];
     theStoredData = [GetRequestIPAddress getStoredData];
     if (![theStoredData.Rows count]) {
         leaveTimeURL = @"";
@@ -343,7 +343,7 @@
 {
     NSString *msgHistoryURL;
     //
-    DataTable *theStoredData = [[DataTable alloc] init];
+    DataTable *theStoredData;// = [[DataTable alloc] init];
     theStoredData = [GetRequestIPAddress getStoredData];
     if (![theStoredData.Rows count]) {
         msgHistoryURL = @"";
@@ -360,7 +360,7 @@
 {
     NSString *sendMsgURL;
     //
-    DataTable *theStoredData = [[DataTable alloc] init];
+    DataTable *theStoredData;// = [[DataTable alloc] init];
     theStoredData = [GetRequestIPAddress getStoredData];
     if (![theStoredData.Rows count]) {
         sendMsgURL = @"";
@@ -377,7 +377,7 @@
 {
     NSString *addDeviceURL;
     //
-    DataTable *theStoredData = [[DataTable alloc] init];
+    DataTable *theStoredData;// = [[DataTable alloc] init];
     theStoredData = [GetRequestIPAddress getStoredData];
     if (![theStoredData.Rows count]) {
         addDeviceURL = @"";
@@ -394,7 +394,7 @@
 {
     NSString *completeStateURL;
     //
-    DataTable *theStoredData = [[DataTable alloc] init];
+    DataTable *theStoredData;// = [[DataTable alloc] init];
     theStoredData = [GetRequestIPAddress getStoredData];
     if (![theStoredData.Rows count]) {
         completeStateURL = @"";
@@ -411,7 +411,7 @@
 {
     NSString *needMendHoleURL;
     //
-    DataTable *theStoredData = [[DataTable alloc] init];
+    DataTable *theStoredData;// = [[DataTable alloc] init];
     theStoredData = [GetRequestIPAddress getStoredData];
     if (![theStoredData.Rows count]) {
         needMendHoleURL = @"";

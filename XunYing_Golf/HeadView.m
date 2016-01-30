@@ -26,7 +26,7 @@
 {
     static NSString *headIdentifier = @"header";
     
-    HeadView *headView = [tableView dequeueReusableCellWithIdentifier:headIdentifier];
+    HeadView *headView = (HeadView *)[tableView dequeueReusableCellWithIdentifier:headIdentifier];
     if (headView == nil) {
         headView = [[HeadView alloc] initWithReuseIdentifier:headIdentifier];
     }

@@ -325,6 +325,10 @@
     NSString *uuid;//=[NSString stringWithString:(__bridge NSString * _Nonnull)(uuid_string_ref)];
     uuid=[NSString stringWithString:(__bridge NSString * _Nonnull)(uuid_string_ref)];
     NSLog(@"uuid:%@",uuid);
+    //
+    CFRelease(uuid_ref);
+    CFRelease(uuid_string_ref);
+    
     return uuid;
 }
 
@@ -510,14 +514,15 @@
             if(bgTask != UIBackgroundTaskInvalid)
                 bgTask = UIBackgroundTaskInvalid;
             //通过判断是否还有组信息来确定是否已经下场，若没有组信息则不启动心跳
-            DataTable *grpInf = [[DataTable alloc] init];
+            DataTable *grpInf;// = [[DataTable alloc] init];
             grpInf = [weakSelf.dbCon ExecDataTable:@"select *from tbl_groupInf"];
             
             NSLog(@"background1,baIdentifier:%lu",(unsigned long)bgTask);
             if (![grpInf.Rows count]) {
+                grpInf = nil;
                 return ;
             }
-            
+            grpInf = nil;
             //重启心跳服务
             HeartBeatAndDetectState *backGroundHeartbeat = [[HeartBeatAndDetectState alloc] init];
             [backGroundHeartbeat initHeartBeat];

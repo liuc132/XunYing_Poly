@@ -84,7 +84,7 @@
 //tbl_SettingInfo(interval text,ipAddr text,portNum text)
 - (IBAction)confirmSetting:(UIButton *)sender {
     NSLog(@"enter confirm setting and store");
-    __weak typeof(self) weakSelf = self;
+//    __weak typeof(self) weakSelf = self;
     [self.inputHeartIntervalTime resignFirstResponder];
     [self.inputIPAddress resignFirstResponder];
     [self.inputPortNum resignFirstResponder];

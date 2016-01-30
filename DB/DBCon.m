@@ -151,6 +151,7 @@ static DBCon * myInstance;
     }
     
     sqlite3_close(db);
+    
     return dt;
 }
 
@@ -206,6 +207,7 @@ static DBCon * myInstance;
         sqlite3_finalize(stmt);
     }
     sqlite3_close(db);
+    db = nil;
 }
 
 /**

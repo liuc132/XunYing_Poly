@@ -186,18 +186,28 @@ FixedPoint gpsScreenPoint;
 - (void)switchToCurCourse{
     switch (self.theCourseIndex) {
         case 0://north
-            [self.mapView removeMapLayer:self.backGroundLayer];
-            [self.mapView removeMapLayer:self.localHoleFeatureTableLayer];
-            [self.mapView removeMapLayer:self.localFeatureTableLayer];
+//            [self.mapView removeMapLayer:self.backGroundLayer];
+//            [self.mapView removeMapLayer:self.localHoleFeatureTableLayer];
+//            [self.mapView removeMapLayer:self.localFeatureTableLayer];
+//            //
+//            _backGroundLayer = nil;
+//            _localFeatureTableLayer = nil;
+//            _localFeatureTableLayer = nil;
+//            _graphicLayer = nil;
             //
             [self loadingNorthCourse];
             
             break;
             
         case 1://south
-            [self.mapView removeMapLayer:self.backGroundLayer];
-            [self.mapView removeMapLayer:self.localHoleFeatureTableLayer];
-            [self.mapView removeMapLayer:self.localFeatureTableLayer];
+//            [self.mapView removeMapLayer:self.backGroundLayer];
+//            [self.mapView removeMapLayer:self.localHoleFeatureTableLayer];
+//            [self.mapView removeMapLayer:self.localFeatureTableLayer];
+//            //
+//            _backGroundLayer = nil;
+//            _localFeatureTableLayer = nil;
+//            _localFeatureTableLayer = nil;
+//            _graphicLayer = nil;
             //
             [self loadingSouthCourse];
             
@@ -491,6 +501,11 @@ FixedPoint gpsScreenPoint;
     return NO;
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+}
+
 #pragma -mark GPS_viewDidAppear
 -(void)viewWillDisappear:(BOOL)animated
 {
@@ -592,6 +607,11 @@ FixedPoint gpsScreenPoint;
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    _graphicLayer = nil;
+    _localFeatureTableLayer = nil;
+    _localHoleFeatureTableLayer = nil;
+    _backGroundLayer = nil;
+    
 }
 //构建模拟路径
 -(void)constructPolyline
@@ -620,4 +640,7 @@ FixedPoint gpsScreenPoint;
     [self.mapView centerAtPoint:[self.mapView.locationDisplay mapLocation] animated:YES];
     self.mapView.locationDisplay.autoPanMode = AGSLocationDisplayAutoPanModeDefault;
 }
+
+
+
 @end

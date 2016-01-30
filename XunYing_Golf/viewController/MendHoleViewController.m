@@ -228,6 +228,7 @@
         [self.needMendHoles addObject:eachNeedMend[@"holcod"]];
         //切换显示颜色
         switch ([eachNeedMend[@"holnum"] intValue]) {
+            
             case 1:
                 self.hole1.backgroundColor = [UIColor HexString:NeedMendColor];
                 break;
@@ -291,7 +292,7 @@
 - (IBAction)requestMendHole:(UIButton *)sender {
     NSLog(@"requestMendHole");
     //通过代理，读取到总共跳过了哪些球洞，NSMutableArray类型的数据来存储数据
-    NSString *mendHoles = [[NSString alloc] init];
+    NSString *mendHoles;// = [[NSString alloc] init];
     //
 //    if (self.needMendHoles) {
 //

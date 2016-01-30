@@ -84,6 +84,7 @@ typedef NS_ENUM(NSInteger,holePosition) {
 @property (strong, nonatomic) UIActivityIndicatorView   *stateIndicator;
 
 @property (strong, nonatomic) UITextField     *activeField;
+@property (assign, nonatomic) CGFloat         offsetY;
 
 @property (strong, nonatomic) IBOutlet UIView *subDetailView;
 @property (strong, nonatomic) IBOutlet UILabel *detailLabel;
@@ -216,25 +217,33 @@ typedef NS_ENUM(NSInteger,holePosition) {
 // Called when the UIKeyboardDidShowNotification is sent.
 - (void)keyboardWasShown:(NSNotification*)aNotification
 {
-    __weak typeof(self) weakSelf = self;
+//    __weak typeof(self) weakSelf = self;
+//    //
+//    NSDictionary* info = [aNotification userInfo];
+//    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+//    
+//    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
+//    self.createGrpScrollView.contentInset = contentInsets;
+//    self.createGrpScrollView.scrollIndicatorInsets = contentInsets;
+//    
+//    // If active text field is hidden by keyboard, scroll it so it's visible
+//    // Your app might not need or want this behavior.
+//    CGRect aRect = self.view.frame;
+//    aRect.size.height -= kbSize.height;
+//    if (!CGRectContainsPoint(aRect, self.activeField.frame.origin) ) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [weakSelf.createGrpScrollView scrollRectToVisible:weakSelf.activeField.frame animated:YES];
+//        });
+//        
+//    }
     //
     NSDictionary* info = [aNotification userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
-    self.createGrpScrollView.contentInset = contentInsets;
-    self.createGrpScrollView.scrollIndicatorInsets = contentInsets;
-    
-    // If active text field is hidden by keyboard, scroll it so it's visible
-    // Your app might not need or want this behavior.
-    CGRect aRect = self.createGrpScrollView.frame;
-    aRect.size.height -= kbSize.height;
-    if (!CGRectContainsPoint(aRect, self.activeField.frame.origin) ) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.createGrpScrollView scrollRectToVisible:weakSelf.activeField.frame animated:YES];
-        });
-        
-    }
+    CGRect bkgndRect = self.activeField.superview.frame;
+    bkgndRect.size.height += kbSize.height;
+    [self.activeField.superview setFrame:bkgndRect];
+    self.offsetY = -self.activeField.frame.origin.y+kbSize.height;
+    [self.createGrpScrollView setContentOffset:CGPointMake(0.0, self.offsetY) animated:YES];
 }
 
 // Called when the UIKeyboardWillHideNotification is sent
@@ -243,6 +252,7 @@ typedef NS_ENUM(NSInteger,holePosition) {
     UIEdgeInsets contentInsets = UIEdgeInsetsZero;
     self.createGrpScrollView.contentInset = contentInsets;
     self.createGrpScrollView.scrollIndicatorInsets = contentInsets;
+    [self.createGrpScrollView setContentOffset:CGPointMake(0.0, 0.0) animated:YES];
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
@@ -460,7 +470,7 @@ typedef NS_ENUM(NSInteger,holePosition) {
 //
 -(NSString *)constructCustomers:(cusNumbers)cusNum andAllCustomers:(DataTable *)allCusData
 {
-    NSString *customers = [[NSString alloc] init];
+    NSString *customers;// = [[NSString alloc] init];
 #ifdef DEBUG_MODE
     NSLog(@"%@",customers);
 #endif
@@ -509,7 +519,7 @@ typedef NS_ENUM(NSInteger,holePosition) {
     //获取得到的四个用户卡号
     self.customFourNum = [self.dbCon ExecDataTable:@"select *from tbl_CustomerNumbers"];
     //组建客户卡号
-    NSString *selectedCus = [[NSString alloc] init];
+    NSString *selectedCus;// = [[NSString alloc] init];
 #ifdef DEBUG_MODE
     NSLog(@"cusCount:%ld;cusFourNum:%@",(long)self.theSelectedCusCounts,self.customFourNum);
 #endif
@@ -828,26 +838,19 @@ typedef NS_ENUM(NSInteger,holePosition) {
 //    return YES;
 //}
 
-
-
-
-
-
-
-
 - (BOOL)whetherCanAddCaddy
 {
     BOOL canAdd;
     canAdd = YES;
     //
-    if (![self.inputCaddyNum.text boolValue] ) {
+    if (![self.inputCaddyNum.text boolValue] && canAdd) {
         self.inputCaddyNum.text = @"";
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"请输入要添加的球童编号" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
         [alert show];
         canAdd = NO;
     }
     //
-    if ([self.addcaddiesArray count] > 3) {//最多只能添加四个球车
+     if (([self.addcaddiesArray count] > 3) && canAdd) {//最多只能添加四个球车
         self.inputCaddyNum.text = @"";
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"最多只能添加4个球童" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
         [alert show];
@@ -881,7 +884,7 @@ typedef NS_ENUM(NSInteger,holePosition) {
     }
     NSString *displayErr;
     displayErr = [NSString stringWithFormat:@"系统中没有%@球童或者此球童不是可用状态",theInputCaddyNum];
-    if (!hasTheData) {
+    if (!hasTheData && canAdd) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:displayErr message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
         [alert show];
         canAdd = NO;
@@ -979,14 +982,14 @@ typedef NS_ENUM(NSInteger,holePosition) {
 #ifdef DEBUG_MODE
     NSLog(@"inputCart:%@",self.inputCartNum.text);
 #endif
-    if (![self.inputCartNum.text boolValue] ) {
+    if (![self.inputCartNum.text boolValue] && canAdd) {
         self.inputCartNum.text = @"";
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"请输入要添加的球车编号" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
         [alert show];
         canAdd = NO;
     }
     //
-    if ([self.addCartsArray count] > 3) {//最多只能添加四个球车
+    if (([self.addCartsArray count] > 3) && canAdd) {//最多只能添加四个球车
         self.inputCartNum.text = @"";
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"最多只能添加4个球车" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
         [alert show];
@@ -1019,7 +1022,7 @@ typedef NS_ENUM(NSInteger,holePosition) {
     }
     NSString *displayCartErr;
     displayCartErr = [NSString stringWithFormat:@"系统中没有%@球车或者此球车不是可用状态",theInputCartNum];
-    if (!hasTheData) {
+    if (!hasTheData && canAdd) {
         self.inputCartNum.text = @"";
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:displayCartErr message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
         [alert show];

@@ -155,7 +155,7 @@
     //发送同步请求 并返回结果
     NSData * returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
     
-    NSDictionary *dic =[NSPropertyListSerialization propertyListWithData:returnData options:NSPropertyListXMLFormat_v1_0 format:nil error:&error];
+    NSDictionary *dic = [NSPropertyListSerialization propertyListWithData:returnData options:NSPropertyListMutableContainers format:NSPropertyListXMLFormat_v1_0 error:&error];//[NSPropertyListSerialization propertyListWithData:returnData options:NSPropertyListXMLFormat_v1_0 format:nil error:&error];
     
     if (error != nil) {
         NSLog(@"%@",error);

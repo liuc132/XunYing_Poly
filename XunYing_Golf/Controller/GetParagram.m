@@ -116,7 +116,7 @@
 {
     //
     DBCon *dbCon = [[DBCon alloc] init];
-    DataTable *logCaddy = [[DataTable alloc] init];
+    DataTable *logCaddy;// = [[DataTable alloc] init];
     
     logCaddy = [dbCon ExecDataTable:@"select *from tbl_NamePassword"];
     

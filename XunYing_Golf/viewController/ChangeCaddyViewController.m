@@ -347,7 +347,7 @@ typedef enum ChangeReason{
         return;
     }
     //根据职员编号查询球童号
-    NSString *caddyCode = [[NSString alloc] init];
+    NSString *caddyCode;// = [[NSString alloc] init];
     for (NSDictionary *eachCaddy in self.allCaddyInfo.Rows) {
         if ([eachCaddy[@"empcod"] isEqualToString:self.curGrpCaddies.Rows[0][@"code"]]) {
             caddyCode = eachCaddy[@"cadcod"];

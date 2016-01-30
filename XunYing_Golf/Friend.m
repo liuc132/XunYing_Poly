@@ -20,12 +20,6 @@
 }
 - (instancetype)initWithDict:(NSDictionary *)dict
 {
-    NSArray *values = [[NSArray alloc] init];
-    NSArray *keys = [[NSArray alloc] init];
-    //
-    values = [dict allValues];
-    keys   = [dict allKeys];
-    
     if (self = [super init]) {
         [self setValuesForKeysWithDictionary:dict];
     }
