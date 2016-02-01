@@ -338,6 +338,9 @@ extern NSString *CTSettingCopyMyPhoneNumber();
 #ifdef DEBUG_MODE
     NSLog(@"holeType:%@  holeCount:%ld",self.curHoleName,(long)self.customerCount);
 #endif
+    //
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -701,6 +704,10 @@ extern NSString *CTSettingCopyMyPhoneNumber();
 #ifdef DEBUG_MODE
                     NSLog(@"强制登录失败");
 #endif
+                    [weakSelf.activityIndicatorView stopAnimating];
+                    weakSelf.activityIndicatorView.hidden = YES;
+                    UIAlertView *errAlert = [[UIAlertView alloc] initWithTitle:@"网络请求失败" message:nil delegate:weakSelf cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                    [errAlert show];
                     
                 }];
                 
@@ -713,6 +720,7 @@ extern NSString *CTSettingCopyMyPhoneNumber();
 
 - (void)registerDeviceID
 {
+    __weak typeof(self) weakSelf = self;
     //获取到mid号码
     NSString *theMid;
     theMid = [GetRequestIPAddress getUniqueID];
@@ -737,6 +745,11 @@ extern NSString *CTSettingCopyMyPhoneNumber();
         NSLog(@"request failled");
 #endif
         NSLog(@"request failled");
+        [weakSelf.activityIndicatorView stopAnimating];
+        weakSelf.activityIndicatorView.hidden = YES;
+        UIAlertView *errAlert = [[UIAlertView alloc] initWithTitle:@"网络请求失败" message:nil delegate:weakSelf cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+        [errAlert show];
+        
     }];
 
 }
@@ -1153,7 +1166,7 @@ extern NSString *CTSettingCopyMyPhoneNumber();
         [self.activityIndicatorView stopAnimating];
         self.activityIndicatorView.hidden = YES;
         //
-        UIAlertView *netAlert = [[UIAlertView alloc] initWithTitle:@"网络连接异常，请检查网络设置" message:nil delegate:weakSelf cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+        UIAlertView *netAlert = [[UIAlertView alloc] initWithTitle:@"网络连接异常" message:nil delegate:weakSelf cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
         [netAlert show];
     }];
 }

@@ -274,6 +274,13 @@ typedef NS_ENUM(NSInteger,holePosition) {
     
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     //删除球童
@@ -587,7 +594,7 @@ typedef NS_ENUM(NSInteger,holePosition) {
     //
     NSMutableDictionary *createGroupParameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:theMid,@"mid",@"",@"gronum",selectedCus,@"cus",allAddCarts,@"car",@"all",@"hole",allAddCaddies,@"cad",self.userData.Rows[0][@"caddyLogIn"],@"cadShow",self.userData.Rows[0][@"empCode"],@"user",courseTag,@"coursetag", nil];
     //
-    __weak typeof(self) weakself = self;
+    __weak typeof(self) weakSelf = self;
     //
     NSString *createGrpURLStr;
     createGrpURLStr = [GetRequestIPAddress getcreateGroupURL];
@@ -597,10 +604,9 @@ typedef NS_ENUM(NSInteger,holePosition) {
     dispatch_async(dispatch_get_main_queue(), ^{
         //
         [HttpTools getHttp:createGrpURLStr forParams:createGroupParameters success:^(NSData *nsData){
-            CreateGroupViewController *strongself = weakself;
             
-            [self.stateIndicator stopAnimating];
-            self.stateIndicator.hidden = YES;
+            [weakSelf.stateIndicator stopAnimating];
+            weakSelf.stateIndicator.hidden = YES;
             
 //            NSDictionary *receiveCreateGroupDic     = [NSJSONSerialization JSONObjectWithData:nsData options:NSJSONReadingMutableLeaves error:nil];
             NSDictionary *receiveCreateGroupDic;// = [NSJSONSerialization JSONObjectWithData:nsData options:NSJSONReadingMutableLeaves error:nil];
@@ -645,9 +651,9 @@ typedef NS_ENUM(NSInteger,holePosition) {
             }
             else
             {
-                [self.dbCon ExecDataTable:@"delete from tbl_CustomersInfo"];
-                [self.dbCon ExecDataTable:@"delete from tbl_selectCart"];
-                [self.dbCon ExecDataTable:@"delete from tbl_addCaddy"];
+                [weakSelf.dbCon ExecDataTable:@"delete from tbl_CustomersInfo"];
+                [weakSelf.dbCon ExecDataTable:@"delete from tbl_selectCart"];
+                [weakSelf.dbCon ExecDataTable:@"delete from tbl_addCaddy"];
                 //tbl_addCaddy
 #ifdef DEBUG_MODE
                 NSLog(@"grpcod:%@  ;groind:%@  ;grolev:%@  ;gronum:%@  ;grosta:%@",receiveCreateGroupDic[@"Msg"][@"grocod"],receiveCreateGroupDic[@"Msg"][@"groind"],receiveCreateGroupDic[@"Msg"][@"grolev"],receiveCreateGroupDic[@"Msg"][@"gronum"],receiveCreateGroupDic[@"Msg"][@"grosta"]);
@@ -657,7 +663,7 @@ typedef NS_ENUM(NSInteger,holePosition) {
                 //将数据加载到创建的数据库中
                 //grocod text,groind text,grolev text,gronum text,grosta text,hgcod text,onlinestatus text
                 
-                [self.dbCon ExecNonQuery:@"insert into tbl_groupInf(grocod,groind,grolev,gronum,grosta,hgcod,onlinestatus,createdate,timestamps)values(?,?,?,?,?,?,?,?,?)" forParameter:groupInfArray];
+                [weakSelf.dbCon ExecNonQuery:@"insert into tbl_groupInf(grocod,groind,grolev,gronum,grosta,hgcod,onlinestatus,createdate,timestamps)values(?,?,?,?,?,?,?,?,?)" forParameter:groupInfArray];
 #ifdef DEBUG_MODE
                 NSLog(@"successfully create group and the recDic:%@  code:%@",receiveCreateGroupDic[@"Msg"],receiveCreateGroupDic[@"code"]);
 #endif
@@ -665,31 +671,31 @@ typedef NS_ENUM(NSInteger,holePosition) {
                 NSArray *allCustomers = receiveCreateGroupDic[@"Msg"][@"cuss"];
                 for (NSDictionary *eachCus in allCustomers) {
                     NSMutableArray *eachCusParam = [[NSMutableArray alloc] initWithObjects:eachCus[@"bansta"],eachCus[@"bantim"],eachCus[@"cadcod"],eachCus[@"carcod"],eachCus[@"cuscod"],eachCus[@"cuslev"],eachCus[@"cusnam"],eachCus[@"cusnum"],eachCus[@"cussex"],eachCus[@"depsta"],eachCus[@"endtim"],eachCus[@"grocod"],eachCus[@"memnum"],eachCus[@"padcod"],eachCus[@"phone"],eachCus[@"statim"], nil];
-                    [strongself.dbCon ExecNonQuery:@"insert into tbl_CustomersInfo(bansta,bantim,cadcod,carcod,cuscod,cuslev,cusnam,cusnum,cussex,depsta,endtim,grocod,memnum,padcod,phone,statim) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" forParameter:eachCusParam];
+                    [weakSelf.dbCon ExecNonQuery:@"insert into tbl_CustomersInfo(bansta,bantim,cadcod,carcod,cuscod,cuslev,cusnam,cusnum,cussex,depsta,endtim,grocod,memnum,padcod,phone,statim) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" forParameter:eachCusParam];
                 }
                 //保存添加的球车的信息 tbl_selectCart(carcod text,carnum text,carsea text)
                 NSArray *allSelectedCartsArray = receiveCreateGroupDic[@"Msg"][@"cars"];
                 for (NSDictionary *eachCart in allSelectedCartsArray) {
                     NSMutableArray *selectedCart = [[NSMutableArray alloc] initWithObjects:eachCart[@"carcod"],eachCart[@"carnum"],eachCart[@"carsea"], nil];
-                    [strongself.dbCon ExecNonQuery:@"insert into tbl_selectCart(carcod,carnum,carsea) values(?,?,?)" forParameter:selectedCart];
+                    [weakSelf.dbCon ExecNonQuery:@"insert into tbl_selectCart(carcod,carnum,carsea) values(?,?,?)" forParameter:selectedCart];
                 }
                 //保存添加的球童的信息 tbl_addCaddy(cadcod text,cadnam text,cadnum text,cadsex text,empcod text)
                 NSArray *allSelectedCaddiesArray = receiveCreateGroupDic[@"Msg"][@"cads"];
                 for (NSDictionary *eachCaddy in allSelectedCaddiesArray) {
                     NSMutableArray *selectedCaddy = [[NSMutableArray alloc] initWithObjects:eachCaddy[@"cadcod"],eachCaddy[@"cadnam"],eachCaddy[@"cadnum"],eachCaddy[@"cadsex"],eachCaddy[@"empcod"], nil];
-                    [strongself.dbCon ExecNonQuery:@"insert into tbl_addCaddy(cadcod,cadnam,cadnum,cadsex,empcod) values(?,?,?,?,?)" forParameter:selectedCaddy];
+                    [weakSelf.dbCon ExecNonQuery:@"insert into tbl_addCaddy(cadcod,cadnam,cadnum,cadsex,empcod) values(?,?,?,?,?)" forParameter:selectedCaddy];
                 }
                 
 //                ucCusCounts = (unsigned char)self.theSelectedCusCounts;
 //                ucHolePosition = (unsigned char)self.theSelectedHolePosition;
                 
-                if ([self.cusAndHoleDelegate respondsToSelector:@selector(getCustomerCounts:andHolePosition:)]) {
-                    [self.cusAndHoleDelegate getCustomerCounts:self.theSelectedCusCounts andHolePosition:self.theSelectedHolePosition];
+                if ([weakSelf.cusAndHoleDelegate respondsToSelector:@selector(getCustomerCounts:andHolePosition:)]) {
+                    [weakSelf.cusAndHoleDelegate getCustomerCounts:weakSelf.theSelectedCusCounts andHolePosition:self.theSelectedHolePosition];
                 }
                 //
                 dispatch_async(dispatch_get_main_queue(), ^{
                     //跳转页面
-                    [strongself performSegueWithIdentifier:@"toWaitInterface" sender:nil];
+                    [weakSelf performSegueWithIdentifier:@"toWaitInterface" sender:nil];
                     //建组成功之后，进入心跳处理类中，开始心跳功能
                     HeartBeatAndDetectState *heartBeat = [[HeartBeatAndDetectState alloc] init];
                     if (![heartBeat checkState]) {
@@ -702,6 +708,10 @@ typedef NS_ENUM(NSInteger,holePosition) {
             
         }failure:^(NSError *err){
             NSLog(@"create group fail");
+            [weakSelf.stateIndicator stopAnimating];
+            weakSelf.stateIndicator.hidden = YES;
+            UIAlertView *errAlert = [[UIAlertView alloc] initWithTitle:@"网络请求失败" message:nil delegate:weakSelf cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+            [errAlert show];
             
         }];
     });

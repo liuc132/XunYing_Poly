@@ -25,7 +25,7 @@ typedef enum ChangeReason{
 #define reasonUnselectWordColor     @"999999"
 #define selectCartColor             @"01cc00"
 
-@interface ChangeCartViewController ()
+@interface ChangeCartViewController ()<UIGestureRecognizerDelegate>
 
 
 @property (strong, nonatomic) DBCon *lcDBCon;
@@ -37,6 +37,8 @@ typedef enum ChangeReason{
 @property (strong, nonatomic) NSString  *changeReasonStr;
 @property (strong, nonatomic) NSDictionary *eventInfoDic;
 @property (nonatomic)         BOOL      toTaskDetailEnable;
+
+@property (assign, nonatomic) NSInteger selectedCartIndex;
 
 
 @property (strong, nonatomic) IBOutlet UIView *firstChangeCartView;
@@ -72,6 +74,15 @@ typedef enum ChangeReason{
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    //
+    self.firstChangeCartView.layer.cornerRadius = self.firstChangeCartView.frame.size.width/2;
+    self.secondChangeCartView.layer.cornerRadius = self.secondChangeCartView.frame.size.width/2;
+    self.thirdChageCartView.layer.cornerRadius = self.thirdChageCartView.frame.size.width/2;
+    self.fourthChangeCartView.layer.cornerRadius = self.fourthChangeCartView.frame.size.width/2;
+    
+    self.changeLowPower.layer.cornerRadius = self.changeLowPower.frame.size.width/2;
+    self.changeBad.layer.cornerRadius = self.changeBad.frame.size.width/2;
+    self.changeOther.layer.cornerRadius = self.changeOther.frame.size.width/2;
     //alloc and init
     self.lcDBCon = [[DBCon alloc] init];
     self.logPerson = [[DataTable alloc] init];
@@ -80,6 +91,8 @@ typedef enum ChangeReason{
     self.changeCartResult = [[DataTable alloc] init];
     self.curGrpCarts    = [[DataTable alloc] init];
     //
+    self.selectedCartIndex  = 0;
+    //
     self.toTaskDetailEnable =   NO;
     //
     self.changeReasonStr = [NSString stringWithFormat:@"%d",LowPowerRequest];
@@ -87,7 +100,99 @@ typedef enum ChangeReason{
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getEventFromHeart:) name:@"changeCart" object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ForceBackField:) name:@"forceBackField" object:nil];
+    //1
+    UITapGestureRecognizer *selectedTheCart1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeCart:)];
+    selectedTheCart1.delegate = self;
+    [self.firstChangeCartView addGestureRecognizer:selectedTheCart1];
+    //2
+    UITapGestureRecognizer *selectedTheCart2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeCart:)];
+    selectedTheCart2.delegate = self;
+    [self.secondChangeCartView addGestureRecognizer:selectedTheCart2];
+    //3
+    UITapGestureRecognizer *selectedTheCart3 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeCart:)];
+    selectedTheCart3.delegate = self;
+    [self.thirdChageCartView addGestureRecognizer:selectedTheCart3];
+    //4
+    UITapGestureRecognizer *selectedTheCart4 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeCart:)];
+    selectedTheCart4.delegate = self;
+    [self.fourthChangeCartView addGestureRecognizer:selectedTheCart4];
     
+    
+}
+
+- (void)changeCart:(UITapGestureRecognizer *)theSelectedCart
+{
+    NSLog(@"theSelectedCart:%ld",theSelectedCart.view.tag);
+    NSInteger theSelectedCartIndex;
+    theSelectedCartIndex = theSelectedCart.view.tag;
+    //切换球车相应的颜色
+    [self changeCartBackColor:theSelectedCartIndex];
+    //
+    self.selectedCartIndex = theSelectedCartIndex - 1;
+    
+    
+}
+
+- (void)changeCartBackColor:(NSInteger)index
+{
+    NSLog(@"index:%ld",index);
+    UIImage *whithImage;// = [[UIImage alloc] init];
+    whithImage = [UIImage imageNamed:@"changeCartWhite"];
+    UIImage *grayImage;// = [[UIImage alloc] init];
+    grayImage = [UIImage imageNamed:@"changeCart"];
+    
+    //
+    switch (index) {
+        case 1:
+            self.firstChangeCartView.backgroundColor = [UIColor HexString:selectCartColor];
+            self.firstChangeCartImage.image = whithImage;
+            self.secondChangeCartView.backgroundColor = [UIColor whiteColor];
+            self.secondChangeCartImage.image = grayImage;
+            self.thirdChageCartView.backgroundColor = [UIColor whiteColor];
+            self.thirdChangeCartImage.image = grayImage;
+            self.fourthChangeCartView.backgroundColor = [UIColor whiteColor];
+            self.fourthChangeCartImage.image = grayImage;
+            
+            break;
+        case 2:
+            self.firstChangeCartView.backgroundColor = [UIColor whiteColor];
+            self.firstChangeCartImage.image = grayImage;
+            self.secondChangeCartView.backgroundColor = [UIColor HexString:selectCartColor];
+            self.secondChangeCartImage.image = whithImage;
+            self.thirdChageCartView.backgroundColor = [UIColor whiteColor];
+            self.thirdChangeCartImage.image = grayImage;
+            self.fourthChangeCartView.backgroundColor = [UIColor whiteColor];
+            self.fourthChangeCartImage.image = grayImage;
+            
+            break;
+            
+        case 3:
+            self.firstChangeCartView.backgroundColor = [UIColor whiteColor];
+            self.firstChangeCartImage.image = grayImage;
+            self.secondChangeCartView.backgroundColor = [UIColor whiteColor];
+            self.secondChangeCartImage.image = grayImage;
+            self.thirdChageCartView.backgroundColor = [UIColor HexString:selectCartColor];
+            self.thirdChangeCartImage.image = whithImage;
+            self.fourthChangeCartView.backgroundColor = [UIColor whiteColor];
+            self.fourthChangeCartImage.image = grayImage;
+            
+            break;
+            
+        case 4:
+            self.firstChangeCartView.backgroundColor = [UIColor whiteColor];
+            self.firstChangeCartImage.image = grayImage;
+            self.secondChangeCartView.backgroundColor = [UIColor whiteColor];
+            self.secondChangeCartImage.image = grayImage;
+            self.thirdChageCartView.backgroundColor = [UIColor whiteColor];
+            self.thirdChangeCartImage.image = grayImage;
+            self.fourthChangeCartView.backgroundColor = [UIColor HexString:selectCartColor];
+            self.fourthChangeCartImage.image = whithImage;
+            
+            break;
+            
+        default:
+            break;
+    }
 }
 
 - (void)ForceBackField:(NSNotification *)sender
@@ -263,7 +368,7 @@ typedef enum ChangeReason{
     [dataFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSString *curDeviceDate = [dataFormatter stringFromDate:[NSDate date]];
     
-    NSMutableDictionary *changeCartParam = [[NSMutableDictionary alloc] initWithObjectsAndKeys:theMid,@"mid",self.groupInfo.Rows[0][@"grocod"],@"grocod",self.logPerson.Rows[0][@"empCode"],@"empcod",self.changeReasonStr,@"reason",self.cartInfo.Rows[0][@"carcod"],@"carcod",curDeviceDate,@"subtim", nil];
+    NSMutableDictionary *changeCartParam = [[NSMutableDictionary alloc] initWithObjectsAndKeys:theMid,@"mid",self.groupInfo.Rows[0][@"grocod"],@"grocod",self.logPerson.Rows[0][@"empCode"],@"empcod",self.changeReasonStr,@"reason",self.curGrpCarts.Rows[self.selectedCartIndex][@"carcod"],@"carcod",curDeviceDate,@"subtim", nil];
     //
     NSString *changeCartURLStr;
     changeCartURLStr = [GetRequestIPAddress getChangeCartURL];

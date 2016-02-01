@@ -33,6 +33,7 @@ GPSPoint currentGPS;
 @property (strong, nonatomic) IBOutlet UISegmentedControl *switchMapFunView;
 - (IBAction)showCurLocation:(UIButton *)sender;
 
+@property (weak, nonatomic) IBOutlet AGSMapView *mapView;
 
 
 
@@ -184,30 +185,16 @@ FixedPoint gpsScreenPoint;
 }
 
 - (void)switchToCurCourse{
+    [self.mapView reset];
+    //
     switch (self.theCourseIndex) {
         case 0://north
-//            [self.mapView removeMapLayer:self.backGroundLayer];
-//            [self.mapView removeMapLayer:self.localHoleFeatureTableLayer];
-//            [self.mapView removeMapLayer:self.localFeatureTableLayer];
-//            //
-//            _backGroundLayer = nil;
-//            _localFeatureTableLayer = nil;
-//            _localFeatureTableLayer = nil;
-//            _graphicLayer = nil;
             //
             [self loadingNorthCourse];
             
             break;
             
         case 1://south
-//            [self.mapView removeMapLayer:self.backGroundLayer];
-//            [self.mapView removeMapLayer:self.localHoleFeatureTableLayer];
-//            [self.mapView removeMapLayer:self.localFeatureTableLayer];
-//            //
-//            _backGroundLayer = nil;
-//            _localFeatureTableLayer = nil;
-//            _localFeatureTableLayer = nil;
-//            _graphicLayer = nil;
             //
             [self loadingSouthCourse];
             
@@ -243,11 +230,16 @@ FixedPoint gpsScreenPoint;
 {
     //add tiled layer  step1
     NSString *path = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapDataN.bundle/GolfPark.tpk"];
+    NSLog(@"backgroundlayer:%@",self.backGroundLayer);
     self.backGroundLayer = [AGSLocalTiledLayer localTiledLayerWithPath:path];
     //如果层被合适的初始化了之后，添加到地图
     if(self.backGroundLayer != nil && !self.backGroundLayer.error)
     {
+        NSLog(@"path:%@",[self.backGroundLayer cachePath]);
+//        [self.mapView removeMapLayerWithName:@"Local Tiled Layer"];
         [self.mapView addMapLayer:self.backGroundLayer withName:@"Local Tiled Layer"];
+        
+//        [self.mapView insertMapLayer:self.backGroundLayer withName:@"Local Tiled Layer" atIndex:0];
     }
     else
     {
@@ -504,6 +496,14 @@ FixedPoint gpsScreenPoint;
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+    //
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    //移除掉view以及将相应的通知给移除掉，从而释放内存
+    self.view = nil;
+    [self.mapView.locationDisplay removeObserver:self forKeyPath:@"autoPanMode"];
+    [self.mapView removeObserver:self forKeyPath:@"location"];
+    
+    
 }
 
 #pragma -mark GPS_viewDidAppear
@@ -607,10 +607,12 @@ FixedPoint gpsScreenPoint;
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-    _graphicLayer = nil;
-    _localFeatureTableLayer = nil;
-    _localHoleFeatureTableLayer = nil;
-    _backGroundLayer = nil;
+//    if ([self.view window] == nil) {
+//        //保存数据
+//        
+//        //
+//        self.mapView = nil;
+//    }
     
 }
 //构建模拟路径

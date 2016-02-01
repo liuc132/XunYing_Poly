@@ -155,6 +155,7 @@
 {
     [super viewDidDisappear:animated];
     
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 /*
 #pragma mark - Navigation
@@ -334,12 +335,10 @@
                     else
                     {
                         //先隐藏，同时停止动画
-//                        [self.activityIndicatorView hideIndicator];
-//                        self.activityIndicatorView.hidden = YES;
-                        [self.stateIndicator stopAnimating];
-                        self.stateIndicator.hidden = YES;
+                        [weakSelf.stateIndicator stopAnimating];
+                        weakSelf.stateIndicator.hidden = YES;
                         //
-                        [self performSegueWithIdentifier:@"mannualCreatGrp" sender:nil];
+                        [weakSelf performSegueWithIdentifier:@"mannualCreatGrp" sender:nil];
                     }
                     
                 }
@@ -347,7 +346,10 @@
             
         }failure:^(NSError *err){
             NSLog(@"request failled");
-            
+            [weakSelf.stateIndicator stopAnimating];
+            weakSelf.stateIndicator.hidden = YES;
+            UIAlertView *errAlert = [[UIAlertView alloc] initWithTitle:@"网络请求失败" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+            [errAlert show];
             
         }];
     });
@@ -533,6 +535,10 @@
                 
             }failure:^(NSError *err){
                 NSLog(@"request failed");
+                [weakSelf.stateIndicator stopAnimating];
+                weakSelf.stateIndicator.hidden = YES;
+                UIAlertView *errAlert = [[UIAlertView alloc] initWithTitle:@"网络请求失败" message:nil delegate:weakSelf cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                [errAlert show];
                 
             }];
         });

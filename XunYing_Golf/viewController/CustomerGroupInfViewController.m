@@ -52,6 +52,12 @@
 @property (strong, nonatomic) IBOutlet UILabel *firstCaddyNumber;
 @property (strong, nonatomic) IBOutlet UILabel *secondCaddyName;
 @property (strong, nonatomic) IBOutlet UILabel *secondCaddyNumber;
+@property (weak, nonatomic) IBOutlet UILabel *thirdCaddyName;
+@property (weak, nonatomic) IBOutlet UILabel *thirdCaddyNumber;
+@property (weak, nonatomic) IBOutlet UILabel *fourthCaddyName;
+@property (weak, nonatomic) IBOutlet UILabel *fourthCaddyNumber;
+
+
 
 @property (strong, nonatomic) IBOutlet UILabel *firstCartNumber;
 @property (strong, nonatomic) IBOutlet UILabel *firstCartSeats;
@@ -320,6 +326,11 @@
             self.firstCaddyNumber.hidden = YES;
             self.secondCaddyName.hidden = YES;
             self.secondCaddyNumber.hidden = YES;
+            self.thirdCaddyName.hidden = YES;
+            self.thirdCaddyNumber.hidden = YES;
+            self.fourthCaddyName.hidden = YES;
+            self.fourthCaddyNumber.hidden = YES;
+            
             break;
             //
         case 1:
@@ -328,6 +339,10 @@
             //hide
             self.secondCaddyName.hidden = YES;
             self.secondCaddyNumber.hidden = YES;
+            self.thirdCaddyName.hidden = YES;
+            self.thirdCaddyNumber.hidden = YES;
+            self.fourthCaddyName.hidden = YES;
+            self.fourthCaddyNumber.hidden = YES;
             
             break;
             //
@@ -336,10 +351,41 @@
             self.firstCaddyNumber.text = self.curGrpCaddies.Rows[0][@"cadnum"];
             self.secondCaddyName.text = self.curGrpCaddies.Rows[1][@"cadnam"];
             self.secondCaddyNumber.text = self.curGrpCaddies.Rows[1][@"cadnum"];
+            self.thirdCaddyName.hidden = YES;
+            self.thirdCaddyNumber.hidden = YES;
+            self.fourthCaddyName.hidden = YES;
+            self.fourthCaddyNumber.hidden = YES;
+            break;
+            //
+        case 3:
+            self.firstCaddyName.text = self.curGrpCaddies.Rows[0][@"cadnam"];
+            self.firstCaddyNumber.text = self.curGrpCaddies.Rows[0][@"cadnum"];
+            self.secondCaddyName.text = self.curGrpCaddies.Rows[1][@"cadnam"];
+            self.secondCaddyNumber.text = self.curGrpCaddies.Rows[1][@"cadnum"];
+            self.thirdCaddyName.text = self.curGrpCaddies.Rows[2][@"cadnam"];
+            self.thirdCaddyNumber.text = self.curGrpCaddies.Rows[2][@"cadnum"];
+            //
+            self.fourthCaddyName.hidden = YES;
+            self.fourthCaddyNumber.hidden = YES;
+            
             break;
             
+        case 4:
+            self.firstCaddyName.text = self.curGrpCaddies.Rows[0][@"cadnam"];
+            self.firstCaddyNumber.text = self.curGrpCaddies.Rows[0][@"cadnum"];
+            self.secondCaddyName.text = self.curGrpCaddies.Rows[1][@"cadnam"];
+            self.secondCaddyNumber.text = self.curGrpCaddies.Rows[1][@"cadnum"];
+            self.thirdCaddyName.text = self.curGrpCaddies.Rows[2][@"cadnam"];
+            self.thirdCaddyNumber.text = self.curGrpCaddies.Rows[2][@"cadnum"];
+            self.fourthCaddyName.text = self.curGrpCaddies.Rows[3][@"cadnam"];
+            self.fourthCaddyNumber.text = self.curGrpCaddies.Rows[3][@"cadnum"];
+            
+            break;
             
         default:
+            
+            
+            
             break;
     }
     //显示当前的所有客户的名称
@@ -462,6 +508,8 @@
             break;
             //选了两个球车
         case 2:
+        case 3:
+        case 4:
             self.firstCartNumber.hidden = NO;
             self.firstCartSeats.hidden  = NO;
             self.secondCartNumber.hidden = NO;

@@ -23,20 +23,34 @@ typedef enum ChangeReason{
 
 #define reasonSelectColor           @"0197d6"
 #define reasonUnselectWordColor     @"999999"
+#define caddySelectedBKColor        @"01cc00"
 
 
 
 @interface ChangeCaddyViewController ()<UIGestureRecognizerDelegate>
 
+@property (assign, nonatomic) NSInteger selectedCaddyIndex;
+
 
 @property (strong, nonatomic) IBOutlet UIView *caddyView1;
 @property (strong, nonatomic) IBOutlet UILabel *firstChange;
+@property (weak, nonatomic) IBOutlet UIImageView *firstCaddyImage;
+
+
 @property (strong, nonatomic) IBOutlet UIView *caddyView2;
 @property (strong, nonatomic) IBOutlet UILabel *secondChange;
+@property (weak, nonatomic) IBOutlet UIImageView *secondCaddyImage;
+
+
 @property (strong, nonatomic) IBOutlet UIView *caddyView3;
 @property (strong, nonatomic) IBOutlet UILabel *thirdChange;
+@property (weak, nonatomic) IBOutlet UIImageView *thirdCaddyImage;
+
+
 @property (strong, nonatomic) IBOutlet UIView *caddyView4;
 @property (strong, nonatomic) IBOutlet UILabel *fourthChange;
+@property (weak, nonatomic) IBOutlet UIImageView *fourthCaddyImage;
+
 
 @property (strong, nonatomic) IBOutlet UIButton *caddyReason;
 @property (strong, nonatomic) IBOutlet UIButton *customRequest;
@@ -82,14 +96,107 @@ typedef enum ChangeReason{
     self.changeCaddyResult  = [[DataTable alloc] init];
     self.allCaddyInfo       = [[DataTable alloc] init];
     //
+    self.selectedCaddyIndex = 0;
+    //
     self.toTaskDetailEnable =   NO;
     //setting the initial state
     self.changeReasonStr = [NSString stringWithFormat:@"%d",CaddyRequest];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getEventFromHeart:) name:@"changeCaddy" object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ForceBackField:) name:@"forceBackField" object:nil];
+    UITapGestureRecognizer *selectTheCaddy1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeCaddy:)];
+    selectTheCaddy1.delegate = self;
+    UITapGestureRecognizer *selectTheCaddy2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeCaddy:)];
+    selectTheCaddy2.delegate = self;
+    UITapGestureRecognizer *selectTheCaddy3 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeCaddy:)];
+    selectTheCaddy3.delegate = self;
+    UITapGestureRecognizer *selectTheCaddy4 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeCaddy:)];
+    selectTheCaddy4.delegate = self;
+    //给每个球童视图添加手势
+    [self.caddyView1 addGestureRecognizer:selectTheCaddy1];
+    [self.caddyView2 addGestureRecognizer:selectTheCaddy2];
+    [self.caddyView3 addGestureRecognizer:selectTheCaddy3];
+    [self.caddyView4 addGestureRecognizer:selectTheCaddy4];
     
 }
+
+- (void)changeCaddy:(UITapGestureRecognizer *)theSelectedCaddy
+{
+    NSLog(@"enterChangeCaddy and the view's tag:%ld",theSelectedCaddy.view.tag);
+    NSInteger theSelectedCaddyIndex;
+    theSelectedCaddyIndex = theSelectedCaddy.view.tag;
+    //
+    [self changeCaddyBackColor:theSelectedCaddyIndex];
+    //
+    self.selectedCaddyIndex = theSelectedCaddyIndex - 1;
+    
+    
+    
+    NSLog(@"end changeCaddy");
+}
+
+- (void)changeCaddyBackColor:(NSInteger)index
+{
+    NSLog(@"index:%ld",index);
+    UIImage *whithImage;// = [[UIImage alloc] init];
+    whithImage = [UIImage imageNamed:@"changeCaddyWhite"];
+    UIImage *grayImage;// = [[UIImage alloc] init];
+    grayImage = [UIImage imageNamed:@"changeCaddy"];
+    
+    //
+    switch (index) {
+        case 1:
+            self.caddyView1.backgroundColor = [UIColor HexString:caddySelectedBKColor];
+            self.firstCaddyImage.image = whithImage;
+            self.caddyView2.backgroundColor = [UIColor whiteColor];
+            self.secondCaddyImage.image = grayImage;
+            self.caddyView3.backgroundColor = [UIColor whiteColor];
+            self.thirdCaddyImage.image = grayImage;
+            self.caddyView4.backgroundColor = [UIColor whiteColor];
+            self.fourthCaddyImage.image = grayImage;
+            
+            break;
+        case 2:
+            self.caddyView1.backgroundColor = [UIColor whiteColor];
+            self.firstCaddyImage.image = grayImage;
+            self.caddyView2.backgroundColor = [UIColor HexString:caddySelectedBKColor];
+            self.secondCaddyImage.image = whithImage;
+            self.caddyView3.backgroundColor = [UIColor whiteColor];
+            self.thirdCaddyImage.image = grayImage;
+            self.caddyView4.backgroundColor = [UIColor whiteColor];
+            self.fourthCaddyImage.image = grayImage;
+            
+            break;
+            
+        case 3:
+            self.caddyView1.backgroundColor = [UIColor whiteColor];
+            self.firstCaddyImage.image = grayImage;
+            self.caddyView2.backgroundColor = [UIColor whiteColor];
+            self.secondCaddyImage.image = grayImage;
+            self.caddyView3.backgroundColor = [UIColor HexString:caddySelectedBKColor];
+            self.thirdCaddyImage.image = whithImage;
+            self.caddyView4.backgroundColor = [UIColor whiteColor];
+            self.fourthCaddyImage.image = grayImage;
+            
+            break;
+            
+        case 4:
+            self.caddyView1.backgroundColor = [UIColor whiteColor];
+            self.firstCaddyImage.image = grayImage;
+            self.caddyView2.backgroundColor = [UIColor whiteColor];
+            self.secondCaddyImage.image = grayImage;
+            self.caddyView3.backgroundColor = [UIColor whiteColor];
+            self.thirdCaddyImage.image = grayImage;
+            self.caddyView4.backgroundColor = [UIColor HexString:caddySelectedBKColor];
+            self.fourthCaddyImage.image = whithImage;
+            
+            break;
+            
+        default:
+            break;
+    }
+}
+
 
 - (void)viewWillDisappear:(BOOL)animated
 {
@@ -363,7 +470,7 @@ typedef enum ChangeReason{
     NSString *curDateTime = [dateFarmatter stringFromDate:[NSDate date]];
     //构建参数
     NSString *reasonStr = [NSString stringWithFormat:@"%@;",self.changeReasonStr];
-    NSMutableDictionary *changeCaddyParam = [[NSMutableDictionary alloc] initWithObjectsAndKeys:theMid,@"mid",self.curGrpCaddies.Rows[0][@"empcod"],@"empcod",self.groInfo.Rows[0][@"grocod"],@"grocod",reasonStr,@"reason",self.curGrpCaddies.Rows[0][@"cadcod"],@"cadcod",curDateTime,@"subtim", nil];//[[NSDictionary alloc ] initWithObjectsAndKeys:MIDCODE,@"mid", nil];
+    NSMutableDictionary *changeCaddyParam = [[NSMutableDictionary alloc] initWithObjectsAndKeys:theMid,@"mid",self.curGrpCaddies.Rows[0][@"empcod"],@"empcod",self.groInfo.Rows[0][@"grocod"],@"grocod",reasonStr,@"reason",self.curGrpCaddies.Rows[self.selectedCaddyIndex][@"cadcod"],@"cadcod",curDateTime,@"subtim", nil];//[[NSDictionary alloc ] initWithObjectsAndKeys:MIDCODE,@"mid", nil];
     //
     NSString *changeCaddyURLStr;
     changeCaddyURLStr = [GetRequestIPAddress getChangeCaddyURL];

@@ -38,6 +38,7 @@
 @property (strong, nonatomic) UIButton *theOldSelectedBtn;
 @property (strong, nonatomic) NSDictionary *eventInfoDic;
 @property (nonatomic)           BOOL        toTaskDetailEnable;
+@property (strong, nonatomic) UIActivityIndicatorView   *stateIndicator;
 
 
 
@@ -106,7 +107,11 @@
     self.jumpHoleScrollView.alwaysBounceVertical = YES;
     self.jumpHoleScrollView.directionalLockEnabled = YES;
     
-    NSLog(@"finish check out all the data");
+    self.stateIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(ScreenWidth/2 - 100, ScreenHeight/2 - 100, 200, 200)];
+    self.stateIndicator.backgroundColor = [UIColor HexString:@"0a0a0a" andAlpha:0.2];
+    self.stateIndicator.layer.cornerRadius = 20;
+    [self.view addSubview:self.stateIndicator];
+    self.stateIndicator.hidden = YES;
     
     //
     [self GetPlayProcess];
@@ -441,6 +446,9 @@
         [alert show];
         return;
     }
+    //
+    [self.stateIndicator startAnimating];
+    self.stateIndicator.hidden = NO;
     //获取到mid号码
     NSString *theMid;
     theMid = [GetRequestIPAddress getUniqueID];
@@ -455,7 +463,9 @@
         //start request
         [HttpTools getHttp:playProcessURLStr forParams:refreshParam success:^(NSData *nsData){
             NSLog(@"success refresh");
-//            NSDictionary *latestDataDic = [NSJSONSerialization JSONObjectWithData:nsData options:NSJSONReadingMutableLeaves error:nil];
+            [self.stateIndicator stopAnimating];
+            self.stateIndicator.hidden = YES;
+            //
             NSDictionary *latestDataDic;
             latestDataDic = (NSDictionary *)nsData;
             if ([latestDataDic[@"Code"] intValue] > 0) {
@@ -483,7 +493,11 @@
             
         }failure:^(NSError *err){
             NSLog(@"refresh failled and err:%@",err);
-            
+            [self.stateIndicator stopAnimating];
+            self.stateIndicator.hidden = YES;
+            //
+            UIAlertView *netAlert = [[UIAlertView alloc] initWithTitle:@"网络连接异常" message:nil delegate:weakSelf cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+            [netAlert show];
             
         }];
     });

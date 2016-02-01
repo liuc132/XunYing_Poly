@@ -11,7 +11,6 @@
 
 @interface ViewController : UIViewController<AGSMapViewLayerDelegate,AGSFeatureLayerQueryDelegate,AGSMapViewTouchDelegate>
 
-@property (strong, nonatomic) IBOutlet AGSMapView *mapView;
 
 @property (strong, nonatomic) AGSPoint *GpsPoint;
 @property (nonatomic) BOOL  confirmGetGPS;

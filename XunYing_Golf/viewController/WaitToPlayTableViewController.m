@@ -471,6 +471,8 @@
     [super viewDidDisappear:animated];
     [self.activityIndicatorView stopAnimating];
     self.activityIndicatorView.hidden = YES;
+    //
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma --mark viewDidLayoutSubviews
@@ -524,12 +526,16 @@
 
 - (void)canCleDownHandle
 {
+    __weak typeof(self) weakSelf = self;
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"组参数异常" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
     if(![self.groupTable.Rows count])
     {
         [alert show];
         return;
     }
+    //
+    [self.activityIndicatorView stopAnimating];
+    self.activityIndicatorView.hidden = YES;
     //获取到mid号码
     NSString *theMid;
     theMid = [GetRequestIPAddress getUniqueID];
@@ -544,7 +550,7 @@
         //向服务器发送取消下场申请
         [HttpTools getHttp:cancelWait forParams:cancleWaiting success:^(NSData *nsData){
             //        NSLog(@"cancle Waiting down group success");
-            [self.timer invalidate];
+            [weakSelf.timer invalidate];
             //
 //            NSDictionary *recDic = [NSJSONSerialization JSONObjectWithData:nsData options:NSJSONReadingMutableLeaves error:nil];
             NSDictionary *recDic;
@@ -564,12 +570,15 @@
             {
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"HeartBeat" object:nil userInfo:@{@"disableHeart":@"1"}];
                 //
-                [self performSegueWithIdentifier:@"waitDownToCreateGrp" sender:nil];
+                [weakSelf performSegueWithIdentifier:@"waitDownToCreateGrp" sender:nil];
             }
             
         }failure:^(NSError *err){
             NSLog(@"cancle waiting down group fail");
-            
+            [weakSelf.activityIndicatorView stopAnimating];
+            weakSelf.activityIndicatorView.hidden = YES;
+            UIAlertView *errAlert = [[UIAlertView alloc] initWithTitle:@"网络请求失败" message:nil delegate:weakSelf cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+            [errAlert show];
         }];
     });
 
