@@ -335,6 +335,9 @@ typedef enum eventOrder{
                                         cartValue = [newCart objectForKey:@"newcad"];
                                         if ((NSNull *)cartValue != [NSNull null]) {
                                             [weakSelf.lcDBCon ExecNonQuery:[NSString stringWithFormat:@"UPDATE tbl_taskInfo SET newCaddyCode = '%@' , result = '%@' , hantim = '%@' where evecod = '%@'",eventDic[@"everes"][@"newcad"][@"carcod"],eventDic[@"everes"][@"result"],eventDic[@"hantim"],eventDic[@"evecod"]]];
+                                            //更新已经添加的球童
+                                            
+                                            
                                         }
                                         else
                                         {
@@ -355,6 +358,9 @@ typedef enum eventOrder{
                                         cartValue = [newCart objectForKey:@"newcar"];
                                         if ((NSNull *)cartValue != [NSNull null]) {
                                             [weakSelf.lcDBCon ExecNonQuery:[NSString stringWithFormat:@"UPDATE tbl_taskInfo SET newCartCode = '%@' , result = '%@' , hantim = '%@' where evecod = '%@'",eventDic[@"everes"][@"newcar"][@"carcod"],eventDic[@"everes"][@"result"],eventDic[@"hantim"],eventDic[@"evecod"]]];
+                                            //更新已经添加的球车的数据
+                                            
+                                            
                                         }
                                         else
                                         {

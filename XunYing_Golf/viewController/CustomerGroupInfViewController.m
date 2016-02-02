@@ -63,6 +63,12 @@
 @property (strong, nonatomic) IBOutlet UILabel *firstCartSeats;
 @property (strong, nonatomic) IBOutlet UILabel *secondCartNumber;
 @property (strong, nonatomic) IBOutlet UILabel *seconCartSeats;
+@property (weak, nonatomic) IBOutlet UILabel *thirdCartNumber;
+@property (weak, nonatomic) IBOutlet UILabel *thirdCartSeats;
+@property (weak, nonatomic) IBOutlet UILabel *fourthCartNumber;
+@property (weak, nonatomic) IBOutlet UILabel *fourthCartSeats;
+
+
 
 @property (strong, nonatomic) IBOutlet UILabel *panelNumber;
 
@@ -74,6 +80,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *startHoleNumber;
 @property (strong, nonatomic) IBOutlet UILabel *currentHoleNumber;
 @property (strong, nonatomic) IBOutlet UILabel *holeType;//显示上九洞，下九洞，十八洞
+@property (weak, nonatomic) IBOutlet UILabel *fieldPosition;//南场，北场
 
 
 
@@ -129,7 +136,7 @@
     self.cusInfScrollView.showsHorizontalScrollIndicator = NO;
     self.cusInfScrollView.showsVerticalScrollIndicator = YES;
     self.cusInfScrollView.indicatorStyle = UIScrollViewIndicatorStyleDefault;
-    self.cusInfScrollView.contentInset = UIEdgeInsetsMake(0, 0, 85, 0);
+    self.cusInfScrollView.contentInset = UIEdgeInsetsMake(0, 0, 160, 0);
     
     
     self.stateIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(ScreenWidth/2 - 100, ScreenHeight/2 - 100, 200, 200)];
@@ -294,6 +301,19 @@
         self.currentHoleNumber.text  = self.cusGroupInf.Rows[0][@"nowholnum"];
         //当球的打球状态
         self.playState.text     = self.playStateArray[[self.cusGroupInf.Rows[0][@"grosta"] intValue]];
+        //但前所在的球场的位置
+        NSString *fieldName;
+        NSString *fieldNameStr;
+        fieldNameStr = [NSString stringWithFormat:@"%@",self.cusGroupInf.Rows[0][@"coursegrouptag"]];
+        if ([fieldNameStr isEqualToString:@"north"]) {
+            fieldName = @"北场";
+        }
+        else if ([fieldNameStr isEqualToString:@"south"])
+        {
+            fieldName = @"南场";
+        }
+        
+        self.fieldPosition.text = fieldName;
         
     }
     //
@@ -494,6 +514,11 @@
             self.firstCartSeats.hidden  = YES;
             self.secondCartNumber.hidden = YES;
             self.seconCartSeats.hidden = YES;
+            self.thirdCartNumber.hidden = YES;
+            self.thirdCartSeats.hidden = YES;
+            self.fourthCartNumber.hidden = YES;
+            self.fourthCartSeats.hidden = YES;
+            
             break;
             //只选了一个球车
         case 1:
@@ -501,6 +526,10 @@
             self.firstCartSeats.hidden  = NO;
             self.secondCartNumber.hidden = YES;
             self.seconCartSeats.hidden  = YES;
+            self.thirdCartNumber.hidden = YES;
+            self.thirdCartSeats.hidden = YES;
+            self.fourthCartNumber.hidden = YES;
+            self.fourthCartSeats.hidden = YES;
             //
             self.firstCartNumber.text = [NSString stringWithFormat:@"%@",[self.selectedCartInfo.Rows[0][@"carnum"] isEmpty]?@"042":self.selectedCartInfo.Rows[0][@"carnum"]];
             self.firstCartSeats.text = [NSString stringWithFormat:@"%@",[self.selectedCartInfo.Rows[0][@"carsea"] isEmpty]?@"4":self.selectedCartInfo.Rows[0][@"carsea"]];
@@ -508,12 +537,14 @@
             break;
             //选了两个球车
         case 2:
-        case 3:
-        case 4:
             self.firstCartNumber.hidden = NO;
             self.firstCartSeats.hidden  = NO;
             self.secondCartNumber.hidden = NO;
             self.seconCartSeats.hidden  = NO;
+            self.thirdCartNumber.hidden = YES;
+            self.thirdCartSeats.hidden = YES;
+            self.fourthCartNumber.hidden = YES;
+            self.fourthCartSeats.hidden = YES;
             //将相应的信息显示出来
             //1
             self.firstCartNumber.text = [NSString stringWithFormat:@"%@",[self.selectedCartInfo.Rows[0][@"carnum"] isEmpty]?@"042":self.selectedCartInfo.Rows[0][@"carnum"]];
@@ -523,6 +554,57 @@
             self.seconCartSeats.text = [NSString stringWithFormat:@"%@",[self.selectedCartInfo.Rows[1][@"carsea"] isEmpty]?@"4":self.selectedCartInfo.Rows[1][@"carsea"]];
             
             break;
+            //
+        case 3:
+            self.firstCartNumber.hidden = NO;
+            self.firstCartSeats.hidden  = NO;
+            self.secondCartNumber.hidden = NO;
+            self.seconCartSeats.hidden  = NO;
+            self.thirdCartNumber.hidden = NO;
+            self.thirdCartSeats.hidden = NO;
+            self.fourthCartNumber.hidden = YES;
+            self.fourthCartSeats.hidden = YES;
+            //
+            //将相应的信息显示出来
+            //1
+            self.firstCartNumber.text = [NSString stringWithFormat:@"%@",[self.selectedCartInfo.Rows[0][@"carnum"] isEmpty]?@"042":self.selectedCartInfo.Rows[0][@"carnum"]];
+            self.firstCartSeats.text = [NSString stringWithFormat:@"%@",[self.selectedCartInfo.Rows[0][@"carsea"] isEmpty]?@"4":self.selectedCartInfo.Rows[0][@"carsea"]];
+            //2
+            self.secondCartNumber.text = [NSString stringWithFormat:@"%@",[self.selectedCartInfo.Rows[1][@"carnum"] isEmpty]?@"042":self.selectedCartInfo.Rows[1][@"carnum"]];
+            self.seconCartSeats.text = [NSString stringWithFormat:@"%@",[self.selectedCartInfo.Rows[1][@"carsea"] isEmpty]?@"4":self.selectedCartInfo.Rows[1][@"carsea"]];
+            //3
+            self.thirdCartNumber.text = [NSString stringWithFormat:@"%@",[self.selectedCartInfo.Rows[2][@"carnum"] isEmpty]?@"042":self.selectedCartInfo.Rows[2][@"carnum"]];
+            self.thirdCartSeats.text = [NSString stringWithFormat:@"%@",[self.selectedCartInfo.Rows[2][@"carsea"] isEmpty]?@"4":self.selectedCartInfo.Rows[2][@"carsea"]];
+            
+            break;
+            //
+        case 4:
+            self.firstCartNumber.hidden = NO;
+            self.firstCartSeats.hidden  = NO;
+            self.secondCartNumber.hidden = NO;
+            self.seconCartSeats.hidden  = NO;
+            self.thirdCartNumber.hidden = NO;
+            self.thirdCartSeats.hidden = NO;
+            self.fourthCartNumber.hidden = NO;
+            self.fourthCartSeats.hidden = NO;
+            //
+            //将相应的信息显示出来
+            //1
+            self.firstCartNumber.text = [NSString stringWithFormat:@"%@",[self.selectedCartInfo.Rows[0][@"carnum"] isEmpty]?@"042":self.selectedCartInfo.Rows[0][@"carnum"]];
+            self.firstCartSeats.text = [NSString stringWithFormat:@"%@",[self.selectedCartInfo.Rows[0][@"carsea"] isEmpty]?@"4":self.selectedCartInfo.Rows[0][@"carsea"]];
+            //2
+            self.secondCartNumber.text = [NSString stringWithFormat:@"%@",[self.selectedCartInfo.Rows[1][@"carnum"] isEmpty]?@"042":self.selectedCartInfo.Rows[1][@"carnum"]];
+            self.seconCartSeats.text = [NSString stringWithFormat:@"%@",[self.selectedCartInfo.Rows[1][@"carsea"] isEmpty]?@"4":self.selectedCartInfo.Rows[1][@"carsea"]];
+            //将相应的信息显示出来
+            //3
+            self.thirdCartNumber.text = [NSString stringWithFormat:@"%@",[self.selectedCartInfo.Rows[2][@"carnum"] isEmpty]?@"042":self.selectedCartInfo.Rows[2][@"carnum"]];
+            self.thirdCartSeats.text = [NSString stringWithFormat:@"%@",[self.selectedCartInfo.Rows[2][@"carsea"] isEmpty]?@"4":self.selectedCartInfo.Rows[2][@"carsea"]];
+            //4
+            self.fourthCartNumber.text = [NSString stringWithFormat:@"%@",[self.selectedCartInfo.Rows[3][@"carnum"] isEmpty]?@"042":self.selectedCartInfo.Rows[3][@"carnum"]];
+            self.fourthCartSeats.text = [NSString stringWithFormat:@"%@",[self.selectedCartInfo.Rows[3][@"carsea"] isEmpty]?@"4":self.selectedCartInfo.Rows[3][@"carsea"]];
+            
+            break;
+            
         default:
             break;
     }

@@ -11,10 +11,11 @@
 
 @interface WaitToPlayTableViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 
-@property (nonatomic) NSString* holeType;
+@property (copy,nonatomic) NSString* holeType;
 @property (nonatomic) NSInteger customerCounts;
 @property (nonatomic) BOOL      QRCodeEnable;
 @property (strong, nonatomic)   NSArray *cusCardArray;
+@property (copy, nonatomic) NSString *fieldName;
 
 
 @property (strong, nonatomic) id<passValueLogInDelegate> passDelegate;

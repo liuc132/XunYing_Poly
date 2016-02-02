@@ -78,8 +78,8 @@ typedef NS_ENUM(NSInteger,holePosition) {
 //
 @property (strong, nonatomic) UITapGestureRecognizer *creatGrpTap;
 //
-@property (strong, nonatomic) NSMutableArray         *allCartsViewArray;
-@property (strong, nonatomic) NSMutableArray         *allCaddiesViewArray;
+@property (strong, atomic) NSMutableArray         *allCartsViewArray;
+@property (strong, atomic) NSMutableArray         *allCaddiesViewArray;
 
 @property (strong, nonatomic) UIActivityIndicatorView   *stateIndicator;
 
@@ -291,7 +291,7 @@ typedef NS_ENUM(NSInteger,holePosition) {
                 break;
                 
             case 1:
-                [self.addcaddiesArray removeObjectAtIndex:self.deleteCaddyRow];
+//                [self.addcaddiesArray removeObjectAtIndex:self.deleteCaddyRow];
                 //
 //                [self.theSelectedView removeFromSuperview];
                 self.inputCaddyNum.transform = CGAffineTransformMakeTranslation(-(self._caddyOffset), 0);
@@ -306,6 +306,8 @@ typedef NS_ENUM(NSInteger,holePosition) {
                 
                 self.caddyIndex = 0;
                 self._caddyOffset = 0;
+                
+                [self.addcaddiesArray removeObjectAtIndex:self.deleteCaddyRow];
                 
                 [self displayCurrentCaddies];
                 
@@ -649,7 +651,7 @@ typedef NS_ENUM(NSInteger,holePosition) {
                 [hasGrpFailAlert show];
                 NSLog(@"已有球组，建组失败");
             }
-            else
+            else if([receiveCreateGroupDic[@"Code"] integerValue] > 0)
             {
                 [weakSelf.dbCon ExecDataTable:@"delete from tbl_CustomersInfo"];
                 [weakSelf.dbCon ExecDataTable:@"delete from tbl_selectCart"];
@@ -670,8 +672,8 @@ typedef NS_ENUM(NSInteger,holePosition) {
                 //获取到登录小组的所有客户的信息
                 NSArray *allCustomers = receiveCreateGroupDic[@"Msg"][@"cuss"];
                 for (NSDictionary *eachCus in allCustomers) {
-                    NSMutableArray *eachCusParam = [[NSMutableArray alloc] initWithObjects:eachCus[@"bansta"],eachCus[@"bantim"],eachCus[@"cadcod"],eachCus[@"carcod"],eachCus[@"cuscod"],eachCus[@"cuslev"],eachCus[@"cusnam"],eachCus[@"cusnum"],eachCus[@"cussex"],eachCus[@"depsta"],eachCus[@"endtim"],eachCus[@"grocod"],eachCus[@"memnum"],eachCus[@"padcod"],eachCus[@"phone"],eachCus[@"statim"], nil];
-                    [weakSelf.dbCon ExecNonQuery:@"insert into tbl_CustomersInfo(bansta,bantim,cadcod,carcod,cuscod,cuslev,cusnam,cusnum,cussex,depsta,endtim,grocod,memnum,padcod,phone,statim) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" forParameter:eachCusParam];
+                    NSMutableArray *eachCusParam = [[NSMutableArray alloc] initWithObjects:eachCus[@"bansta"],eachCus[@"bantim"],eachCus[@"cadcod"],eachCus[@"carcod"],eachCus[@"cuscod"],eachCus[@"cuslev"],eachCus[@"cusnam"],eachCus[@"cusnum"],eachCus[@"cussex"],eachCus[@"depsta"],eachCus[@"endtim"],eachCus[@"grocod"],eachCus[@"memnum"],eachCus[@"padcod"],eachCus[@"phone"],eachCus[@"statim"],receiveCreateGroupDic[@"Msg"][@"coursegrouptag"], nil];
+                    [weakSelf.dbCon ExecNonQuery:@"insert into tbl_CustomersInfo(bansta,bantim,cadcod,carcod,cuscod,cuslev,cusnam,cusnum,cussex,depsta,endtim,grocod,memnum,padcod,phone,statim,courseTag) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" forParameter:eachCusParam];
                 }
                 //保存添加的球车的信息 tbl_selectCart(carcod text,carnum text,carsea text)
                 NSArray *allSelectedCartsArray = receiveCreateGroupDic[@"Msg"][@"cars"];
@@ -704,6 +706,13 @@ typedef NS_ENUM(NSInteger,holePosition) {
                     }
                 });
                 
+            }
+            else
+            {
+                NSString *errMsg;
+                errMsg = [NSString stringWithFormat:@"%@",receiveCreateGroupDic[@"Msg"]];
+                UIAlertView *errAlert = [[UIAlertView alloc] initWithTitle:errMsg message:nil delegate:weakSelf cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                [errAlert show];
             }
             
         }failure:^(NSError *err){
@@ -975,11 +984,21 @@ typedef NS_ENUM(NSInteger,holePosition) {
             [subView addGestureRecognizer:view4Gesture];
         }
     }
+    //如果所添加的球童数量达到了4个，则将输入框以及添加按钮的图标给隐藏掉
+    if (self.addcaddiesArray.count > 3) {
+        self.addCaddyButton.hidden = YES;
+        self.inputCaddyNum.hidden = YES;
+    }
+    else
+    {
+        self.addCaddyButton.hidden = NO;
+        self.inputCaddyNum.hidden = NO;
+        //
+        self.inputCaddyNum.transform = CGAffineTransformMakeTranslation(self._caddyOffset, 0);
+        self.addCaddyButton.transform = CGAffineTransformMakeTranslation(self._caddyOffset, 0);
+        [self.caddyScrollView setContentInset:UIEdgeInsetsMake(0, 0, 0, self._caddyOffset)];
+    }
     
-    //
-    self.inputCaddyNum.transform = CGAffineTransformMakeTranslation(self._caddyOffset, 0);
-    self.addCaddyButton.transform = CGAffineTransformMakeTranslation(self._caddyOffset, 0);
-    [self.caddyScrollView setContentInset:UIEdgeInsetsMake(0, 0, 0, self._caddyOffset)];
     self.inputCaddyNum.text = @"";
 }
 
@@ -1113,12 +1132,22 @@ typedef NS_ENUM(NSInteger,holePosition) {
             [subView addGestureRecognizer:view4Gesture];
         }
     }
+    //如果所添加的球车数量达到了4个，则将输入框以及添加按钮的图标给隐藏掉
+    if (self.addCartsArray.count > 3) {
+        self.addCartButton.hidden = YES;
+        self.inputCartNum.hidden = YES;
+    }
+    else
+    {
+        self.addCartButton.hidden = NO;
+        self.inputCartNum.hidden = NO;
+        //
+        self.inputCartNum.transform = CGAffineTransformMakeTranslation(self._cartOffset, 0);
+        self.addCartButton.transform = CGAffineTransformMakeTranslation(self._cartOffset, 0);
+        [self.cartScrollView setContentInset:UIEdgeInsetsMake(0, 0, 0, self._cartOffset)];
+    }
     
     
-    
-    self.inputCartNum.transform = CGAffineTransformMakeTranslation(self._cartOffset, 0);
-    self.addCartButton.transform = CGAffineTransformMakeTranslation(self._cartOffset, 0);
-    [self.cartScrollView setContentInset:UIEdgeInsetsMake(0, 0, 0, self._cartOffset)];
     self.inputCartNum.text = @"";
 }
 

@@ -419,9 +419,12 @@
                 //执行跳转
                 [strongSelf performSegueWithIdentifier:@"toTaskDetail" sender:nil];
             }
-            else if ([recDic[@"Code"] intValue] == -6)
+            else
             {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"申请跳过的球洞已经不是待打球洞了" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                NSString *errStr;
+                errStr = [NSString stringWithFormat:@"%@",recDic[@"Msg"]];
+                //
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:errStr message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
                 [alert show];
             }
             

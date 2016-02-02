@@ -47,6 +47,8 @@
 
 @property (nonatomic) NSInteger cusCounts;  //选取的客户个数
 @property (nonatomic) NSInteger holeName;   //选取的球洞类型
+
+@property (strong, nonatomic) NSString *courseName;
 //
 @property (strong, nonatomic) NSArray   *cusCardNumArray;
 
@@ -111,6 +113,16 @@
     self.groupTable = [self.localDBcon ExecDataTable:@"select *from tbl_groupInf"];
     self.allcusTable = [self.localDBcon ExecDataTable:@"select *from tbl_CustomersInfo"];
     //
+    NSString *courseFieldStr;
+    courseFieldStr = [NSString stringWithFormat:@"%@",self.allcusTable.Rows[0][@"courseTag"]];
+    if ([courseFieldStr isEqualToString:@"north"]) {
+        self.courseName = @"北场";
+    }
+    else if ([courseFieldStr isEqualToString:@"south"])
+    {
+        self.courseName = @"南场";
+    }
+    //
     self.activityIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(ScreenWidth/2-100, ScreenHeight/2 - 130, 200, 200)];
     [self.view addSubview:self.activityIndicatorView];
     self.activityIndicatorView.backgroundColor = [UIColor HexString:@"0a0a0a" andAlpha:0.3];
@@ -159,7 +171,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 //#warning Incomplete implementation, return the number of sections
-    return 6;
+    return 7;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -177,6 +189,7 @@
         case 3:
         case 4:
         case 5:
+        case 6:
             eachSectionRow = 1;
             break;
         default:
@@ -212,12 +225,16 @@
     //
     if(indexPath.section == 0)
     {
-        [cell addSubview:grpNum];
+        //if (cell == nil) {
+            [cell addSubview:grpNum];
+        //}
     }
     //
     if(indexPath.section == 1)
     {
-        [cell addSubview:createTime];
+        //if (cell == nil) {
+            [cell addSubview:createTime];
+        //}
     }
     //
     if(indexPath.section == 2)
@@ -258,6 +275,15 @@
     
     //
     UILabel *holeName = [[UILabel alloc] initWithFrame:CGRectMake(5, 10, 60, 21)];
+    UILabel *courseNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 10, 60, 21)];
+    if (self.courseName == nil) {
+        courseNameLabel.text = @"北场";
+    }
+    else
+    {
+        courseNameLabel.text = self.courseName;
+    }
+    //
     if (self.holeType == nil) {
         holeName.text = @"十八洞";
     }
@@ -299,13 +325,22 @@
                 break;
         }
     }
-    //球洞信息
+    //球场信息
     else if (indexPath.section == 3)
     {
-        [cell addSubview:holeName];
+        //if (cell == nil) {
+            [cell addSubview:courseNameLabel];
+        //}
+    }
+    //球洞信息
+    else if (indexPath.section == 4)
+    {
+        //if (cell == nil) {
+            [cell addSubview:holeName];
+        //}
     }
     //球童信息
-    else if (indexPath.section == 4) {
+    else if (indexPath.section == 5) {
         //将所有的球车视图隐藏，并在下边相应开启
         self.firstCaddyLabel.hidden = YES;
         self.secondCaddyLabel.hidden = YES;
@@ -356,13 +391,15 @@
                         break;
                 }
                 //添加球童视图
-                [cell addSubview:self.subCaddyView];
+//                if (cell == nil) {
+                    [cell addSubview:self.subCaddyView];
+//                }
             });
         });
         
     }
     //球车
-    else if (indexPath.section == 5)
+    else if (indexPath.section == 6)
     {
         //将所有的球车视图隐藏，并在下边相应开启
         self.firstCartLabel.hidden = YES;
@@ -414,9 +451,11 @@
                         break;
                 }
                 
+//                if (cell == nil) {
+                    //添加球车视图
+                    [cell addSubview:self.subCartView];
+//                }
                 
-                //添加球车视图
-                [cell addSubview:self.subCartView];
             });
         });
         
@@ -449,14 +488,18 @@
             break;
             
         case 3:
-            headerTitle = @"  球洞";
+            headerTitle = @"  球场";
             break;
             
         case 4:
-            headerTitle = @"  球童";
+            headerTitle = @"  球洞";
             break;
             
         case 5:
+            headerTitle = @"  球童";
+            break;
+            
+        case 6:
             headerTitle = @"  球车";
             break;
         default:

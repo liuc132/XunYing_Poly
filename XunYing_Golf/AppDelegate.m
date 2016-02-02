@@ -213,11 +213,11 @@
             else//
             {
                 [self.dbCon ExecDataTable:@"delete from tbl_selectCart"];
-                //获取到登录小组的所有客户的信息
+                //获取到登录小组的所有客户的信息courseTag text
                 NSArray *allCustomers = recDic[@"Msg"][@"group"][@"cuss"];
                 for (NSDictionary *eachCus in allCustomers) {
-                    NSMutableArray *eachCusParam = [[NSMutableArray alloc] initWithObjects:eachCus[@"bansta"],eachCus[@"bantim"],eachCus[@"cadcod"],eachCus[@"carcod"],eachCus[@"cuscod"],eachCus[@"cuslev"],eachCus[@"cusnam"],eachCus[@"cusnum"],eachCus[@"cussex"],eachCus[@"depsta"],eachCus[@"endtim"],eachCus[@"grocod"],eachCus[@"memnum"],eachCus[@"padcod"],eachCus[@"phone"],eachCus[@"statim"], nil];
-                    [weakSelf.dbCon ExecNonQuery:@"insert into tbl_CustomersInfo(bansta,bantim,cadcod,carcod,cuscod,cuslev,cusnam,cusnum,cussex,depsta,endtim,grocod,memnum,padcod,phone,statim) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" forParameter:eachCusParam];
+                    NSMutableArray *eachCusParam = [[NSMutableArray alloc] initWithObjects:eachCus[@"bansta"],eachCus[@"bantim"],eachCus[@"cadcod"],eachCus[@"carcod"],eachCus[@"cuscod"],eachCus[@"cuslev"],eachCus[@"cusnam"],eachCus[@"cusnum"],eachCus[@"cussex"],eachCus[@"depsta"],eachCus[@"endtim"],eachCus[@"grocod"],eachCus[@"memnum"],eachCus[@"padcod"],eachCus[@"phone"],eachCus[@"statim"],recDic[@"Msg"][@"coursegrouptag"], nil];
+                    [weakSelf.dbCon ExecNonQuery:@"insert into tbl_CustomersInfo(bansta,bantim,cadcod,carcod,cuscod,cuslev,cusnam,cusnum,cussex,depsta,endtim,grocod,memnum,padcod,phone,statim,courseTag) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" forParameter:eachCusParam];
                 }
                 //将所选择的球车的信息保存下来
                 //保存添加的球车的信息 tbl_selectCart(carcod text,carnum text,carsea text)
@@ -440,7 +440,7 @@
     //客户组对象
     [dbCon ExecDataTable:@"create table if not exists tbl_CusGroInf(grocod text,grosta text,nextgrodistime text,nowblocks text,nowholcod text,nowholnum text,pladur text,stahol text,statim text,stddur text)"];
     //当前所创建的小组的顾客的信息
-    [dbCon ExecDataTable:@"create table if not exists tbl_CustomersInfo(bansta text,bantim text,cadcod text,carcod text,cuscod text,cuslev text,cusnam text,cusnum text,cussex text,depsta text,endtim text,grocod text,memnum text,padcod text,phone text,statim text)"];
+    [dbCon ExecDataTable:@"create table if not exists tbl_CustomersInfo(bansta text,bantim text,cadcod text,carcod text,cuscod text,cuslev text,cusnam text,cusnum text,cussex text,depsta text,endtim text,grocod text,memnum text,padcod text,phone text,statim text,courseTag text)"];
     //事件处理的信息
     /*evecod = eve15121717452946189;
      everes =         {

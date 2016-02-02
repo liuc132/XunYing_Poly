@@ -27,7 +27,10 @@
 
 @property (strong, nonatomic) UITableView *lcChatView;
 
+@property (strong, nonatomic) UIImageView *bgView;
 
+
+@property (weak, nonatomic) IBOutlet UIView *statusBarView;
 @property (strong, nonatomic) IBOutlet UINavigationBar *theNav;
 @property (strong, nonatomic) IBOutlet UILabel *statusDisLabel;
 @property (strong, nonatomic) IBOutlet UIView *jumpHoleDetailView;
@@ -108,10 +111,12 @@
     self.allHolesInfo   = [self.lcDbCon ExecDataTable:@"select *from tbl_holeInf"];
     //
     self.jumpHoleDetailView.frame = CGRectMake(0, self.theNav.frame.origin.y + self.theNav.frame.size.height, ScreenWidth, ScreenHeight - (self.theNav.frame.origin.y + self.theNav.frame.size.height));
-    
+    //
+    UIImage *arrowUp = [UIImage imageNamed:@"arrow_Up"];
+    self.threeLineButtonImage.image = arrowUp;
     //0.加载数据
-    [self loadData];
-    
+//    [self loadData];
+    _cellFrameDatas =[NSMutableArray array];
     //1.tableView
     [self addChatView];
     
@@ -121,9 +126,25 @@
     //添加当前事务详情的状态栏
     [self.statusDisLabel setFrame:CGRectMake(0, self.theNav.frame.origin.y + self.theNav.frame.size.height, ScreenWidth, self.statusDisLabel.frame.size.height)];
     
+//    self.threeLineDetailView.layer.cornerRadius = 10;
+//    self.threeLineDetailView.layer.masksToBounds = YES;
+    self.threeLineDetailView.layer.borderWidth = 1;
+    self.threeLineDetailView.layer.borderColor = [UIColor grayColor].CGColor;
+    //
+//    self.fourLineView.layer.cornerRadius = 10;
+//    self.fourLineView.layer.masksToBounds = YES;
+    self.fourLineView.layer.borderWidth = 1;
+    self.fourLineView.layer.borderColor = [UIColor grayColor].CGColor;
+    //
+//    self.fiveLineView.layer.cornerRadius = 10;
+//    self.fiveLineView.layer.masksToBounds = YES;
+    self.fiveLineView.layer.borderWidth = 1;
+    self.fiveLineView.layer.borderColor = [UIColor grayColor].CGColor;
     //
     self.statusDisLabel.text = self.taskStatus;
-    
+    //
+    [self.view addSubview:self.statusBarView];
+    [self.view bringSubviewToFront:self.statusBarView];
     
     [self switchTheDisView];
     
@@ -391,27 +412,27 @@
  */
 - (void)addToolBar
 {
-    UIImageView *bgView = [[UIImageView alloc] init];
-    bgView.frame = CGRectMake(0, self.jumpHoleDetailView.frame.size.height - kToolBarH, self.view.frame.size.width, kToolBarH);
-    bgView.image = [UIImage imageNamed:@"chat_bottom_bg"];
-    bgView.userInteractionEnabled = YES;
-    _toolBar = bgView;
-    [self.jumpHoleDetailView addSubview:bgView];
+    self.bgView = [[UIImageView alloc] init];
+    self.bgView.frame = CGRectMake(0, self.view.frame.size.height - kToolBarH, self.view.frame.size.width, kToolBarH);
+    self.bgView.image = [UIImage imageNamed:@"chat_bottom_bg"];
+    self.bgView.userInteractionEnabled = YES;
+    _toolBar = self.bgView;
+    [self.view addSubview:self.bgView];
     
     UIButton *sendSoundBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     sendSoundBtn.frame = CGRectMake(0, 0, kToolBarH, kToolBarH);
     [sendSoundBtn setImage:[UIImage imageNamed:@"chat_bottom_voice_nor"] forState:UIControlStateNormal];
-    [bgView addSubview:sendSoundBtn];
+    [self.bgView addSubview:sendSoundBtn];
     
     UIButton *addMoreBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     addMoreBtn.frame = CGRectMake(self.view.frame.size.width - kToolBarH, 0, kToolBarH, kToolBarH);
     [addMoreBtn setImage:[UIImage imageNamed:@"chat_bottom_up_nor"] forState:UIControlStateNormal];
-    [bgView addSubview:addMoreBtn];
+    [self.bgView addSubview:addMoreBtn];
     
     UIButton *expressBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     expressBtn.frame = CGRectMake(self.view.frame.size.width - kToolBarH * 2, 0, kToolBarH, kToolBarH);
     [expressBtn setImage:[UIImage imageNamed:@"chat_bottom_smile_nor"] forState:UIControlStateNormal];
-    [bgView addSubview:expressBtn];
+    [self.bgView addSubview:expressBtn];
     
     UITextField *textField = [[UITextField alloc] init];
     textField.returnKeyType = UIReturnKeySend;
@@ -421,7 +442,7 @@
     textField.frame = CGRectMake(kToolBarH, (kToolBarH - kTextFieldH) * 0.5, self.jumpHoleDetailView.frame.size.width - 3 * kToolBarH, kTextFieldH);
     textField.background = [UIImage imageNamed:@"chat_bottom_textfield"];
     textField.delegate = self;
-    [bgView addSubview:textField];
+    [self.bgView addSubview:textField];
 }
 
 #pragma mark - tableView的数据源和代理方法
@@ -483,6 +504,8 @@
 {
     [self.view endEditing:YES];
     self.threeLineDetailView.hidden = NO;
+    self.fourLineView.hidden = NO;
+    self.fiveLineView.hidden = NO;
 }
 
 #pragma mark - UITextField的代理方法
@@ -509,7 +532,7 @@
     //4.添加进去，并且刷新数据
     [_cellFrameDatas addObject:cellFrame];
     //将相应的对话信息给显示出来
-    //[_chatView reloadData];
+    [_chatView reloadData];
     
     //5.自动滚到最后一行
     NSIndexPath *lastPath = [NSIndexPath indexPathForRow:_cellFrameDatas.count - 1 inSection:0];
@@ -526,6 +549,8 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.view endEditing:YES];
         self.threeLineDetailView.hidden = NO;
+        self.fourLineView.hidden = NO;
+        self.fiveLineView.hidden = NO;
     });
     
 //    [self.jumpHoleDetailView endEditing:YES];
@@ -544,11 +569,14 @@
     CGFloat moveY = keyFrame.origin.y - self.view.frame.size.height;
     //
     self.threeLineDetailView.hidden = YES;
+    self.fourLineView.hidden = YES;
+    self.fiveLineView.hidden = YES;
     
     [UIView animateWithDuration:duration animations:^{
-        self.jumpHoleDetailView.transform = CGAffineTransformMakeTranslation(0, moveY);
+        self.bgView.transform = CGAffineTransformMakeTranslation(0, moveY);
     }];
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -571,17 +599,33 @@
     NSLog(@"enter show or dismiss view");
     __weak typeof(self) weakSelf = self;
     static BOOL showEnable = NO;
-    
-    
+    UIImage *arrowUp = [UIImage imageNamed:@"arrow_Up"];
+    UIImage *arrowDown = [UIImage imageNamed:@"arrow_down"];
     //对事务详情的子视图进行平移
     if (!showEnable) {
         showEnable = !showEnable;
         //
         
-        CGFloat moveYN = self.statusDisLabel.frame.size.height - self.threeLineDetailView.frame.size.height;
+        CGFloat moveYN = self.statusDisLabel.frame.size.height - self.threeLineDetailView.frame.size.height - 3;
         //
-        [UIView animateWithDuration:0.1 animations:^{
+        
+        weakSelf.threeLineButtonImage.image = arrowDown;
+        //test
+        //1 创建并指定要修改的属性
+        //    KeyPath:CAlayer的属性名, 不是所有的属性都可以, 只有在头文件中出现animatable的属性才可以, 可以修改属性的属性, 例如:bounds.size
+        //    CALayer
+        CABasicAnimation *basic = [CABasicAnimation animationWithKeyPath:@"bounds"];
+        [basic setDuration:2];
+        //2 修改属性值
+        basic.fromValue = [NSValue valueWithCGRect:CGRectMake(0, self.threeLineDetailView.frame.origin.y, self.threeLineDetailView.bounds.size.width, self.threeLineDetailView.bounds.size.height)];
+        basic.toValue = [NSValue valueWithCGRect:CGRectMake(0, self.threeLineDetailView.frame.origin.y - moveYN, self.threeLineDetailView.bounds.size.width, self.threeLineDetailView.bounds.size.height)];
+        
+        [UIView transitionWithView:self.threeLineDetailView duration:1 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             weakSelf.threeLineDetailView.transform = CGAffineTransformMakeTranslation(0, moveYN);
+        } completion:^(BOOL finished) {
+            if (finished) {
+                NSLog(@"finished");
+            }
         }];
     }
     else
@@ -589,8 +633,10 @@
         showEnable = !showEnable;
         CGFloat moveYP = self.threeLineDetailView.frame.size.height - self.statusDisLabel.frame.size.height;
         //
-        [UIView animateWithDuration:0.1 animations:^{
-            weakSelf.threeLineDetailView.transform = CGAffineTransformMakeTranslation(0, moveYP/8);
+        [UIView animateWithDuration:1 animations:^{
+            weakSelf.threeLineDetailView.transform = CGAffineTransformMakeTranslation(0, moveYP/8 - 10);
+            
+            weakSelf.threeLineButtonImage.image = arrowUp;
         }];
     }
     
@@ -606,9 +652,9 @@
         showEnable = !showEnable;
         //
         
-        CGFloat moveYN = self.statusDisLabel.frame.size.height - self.fiveLineView.frame.size.height;
+        CGFloat moveYN = self.statusDisLabel.frame.size.height - self.fiveLineView.frame.size.height - 3;
         //
-        [UIView animateWithDuration:0.1 animations:^{
+        [UIView animateWithDuration:1 animations:^{
             weakSelf.fiveLineView.transform = CGAffineTransformMakeTranslation(0, moveYN);
         }];
     }
@@ -617,8 +663,8 @@
         showEnable = !showEnable;
         CGFloat moveYP = self.fiveLineView.frame.size.height - self.statusDisLabel.frame.size.height;
         //
-        [UIView animateWithDuration:0.1 animations:^{
-            weakSelf.fiveLineView.transform = CGAffineTransformMakeTranslation(0, moveYP/8);
+        [UIView animateWithDuration:1 animations:^{
+            weakSelf.fiveLineView.transform = CGAffineTransformMakeTranslation(0, moveYP/8 - 10);
         }];
     }
     
@@ -634,9 +680,9 @@
         showEnable = !showEnable;
         //
         
-        CGFloat moveYN = self.statusDisLabel.frame.size.height - self.fourLineView.frame.size.height;
+        CGFloat moveYN = self.statusDisLabel.frame.size.height - self.fourLineView.frame.size.height - 3;
         //
-        [UIView animateWithDuration:0.1 animations:^{
+        [UIView animateWithDuration:1 animations:^{
             weakSelf.fourLineView.transform = CGAffineTransformMakeTranslation(0, moveYN);
         }];
     }
@@ -645,8 +691,8 @@
         showEnable = !showEnable;
         CGFloat moveYP = self.fourLineView.frame.size.height - self.statusDisLabel.frame.size.height;
         //
-        [UIView animateWithDuration:0.1 animations:^{
-            weakSelf.fourLineView.transform = CGAffineTransformMakeTranslation(0, moveYP/8);
+        [UIView animateWithDuration:1 animations:^{
+            weakSelf.fourLineView.transform = CGAffineTransformMakeTranslation(0, moveYP/8 - 10);
         }];
     }
     

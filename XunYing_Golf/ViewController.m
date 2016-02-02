@@ -24,7 +24,7 @@ typedef struct GPSInf{
 
 GPSPoint currentGPS;
 
-@interface ViewController ()<AGSQueryTaskDelegate,AGSLayerDelegate,AGSCalloutDelegate>
+@interface ViewController ()<AGSQueryTaskDelegate,AGSLayerDelegate,AGSCalloutDelegate,UIActionSheetDelegate>
 
 
 - (IBAction)switchMapFunction:(UISegmentedControl *)sender;
@@ -499,11 +499,13 @@ FixedPoint gpsScreenPoint;
     //
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     //移除掉view以及将相应的通知给移除掉，从而释放内存
-    self.view = nil;
     [self.mapView.locationDisplay removeObserver:self forKeyPath:@"autoPanMode"];
     [self.mapView removeObserver:self forKeyPath:@"location"];
-    
-    
+    //
+    dispatch_time_t time = dispatch_time ( DISPATCH_TIME_NOW , 1ull * NSEC_PER_SEC );
+    dispatch_after(time, dispatch_get_main_queue(), ^{
+        self.view = nil;
+    });
 }
 
 #pragma -mark GPS_viewDidAppear
@@ -542,9 +544,14 @@ FixedPoint gpsScreenPoint;
     NSLog(@"segment's index:%ld",(long)sender.selectedSegmentIndex);
     NSInteger index = sender.selectedSegmentIndex;
     sender.selected = NO;
+    //
+    UIActionSheet *selectField = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"北场" otherButtonTitles:@"南场", nil];
+    selectField.actionSheetStyle = UIActionSheetStyleDefault;
+    //
     switch (index) {
         case 0: //自动测距
             [self.chooseHoleView removeFromSuperview];
+            
             
             break;
             //
@@ -558,7 +565,44 @@ FixedPoint gpsScreenPoint;
         case 2: //手动测距
             [self.chooseHoleView removeFromSuperview];
             
+            
+            
             break;
+            
+        case 3://切换球场
+            [self.chooseHoleView removeFromSuperview];
+            [selectField showInView:self.view];
+            
+            break;
+        default:
+            break;
+    }
+    
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSLog(@"buttonIndex:%ld",buttonIndex);
+    //
+    switch (buttonIndex) {
+        case 0:
+            if (self.theCourseIndex == 1) {
+                self.theCourseIndex = 0;
+                
+                [self switchToCurCourse];
+            }
+            
+            break;
+            
+        case 1:
+            if (self.theCourseIndex == 0) {
+                self.theCourseIndex = 1;
+                
+                [self switchToCurCourse];
+            }
+            
+            break;
+            
         default:
             break;
     }
