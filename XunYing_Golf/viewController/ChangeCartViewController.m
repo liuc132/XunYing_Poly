@@ -387,7 +387,7 @@ typedef enum ChangeReason{
                 //获取到服务器返回的结果，并将相应的结果保存在本地数据库中 tbl_taskChangeCartInfo(evecod text,evesta text,subtim text,oldCartNum text,oldCartCode text,newCartNum text,newCartCode text,result text,everea text)
                 NSDictionary *allMsg = recDic[@"Msg"];
                 //
-                NSMutableArray *changeCaddyBackInfo = [[NSMutableArray alloc] initWithObjects:allMsg[@"evecod"],@"1",allMsg[@"evesta"],allMsg[@"subtim"],allMsg[@"everes"][@"result"],allMsg[@"everes"][@"everea"],allMsg[@"hantim"],weakSelf.logPerson.Rows[0][@"code"],@"",weakSelf.cartInfo.Rows[0][@"carcod"],@"",@"",@"",@"",@"",@"",@"",@"",@"",@"", nil];
+                NSMutableArray *changeCaddyBackInfo = [[NSMutableArray alloc] initWithObjects:allMsg[@"evecod"],@"1",allMsg[@"evesta"],allMsg[@"subtim"],allMsg[@"everes"][@"result"],allMsg[@"everes"][@"everea"],allMsg[@"hantim"],weakSelf.logPerson.Rows[0][@"empCode"],@"",weakSelf.curGrpCarts.Rows[weakSelf.selectedCartIndex][@"carcod"],@"",@"",@"",@"",@"",@"",@"",@"",@"",@"", nil];
                 [weakSelf.lcDBCon ExecNonQuery:@"insert into tbl_taskInfo(evecod,evetyp,evesta,subtim,result,everea,hantim,oldCaddyCode,newCaddyCode,oldCartCode,newCartCode,jumpHoleCode,toHoleCode,destintime,reqBackTime,reHoleCode,mendHoleCode,ratifyHoleCode,ratifyinTime,selectedHoleCode) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" forParameter:changeCaddyBackInfo];
                 //
                 self.toTaskDetailEnable =   YES;
