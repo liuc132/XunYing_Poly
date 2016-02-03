@@ -484,12 +484,12 @@ typedef enum ChangeReason{
             //
             if ([recDic[@"Code"] intValue] > 0) {
                 //保存数据 tbl_taskChangeCaddyInfo(evecod text,everea text,result text,evesta text,oldCaddy text,oldCaddyCode text,newCaddy text,newCaddyCode,subtim text)
-                //tbl_taskInfo(evecod text,evetyp text,evesta text,subtim text,result text,everea text,hantim text,oldCaddyCode text,newCaddyCode text,oldCartCode text,newCartCode text,jumpHoleCode text,toHoleCode text,reqBackTime text,reHoleCode text,mendHoleCode text,ratifyHoleCode text,ratifyinTime text,selectedHoleCode text)
+                //tbl_taskInfo(evecod text,evetyp text,evesta text,subtim text,result text,everea text,hantim text,oldCaddyCode text,oldcadnum text,oldcadnam text,oldcadempcod text,newCaddyCode text,newcadnum text,newcadnam text,newcadempcod text,oldCartCode text,oldcarnum text,oldcarsea text,newCartCode text,newcarnum text,newcarsea text,jumpHoleCode text,toHoleCode text,destintime text,reqBackTime text,reHoleCode text,mendHoleCode text,ratifyHoleCode text,ratifyinTime text,selectedHoleCode text)
                 
                 NSDictionary *allMsg = recDic[@"Msg"];
                 //
-                NSMutableArray *changeCaddyBackInfo = [[NSMutableArray alloc] initWithObjects:allMsg[@"evecod"],@"2",allMsg[@"evesta"],allMsg[@"subtim"],allMsg[@"everes"][@"result"],allMsg[@"everes"][@"everea"],allMsg[@"hantim"],weakSelf.curGrpCaddies.Rows[0][@"cadcod"],@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"", nil];
-                [weakSelf.lcDBCon ExecNonQuery:@"insert into tbl_taskInfo(evecod,evetyp,evesta,subtim,result,everea,hantim,oldCaddyCode,newCaddyCode,oldCartCode,newCartCode,jumpHoleCode,toHoleCode,destintime,reqBackTime,reHoleCode,mendHoleCode,ratifyHoleCode,ratifyinTime,selectedHoleCode) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" forParameter:changeCaddyBackInfo];
+                NSMutableArray *changeCaddyBackInfo = [[NSMutableArray alloc] initWithObjects:allMsg[@"evecod"],@"2",allMsg[@"evesta"],allMsg[@"subtim"],allMsg[@"everes"][@"result"],allMsg[@"everes"][@"everea"],allMsg[@"hantim"],weakSelf.curGrpCaddies.Rows[weakSelf.selectedCaddyIndex][@"cadcod"],weakSelf.curGrpCaddies.Rows[weakSelf.selectedCaddyIndex][@"cadnum"],weakSelf.curGrpCaddies.Rows[weakSelf.selectedCaddyIndex][@"cadnam"],weakSelf.curGrpCaddies.Rows[weakSelf.selectedCaddyIndex][@"empcod"],@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"", nil];
+                [weakSelf.lcDBCon ExecNonQuery:@"insert into tbl_taskInfo(evecod,evetyp,evesta,subtim,result,everea,hantim,oldCaddyCode,oldcadnum,oldcadnam,oldcadempcod,newCaddyCode,newcadnum,newcadnam,newcadempcod,oldCartCode,oldcarnum,oldcarsea,newCartCode,newcarnum,newcarsea,jumpHoleCode,toHoleCode,destintime,reqBackTime,reHoleCode,mendHoleCode,ratifyHoleCode,ratifyinTime,selectedHoleCode) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" forParameter:changeCaddyBackInfo];
                 
                 self.toTaskDetailEnable =   YES;
                 //执行跳转程序

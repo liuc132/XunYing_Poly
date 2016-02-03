@@ -201,8 +201,8 @@
             //获取到球洞信息，并将相应的信息保存到内存中
             NSArray *allHolesInfo = recDic[@"Msg"][@"holes"];
             for (NSDictionary *eachHole in allHolesInfo) {
-                NSMutableArray *eachHoleParam = [[NSMutableArray alloc] initWithObjects:eachHole[@"forecasttime"],eachHole[@"gronum"],eachHole[@"holcod"],eachHole[@"holcue"],eachHole[@"holfla"],eachHole[@"holgro"],eachHole[@"holind"],eachHole[@"hollen"],eachHole[@"holnam"],eachHole[@"holnum"],eachHole[@"holspe"],eachHole[@"holsta"],eachHole[@"nowgroups"],eachHole[@"stan1"],eachHole[@"stan2"],eachHole[@"stan3"],eachHole[@"stan4"],eachHole[@"usestatus"],eachHole[@"x"],eachHole[@"y"], nil];
-                [weakSelf.dbCon ExecNonQuery:@"INSERT INTO tbl_holeInf(forecasttime,gronum,holcod,holcue,holfla,holgro,holind,hollen,holnam,holenum,holspe,holsta,nowgroups,stan1,stan2,stan3,stan4,usestatus,x,y) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" forParameter:eachHoleParam];
+                NSMutableArray *eachHoleParam = [[NSMutableArray alloc] initWithObjects:eachHole[@"forecasttime"],eachHole[@"gronum"],eachHole[@"holcod"],eachHole[@"holcue"],eachHole[@"holfla"],eachHole[@"holgro"],eachHole[@"holind"],eachHole[@"hollen"],eachHole[@"holnam"],eachHole[@"holnum"],eachHole[@"holspe"],eachHole[@"holsta"],eachHole[@"nowgroups"],eachHole[@"stan1"],eachHole[@"stan2"],eachHole[@"stan3"],eachHole[@"stan4"],eachHole[@"usestatus"],eachHole[@"x"],eachHole[@"y"],eachHole[@"coursegrouptag"], nil];
+                [weakSelf.dbCon ExecNonQuery:@"INSERT INTO tbl_holeInf(forecasttime,gronum,holcod,holcue,holfla,holgro,holind,hollen,holnam,holenum,holspe,holsta,nowgroups,stan1,stan2,stan3,stan4,usestatus,x,y,coursegrouptag) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" forParameter:eachHoleParam];
             }
             //
             NSString *groupValue = [recDic[@"Msg"] objectForKey:@"group"];
@@ -242,33 +242,12 @@
                     //grocod text,groind text,grolev text,gronum text,grosta text,hgcod text,onlinestatus text
                     [weakSelf.dbCon ExecNonQuery:@"insert into  tbl_groupInf(grocod,groind,grolev,gronum,grosta,hgcod,onlinestatus,createdate,timestamps)values(?,?,?,?,?,?,?,?,?)" forParameter:groupInfArray];
                     //
-                    //                    DataTable *table;// = [[DataTable alloc] init];
-                    //
-                    //                    table = [strongSelf.dbCon ExecDataTable:@"select *from tbl_groupInf"];
-                    //                    NSLog(@"table:%@",table);
-                    //
-                    
-                    //
-//                    dispatch_time_t time = dispatch_time ( DISPATCH_TIME_NOW , 1ull * NSEC_PER_SEC ) ;
-//                    dispatch_after(time, dispatch_get_main_queue(), ^{
-//                        HeartBeatAndDetectState *heartBeat = [[HeartBeatAndDetectState alloc] init];
-//                        if(![heartBeat checkState])
-//                        {
-//                            [heartBeat initHeartBeat];//启动心跳服务
-//                            [heartBeat enableHeartBeat];
-//                        }
-//                    });
                     self.enableHeartBeat = @"1";
                     self.canEnterCreatGrp = @"0";
                     //                    [[NSNotificationCenter defaultCenter] postNotificationName:@"allowDown" object:nil userInfo:@{@"allowDown":@"1"}];
                     
                     //weakSelf.haveGroupNotDown = YES;
-                    //获取到球洞信息，并将相应的信息保存到内存中
-                    NSArray *allHolesInfo = recDic[@"Msg"][@"holes"];
-                    for (NSDictionary *eachHole in allHolesInfo) {
-                        NSMutableArray *eachHoleParam = [[NSMutableArray alloc] initWithObjects:eachHole[@"forecasttime"],eachHole[@"gronum"],eachHole[@"holcod"],eachHole[@"holcue"],eachHole[@"holfla"],eachHole[@"holgro"],eachHole[@"holind"],eachHole[@"hollen"],eachHole[@"holnam"],eachHole[@"holnum"],eachHole[@"holspe"],eachHole[@"holsta"],eachHole[@"nowgroups"],eachHole[@"stan1"],eachHole[@"stan2"],eachHole[@"stan3"],eachHole[@"stan4"],eachHole[@"usestatus"],eachHole[@"x"],eachHole[@"y"], nil];
-                        [weakSelf.dbCon ExecNonQuery:@"INSERT INTO tbl_holeInf(forecasttime,gronum,holcod,holcue,holfla,holgro,holind,hollen,holnam,holenum,holspe,holsta,nowgroups,stan1,stan2,stan3,stan4,usestatus,x,y) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" forParameter:eachHoleParam];
-                    }
+                    
                     //
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [GetParagram getCustomInf];
@@ -332,27 +311,6 @@
     return uuid;
 }
 
-- (void)scale_1
-{
-    UIImageView *round_1 = [[UIImageView alloc] initWithFrame:CGRectMake(ScreenWidth/2 - 120, ScreenHeight/2 - 120, ScreenWidth, ScreenHeight)];
-    round_1.image = [UIImage imageNamed:@""];
-    [self.launchAnimateImage addSubview:round_1];
-}
-
-- (void)scale_2
-{
-    UIImageView *round_1 = [[UIImageView alloc] initWithFrame:CGRectMake(ScreenWidth/2 - 120, ScreenHeight/2 - 120, ScreenWidth, ScreenHeight)];
-    round_1.image = [UIImage imageNamed:@""];
-    [self.launchAnimateImage addSubview:round_1];
-}
-
-- (void)scale_3
-{
-    UIImageView *round_1 = [[UIImageView alloc] initWithFrame:CGRectMake(ScreenWidth/2 - 120, ScreenHeight/2 - 120, ScreenWidth, ScreenHeight)];
-    round_1.image = [UIImage imageNamed:@""];
-    [self.launchAnimateImage addSubview:round_1];
-}
-
 - (void)setAnimation:(UIImageView *)nowView
 {
 //    [UIView animateWithDuration:0.6f animations:^{
@@ -397,7 +355,7 @@
     //创建登录人信息列表 sex cadShowNum empcod empnam empnum empjob
     [dbCon ExecDataTable:@"create table if not exists tbl_logPerson(cadCode text,empCode text,job text,name text,number text,sex text,caddyLogIn text)"];
     //球洞信息
-    [dbCon ExecDataTable:@"create table if not exists tbl_holeInf(forecasttime text,gronum text,holcod text,holcue text,holfla text,holgro text,holind text,hollen text,holnam text,holenum text,holspe text,holsta text,nowgroups text,stan1 text,stan2 text,stan3 text,stan4 text,usestatus text,x text,y text)"];
+    [dbCon ExecDataTable:@"create table if not exists tbl_holeInf(forecasttime text,gronum text,holcod text,holcue text,holfla text,holgro text,holind text,hollen text,holnam text,holenum text,holspe text,holsta text,nowgroups text,stan1 text,stan2 text,stan3 text,stan4 text,usestatus text,x text,y text,coursegrouptag text)"];
     //其他球员的信息，用于通讯
     [dbCon ExecDataTable:@"create table if not exists tbl_EmployeeInf(empcod text,empjob text,empnam text,empnum text,empsex text,loctime text,online text,x text,y text)"];
     //获取到的消费卡号
@@ -442,47 +400,13 @@
     //当前所创建的小组的顾客的信息
     [dbCon ExecDataTable:@"create table if not exists tbl_CustomersInfo(bansta text,bantim text,cadcod text,carcod text,cuscod text,cuslev text,cusnam text,cusnum text,cussex text,depsta text,endtim text,grocod text,memnum text,padcod text,phone text,statim text,courseTag text)"];
     //事件处理的信息
-    /*evecod = eve15121717452946189;
-     everes =         {
-     everea = "11;12";
-     result = 0;
-     };
-     evesta = 1;
-     hantim = "";
-     subtim = "2015-12-17 17:45:29";
-     //
-     empcod = employee15012817402638672;
-     endcod = 2;
-     evecod = eve15121717452946189;
-     everes =     {
-     everea = "11;12";
-     newcar =         {
-     carcod = cart15121416345811194;
-     carnum = 99;
-     carsea = 0;
-     };
-     oldcar =         {
-     carcod = cart14101516183510980;
-     carnum = 001;
-     carsea = 4;
-     };
-     result = 1;
-     };
-     evesta = 3;
-     evetyp = 1;
-     hancod = employee15040815205446952;
-     hannam = "\U738b\U5a77";
-     hannum = e110;
-     hantim = "2015-12-17 17:46:38";
-     subtim = "2015-12-17 17:45:29";
-     */
     [dbCon ExecDataTable:@"create table if not exists tbl_taskChangeCartInfo(evecod text,evesta text,subtim text,oldCartNum text,oldCartCode text,newCartNum text,newCartCode text,result text,everea text)"];
     [dbCon ExecDataTable:@"create table if not exists tbl_taskChangeCaddyInfo(evecod text,everea text,result text,evesta text,oldCaddy text,oldCaddyCode text,newCaddy text,newCaddyCode,subtim text)"];
     [dbCon ExecDataTable:@"create table if not exists tbl_taskJumpHoleInfo(evecod text,everea text,result text,evesta text,jumpHoleCode text,jumpHoleNum text,toHoleCode text,toHoleNum text,subtim text)"];
     [dbCon ExecDataTable:@"create table if not exists tbl_taskLeaveRest(evecod text,everea text,result text,evesta text,subtim text,hantim text,reholeCode text)"];
     [dbCon ExecDataTable:@"create table if not exists tbl_taskMendHoleInfo(evecod text,everea text,result text,evesta text,subtim text,mendHoleNum text)"];
-    //
-    [dbCon ExecDataTable:@"create table if not exists tbl_taskInfo(evecod text,evetyp text,evesta text,subtim text,result text,everea text,hantim text,oldCaddyCode text,newCaddyCode text,oldCartCode text,newCartCode text,jumpHoleCode text,toHoleCode text,destintime text,reqBackTime text,reHoleCode text,mendHoleCode text,ratifyHoleCode text,ratifyinTime text,selectedHoleCode text)"];
+    
+    [dbCon ExecDataTable:@"create table if not exists tbl_taskInfo(evecod text,evetyp text,evesta text,subtim text,result text,everea text,hantim text,oldCaddyCode text,oldcadnum text,oldcadnam text,oldcadempcod text,newCaddyCode text,newcadnum text,newcadnam text,newcadempcod text,oldCartCode text,oldcarnum text,oldcarsea text,newCartCode text,newcarnum text,newcarsea text,jumpHoleCode text,toHoleCode text,destintime text,reqBackTime text,reHoleCode text,mendHoleCode text,ratifyHoleCode text,ratifyinTime text,selectedHoleCode text)"];
     //设置界面中的，心跳间隔，IP地址，端口号
     [dbCon ExecDataTable:@"create table if not exists tbl_SettingInfo(interval text,ipAddr text,portNum text)"];
     //保存ID号

@@ -168,12 +168,12 @@
     //
     NSMutableDictionary *getNeedMendHoleParam = [[NSMutableDictionary alloc] initWithObjectsAndKeys:theMid,@"mid", nil];
     //
-    NSString *needMendHoleURLStr;
-    needMendHoleURLStr = [GetRequestIPAddress getGetNeedMendHoleURL];
+    NSString *getNeedMendHoleURLStr;
+    getNeedMendHoleURLStr = [GetRequestIPAddress getGetNeedMendHoleURL];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         //在此进行读取当前的需要补打的球洞的信息
-        [HttpTools getHttp:needMendHoleURLStr forParams:getNeedMendHoleParam success:^(NSData *nsData){
+        [HttpTools getHttp:getNeedMendHoleURLStr forParams:getNeedMendHoleParam success:^(NSData *nsData){
 //            NSDictionary *needMendHoleDic = [NSJSONSerialization JSONObjectWithData:nsData options:NSJSONReadingMutableLeaves error:nil];
             NSDictionary *needMendHoleDic;
             needMendHoleDic = (NSDictionary *)nsData;
@@ -202,7 +202,17 @@
                 weakSelf.mendHoleReqSuccess = NO;
                 //同时执行跳转程序
                 [weakSelf dismissViewControllerAnimated:YES completion:nil];
-                //            [weakSelf performSegueWithIdentifier:@"mendHoleToList" sender:nil];
+            }
+            else
+            {
+                NSString *errStr;
+                errStr = [NSString stringWithFormat:@"%@",needMendHoleDic[@"Msg"]];
+                
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:errStr message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                [alert show];
+                //同时执行跳转程序
+                [weakSelf dismissViewControllerAnimated:YES completion:nil];
+                
             }
             
             
@@ -318,15 +328,15 @@
     theMid = [GetRequestIPAddress getUniqueID];
     theMid = [NSString stringWithFormat:@"I_IMEI_%@",theMid];
     //组建补洞参数
-    NSMutableDictionary *mendHoleParam = [[NSMutableDictionary alloc] initWithObjectsAndKeys:theMid,@"mid",self.logPerson.Rows[0][@"code"],@"code",mendHoles,@"mencods", nil];
+    NSMutableDictionary *mendHoleParam = [[NSMutableDictionary alloc] initWithObjectsAndKeys:theMid,@"mid",self.logPerson.Rows[0][@"empCode"],@"code",mendHoles,@"mencods", nil];
     //toMoreMain1
     __weak MendHoleViewController *weakSelf = self;
-    NSString *needMendHoleURLStr;
-    needMendHoleURLStr = [GetRequestIPAddress getGetNeedMendHoleURL];
+    NSString *mendHoleURLStr;
+    mendHoleURLStr = [GetRequestIPAddress getMendHoleURL];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         //start request
-        [HttpTools getHttp:needMendHoleURLStr forParams:mendHoleParam success:^(NSData *nsData){
+        [HttpTools getHttp:mendHoleURLStr forParams:mendHoleParam success:^(NSData *nsData){
             MendHoleViewController *strongSelf = weakSelf;
 //            NSDictionary *recDictionary = [NSJSONSerialization JSONObjectWithData:nsData options:NSJSONReadingMutableLeaves error:nil];
             NSDictionary *recDictionary;
@@ -341,8 +351,8 @@
                 NSDictionary *allMsg = recDictionary[@"Msg"];
                 //tbl_taskMendHoleInfo(evecod text,everea text,result text,evesta text,subtim text,mendHoleNum text)
                 
-                NSMutableArray *changeCaddyBackInfo = [[NSMutableArray alloc] initWithObjects:allMsg[@"evecod"],@"4",allMsg[@"evesta"],allMsg[@"subtim"],allMsg[@"everes"][@"result"],allMsg[@"everes"][@"everea"],allMsg[@"hantim"],weakSelf.logPerson.Rows[0][@"code"],@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"", nil];
-                [weakSelf.lcDBCon ExecNonQuery:@"insert into tbl_taskInfo(evecod,evetyp,evesta,subtim,result,everea,hantim,oldCaddyCode,newCaddyCode,oldCartCode,newCartCode,jumpHoleCode,toHoleCode,destintime,reqBackTime,reHoleCode,mendHoleCode,ratifyHoleCode,ratifyinTime,selectedHoleCode) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" forParameter:changeCaddyBackInfo];
+                NSMutableArray *changeCaddyBackInfo = [[NSMutableArray alloc] initWithObjects:allMsg[@"evecod"],@"4",allMsg[@"evesta"],allMsg[@"subtim"],allMsg[@"everes"][@"result"],allMsg[@"everes"][@"everea"],allMsg[@"hantim"],@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"", nil];
+                [weakSelf.lcDBCon ExecNonQuery:@"insert into tbl_taskInfo(evecod,evetyp,evesta,subtim,result,everea,hantim,oldCaddyCode,oldcadnum,oldcadnam,oldcadempcod,newCaddyCode,newcadnum,newcadnam,newcadempcod,oldCartCode,oldcarnum,oldcarsea,newCartCode,newcarnum,newcarsea,jumpHoleCode,toHoleCode,destintime,reqBackTime,reHoleCode,mendHoleCode,ratifyHoleCode,ratifyinTime,selectedHoleCode) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" forParameter:changeCaddyBackInfo];
                 //
                 self.toTaskDetailEnable =   YES;
                 //
@@ -357,6 +367,8 @@
                 [alert show];
                 //
                 self.mendHoleReqSuccess = NO;
+                
+                [weakSelf dismissViewControllerAnimated:YES completion:nil];
             }
             
             

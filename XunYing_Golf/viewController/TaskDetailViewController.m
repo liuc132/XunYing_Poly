@@ -13,6 +13,7 @@
 #import "DBCon.h"
 #import "DataTable.h"
 #import "XunYingPre.h"
+#import "GetParagram.h"
 
 
 #define kToolBarH 44
@@ -28,6 +29,8 @@
 @property (strong, nonatomic) UITableView *lcChatView;
 
 @property (strong, nonatomic) UIImageView *bgView;
+
+@property (strong, nonatomic) UIView      *theSelectedView;
 
 
 @property (weak, nonatomic) IBOutlet UIView *statusBarView;
@@ -79,6 +82,11 @@
 
 @property (strong, nonatomic) IBOutlet UIView *fiveLineView;
 
+//信息收起之后的视图
+@property (weak, nonatomic) IBOutlet UIView *furledView;
+- (IBAction)ScrollDown:(UIButton *)sender;
+
+
 
 //
 - (IBAction)backToTaskList:(UIBarButtonItem *)sender;
@@ -104,16 +112,19 @@
     self.allHolesInfo   = [[DataTable alloc] init];
     //
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChange:) name:UIKeyboardWillChangeFrameNotification object:nil];
-    //查询数据库
-    self.allTaskInfo = [self.lcDbCon ExecDataTable:@"select *from tbl_taskInfo"];
+    
     self.allCaddiesInfo = [self.lcDbCon ExecDataTable:@"select *from tbl_caddyInf"];
     self.allCartsInfo   = [self.lcDbCon ExecDataTable:@"select *from tbl_cartInf"];
     self.allHolesInfo   = [self.lcDbCon ExecDataTable:@"select *from tbl_holeInf"];
     //
     self.jumpHoleDetailView.frame = CGRectMake(0, self.theNav.frame.origin.y + self.theNav.frame.size.height, ScreenWidth, ScreenHeight - (self.theNav.frame.origin.y + self.theNav.frame.size.height));
     //
+    self.furledView.hidden = YES;
+    
     UIImage *arrowUp = [UIImage imageNamed:@"arrow_Up"];
     self.threeLineButtonImage.image = arrowUp;
+    self.fourLineImage.image = arrowUp;
+    self.fiveLineImage.image = arrowUp;
     //0.加载数据
 //    [self loadData];
     _cellFrameDatas =[NSMutableArray array];
@@ -146,8 +157,12 @@
     [self.view addSubview:self.statusBarView];
     [self.view bringSubviewToFront:self.statusBarView];
     
-    [self switchTheDisView];
-    
+//    [GetParagram getCaddyCartInf];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        //查询数据库
+        self.allTaskInfo = [self.lcDbCon ExecDataTable:@"select *from tbl_taskInfo"];
+        [self switchTheDisView];
+    });
 //    [self.view addSubview:theDetailListView];
     [self.view addSubview:self.statusDisLabel];
     //
@@ -214,6 +229,10 @@
         case 2://不同意
             [self.threeLineDetailView setFrame:CGRectMake(0, self.statusDisLabel.frame.origin.y + self.statusDisLabel.frame.size.height, ScreenWidth, self.threeLineDetailView.frame.size.height)];
             [self.view addSubview:self.threeLineDetailView];
+            
+            [self.fourLineView removeFromSuperview];
+            [self.fiveLineView removeFromSuperview];
+            
             break;
             
         case 1://同意
@@ -221,11 +240,17 @@
             if ([self.allTaskInfo.Rows[self.selectRowNum][@"evetyp"] intValue] == 6) {
                 [self.fiveLineView setFrame:CGRectMake(0, self.statusDisLabel.frame.origin.y + self.statusDisLabel.frame.size.height, ScreenWidth, self.fiveLineView.frame.size.height)];
                 [self.view addSubview:self.fiveLineView];
+                
+                [self.threeLineDetailView removeFromSuperview];
+                [self.fourLineView removeFromSuperview];
             }
             else
             {
                 [self.fourLineView setFrame:CGRectMake(0, self.statusDisLabel.frame.origin.y + self.statusDisLabel.frame.size.height, ScreenWidth, self.fourLineView.frame.size.height)];
                 [self.view addSubview:self.fourLineView];
+                
+                [self.threeLineDetailView removeFromSuperview];
+                [self.fiveLineView removeFromSuperview];
             }
             
             break;
@@ -235,28 +260,35 @@
     //
     switch ([theSelectTaskRow[@"evetyp"] intValue]) {
         case 1://换球车
-            for (NSDictionary *eachCart in self.allCartsInfo.Rows) {
-                if ([eachCart[@"carcod"] isEqualToString:[NSString stringWithFormat:@"%@",theSelectTaskRow[@"newCartCode"]]]) {
-                    detailStr = eachCart[@"carnum"];
-                }
-                if ([eachCart[@"carcod"] isEqualToString:[NSString stringWithFormat:@"%@",theSelectTaskRow[@"oldCartCode"]]]) {
-                    detailStrNew = eachCart[@"carnum"];
-                }
-            }
+//            for (NSDictionary *eachCart in self.allCartsInfo.Rows) {
+//                if ([eachCart[@"carcod"] isEqualToString:[NSString stringWithFormat:@"%@",theSelectTaskRow[@"newCartCode"]]]) {
+//                    detailStr = eachCart[@"carnum"];
+//                }
+//                if ([eachCart[@"carcod"] isEqualToString:[NSString stringWithFormat:@"%@",theSelectTaskRow[@"oldCartCode"]]]) {
+//                    detailStrNew = eachCart[@"carnum"];
+//                }
+//            }
+            //
+            detailStr = [NSString stringWithFormat:@"%@",theSelectTaskRow[@"newcarnum"]];
+            detailStrNew = [NSString stringWithFormat:@"%@",theSelectTaskRow[@"oldcarnum"]];
+            //
             navTaskTypeName = @"更换球车详情";
             taskTypeNameStr = @"待更换球车";
             handleResultName = @"已更换新球车";
             break;
         case 2://换球童
-            for (NSDictionary *eachCaddy in self.allCaddiesInfo.Rows) {
-                if ([eachCaddy[@"cadcod"] isEqualToString:[NSString stringWithFormat:@"%@",theSelectTaskRow[@"newCaddyCode"]]]) {
-                    detailStr = [NSString stringWithFormat:@"%@ %@",eachCaddy[@"cadnum"],eachCaddy[@"cadnam"]];
-                }
-                if ([eachCaddy[@"cadcod"] isEqualToString:[NSString stringWithFormat:@"%@",theSelectTaskRow[@"oldCaddyCode"]]]) {
-                    detailStrNew = [NSString stringWithFormat:@"%@ %@",eachCaddy[@"cadnum"],eachCaddy[@"cadnam"]];
-                }
-            }
-            
+//            for (NSDictionary *eachCaddy in self.allCaddiesInfo.Rows) {
+//                if ([eachCaddy[@"cadcod"] isEqualToString:[NSString stringWithFormat:@"%@",theSelectTaskRow[@"newCaddyCode"]]]) {
+//                    detailStr = [NSString stringWithFormat:@"%@ %@",eachCaddy[@"cadnum"],eachCaddy[@"cadnam"]];
+//                }
+//                if ([eachCaddy[@"cadcod"] isEqualToString:[NSString stringWithFormat:@"%@",theSelectTaskRow[@"oldCaddyCode"]]]) {
+//                    detailStrNew = [NSString stringWithFormat:@"%@ %@",eachCaddy[@"cadnum"],eachCaddy[@"cadnam"]];
+//                }
+//            }
+            //
+            detailStr = [NSString stringWithFormat:@"%@",theSelectTaskRow[@"newcadnum"]];
+            detailStrNew = [NSString stringWithFormat:@"%@",theSelectTaskRow[@"oldcadnum"]];
+            //
             navTaskTypeName = @"更换球童详情";
             taskTypeNameStr = @"待换球童";
             handleResultName = @"替换球童";
@@ -605,7 +637,8 @@
     if (!showEnable) {
         showEnable = !showEnable;
         //
-        
+        self.theSelectedView = self.threeLineDetailView;
+        //
         CGFloat moveYN = self.statusDisLabel.frame.size.height - self.threeLineDetailView.frame.size.height - 3;
         //
         
@@ -620,11 +653,18 @@
         basic.fromValue = [NSValue valueWithCGRect:CGRectMake(0, self.threeLineDetailView.frame.origin.y, self.threeLineDetailView.bounds.size.width, self.threeLineDetailView.bounds.size.height)];
         basic.toValue = [NSValue valueWithCGRect:CGRectMake(0, self.threeLineDetailView.frame.origin.y - moveYN, self.threeLineDetailView.bounds.size.width, self.threeLineDetailView.bounds.size.height)];
         
-        [UIView transitionWithView:self.threeLineDetailView duration:1 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView transitionWithView:self.threeLineDetailView duration:0.1 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             weakSelf.threeLineDetailView.transform = CGAffineTransformMakeTranslation(0, moveYN);
+            
+            UIView *statusView = [[UIView alloc] initWithFrame:CGRectMake(0, -20, ScreenWidth, 20)];
+            statusView.backgroundColor = [UIColor blackColor];
+            [weakSelf.view addSubview:statusView];
+            
         } completion:^(BOOL finished) {
             if (finished) {
                 NSLog(@"finished");
+                self.threeLineDetailView.hidden = YES;
+                self.furledView.hidden = NO;
             }
         }];
     }
@@ -633,7 +673,7 @@
         showEnable = !showEnable;
         CGFloat moveYP = self.threeLineDetailView.frame.size.height - self.statusDisLabel.frame.size.height;
         //
-        [UIView animateWithDuration:1 animations:^{
+        [UIView animateWithDuration:0.1 animations:^{
             weakSelf.threeLineDetailView.transform = CGAffineTransformMakeTranslation(0, moveYP/8 - 10);
             
             weakSelf.threeLineButtonImage.image = arrowUp;
@@ -645,25 +685,37 @@
     NSLog(@"enter show or dismiss view");
     __weak typeof(self) weakSelf = self;
     static BOOL showEnable = NO;
-    
+    //
+    UIImage *arrowUp = [UIImage imageNamed:@"arrow_Up"];
+    UIImage *arrowDown = [UIImage imageNamed:@"arrow_down"];
     
     //对事务详情的子视图进行平移
     if (!showEnable) {
         showEnable = !showEnable;
         //
-        
-        CGFloat moveYN = self.statusDisLabel.frame.size.height - self.fiveLineView.frame.size.height - 3;
+        self.theSelectedView = self.fiveLineView;
         //
-        [UIView animateWithDuration:1 animations:^{
+        weakSelf.fiveLineImage.image = arrowDown;
+        //
+        CGFloat moveYN = self.statusDisLabel.frame.size.height - self.fiveLineView.frame.size.height - 3;
+        
+        [UIView transitionWithView:self.fiveLineView duration:0.1 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             weakSelf.fiveLineView.transform = CGAffineTransformMakeTranslation(0, moveYN);
+        } completion:^(BOOL finished) {
+            if (finished) {
+                self.fiveLineView.hidden = YES;
+                self.furledView.hidden = NO;
+            }
         }];
+        
     }
     else
     {
+        weakSelf.fiveLineImage.image = arrowUp;
         showEnable = !showEnable;
         CGFloat moveYP = self.fiveLineView.frame.size.height - self.statusDisLabel.frame.size.height;
         //
-        [UIView animateWithDuration:1 animations:^{
+        [UIView animateWithDuration:0.1 animations:^{
             weakSelf.fiveLineView.transform = CGAffineTransformMakeTranslation(0, moveYP/8 - 10);
         }];
     }
@@ -673,28 +725,61 @@
     NSLog(@"enter show or dismiss view");
     __weak typeof(self) weakSelf = self;
     static BOOL showEnable = NO;
-    
+    //
+    UIImage *arrowUp = [UIImage imageNamed:@"arrow_Up"];
+    UIImage *arrowDown = [UIImage imageNamed:@"arrow_down"];
     
     //对事务详情的子视图进行平移
     if (!showEnable) {
         showEnable = !showEnable;
         //
+        self.theSelectedView = self.fourLineView;
+        //
+        weakSelf.fourLineImage.image = arrowDown;
         
         CGFloat moveYN = self.statusDisLabel.frame.size.height - self.fourLineView.frame.size.height - 3;
         //
-        [UIView animateWithDuration:1 animations:^{
+        
+        [UIView transitionWithView:self.fourLineView duration:0.1 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             weakSelf.fourLineView.transform = CGAffineTransformMakeTranslation(0, moveYN);
+        } completion:^(BOOL finished) {
+            if (finished) {
+                self.fourLineView.hidden = YES;
+                self.furledView.hidden = NO;
+            }
         }];
+        
     }
     else
     {
+        weakSelf.fourLineImage.image = arrowUp;
+        
         showEnable = !showEnable;
         CGFloat moveYP = self.fourLineView.frame.size.height - self.statusDisLabel.frame.size.height;
         //
-        [UIView animateWithDuration:1 animations:^{
+        [UIView animateWithDuration:0.1 animations:^{
             weakSelf.fourLineView.transform = CGAffineTransformMakeTranslation(0, moveYP/8 - 10);
         }];
     }
+    
+}
+- (IBAction)ScrollDown:(UIButton *)sender {
+    __weak typeof(self) weakSelf = self;
+    //
+    UIImage *arrowUp = [UIImage imageNamed:@"arrow_Up"];
+    self.theSelectedView.hidden = NO;
+    NSArray *allsubviews = self.theSelectedView.subviews;
+    for (UIImageView *imageView in allsubviews) {
+        if ([imageView isKindOfClass:[UIImageView class]]) {
+            imageView.image = arrowUp;
+        }
+    }
+    
+    CGFloat moveYP = self.theSelectedView.frame.size.height - self.statusDisLabel.frame.size.height;
+    //
+    [UIView animateWithDuration:0.1 animations:^{
+        weakSelf.theSelectedView.transform = CGAffineTransformMakeTranslation(0, moveYP/8 - 10);
+    }];
     
 }
 @end

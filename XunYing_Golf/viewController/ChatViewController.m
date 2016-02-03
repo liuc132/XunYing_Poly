@@ -173,7 +173,7 @@
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    [self.view endEditing:YES];
+//    [self.view endEditing:YES];
 }
 
 #pragma mark - UITextField的代理方法
@@ -212,7 +212,7 @@
 
 - (void)endEdit
 {
-    [self.view endEditing:YES];
+//    [self.view endEditing:YES];
 }
 
 /**

@@ -243,65 +243,19 @@
             {
                 [self.LogDbcon ExecDataTable:@"delete from tbl_groupInf"];
                 [self.LogDbcon ExecDataTable:@"delete from tbl_holeInf"];
-                //
-                NSArray *holeInf = [[NSArray alloc]initWithObjects:@"forecasttime",@"gronum",@"holcod",@"holcue",@"holfla",@"holgro",@"holind",@"hollen",@"holnam",@"holnum",@"holspe",@"holsta",@"nowgroups",@"stan1",@"stan2",@"stan3",@"stan4",@"usestatus",@"x",@"y", nil];
-                NSMutableArray *holesInf = [[NSMutableArray alloc] init];
-#ifdef DEBUD_MODE
-                NSLog(@"count:%ld",[recDic[@"Msg"][@"holes"] count]);
-#endif
-                NSArray *holesArray = recDic[@"Msg"][@"holes"];
                 
-                //            NSDictionary *holeDic = [[NSDictionary alloc] init];
-                
-                NSMutableArray *mutableHolesArray = [[NSMutableArray alloc] init];
-                for (unsigned char i = 0; i < [holesArray count]; i++) {
-                    [mutableHolesArray addObject:holesArray[i]];
+                //获取到球洞信息，并将相应的信息保存到内存中
+                NSArray *allHolesInfo = recDic[@"Msg"][@"holes"];
+                for (NSDictionary *eachHole in allHolesInfo) {
+                    NSMutableArray *eachHoleParam = [[NSMutableArray alloc] initWithObjects:eachHole[@"forecasttime"],eachHole[@"gronum"],eachHole[@"holcod"],eachHole[@"holcue"],eachHole[@"holfla"],eachHole[@"holgro"],eachHole[@"holind"],eachHole[@"hollen"],eachHole[@"holnam"],eachHole[@"holnum"],eachHole[@"holspe"],eachHole[@"holsta"],eachHole[@"nowgroups"],eachHole[@"stan1"],eachHole[@"stan2"],eachHole[@"stan3"],eachHole[@"stan4"],eachHole[@"usestatus"],eachHole[@"x"],eachHole[@"y"],eachHole[@"coursegrouptag"], nil];
+                    [weakSelf.LogDbcon ExecNonQuery:@"INSERT INTO tbl_holeInf(forecasttime,gronum,holcod,holcue,holfla,holgro,holind,hollen,holnam,holenum,holspe,holsta,nowgroups,stan1,stan2,stan3,stan4,usestatus,x,y,coursegrouptag) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" forParameter:eachHoleParam];
                 }
-                //
-                for(unsigned int j = 0; j < [mutableHolesArray count];j++)
+                /*NSArray *allHolesInfo = recDic[@"Msg"][@"holes"];
+                 for (NSDictionary *eachHole in allHolesInfo) {
+                 NSMutableArray *eachHoleParam = [[NSMutableArray alloc] initWithObjects:eachHole[@"forecasttime"],eachHole[@"gronum"],eachHole[@"holcod"],eachHole[@"holcue"],eachHole[@"holfla"],eachHole[@"holgro"],eachHole[@"holind"],eachHole[@"hollen"],eachHole[@"holnam"],eachHole[@"holnum"],eachHole[@"holspe"],eachHole[@"holsta"],eachHole[@"nowgroups"],eachHole[@"stan1"],eachHole[@"stan2"],eachHole[@"stan3"],eachHole[@"stan4"],eachHole[@"usestatus"],eachHole[@"x"],eachHole[@"y"],eachHole[@"coursegrouptag"], nil];
+                 [weakSelf.dbCon ExecNonQuery:@"INSERT INTO tbl_holeInf(forecasttime,gronum,holcod,holcue,holfla,holgro,holind,hollen,holnam,holenum,holspe,holsta,nowgroups,stan1,stan2,stan3,stan4,usestatus,x,y,coursegrouptag) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" forParameter:eachHoleParam];
+                 }*/
                 {
-                    NSMutableArray *eachHoleInf = [[NSMutableArray alloc] init];//[[NSMutableArray alloc]initWithObjects:@"", nil];
-                    for(unsigned int i = 0; i < [holeInf count];i++)
-                    {
-                        [eachHoleInf addObject:mutableHolesArray[j][holeInf[i]]];
-                        //                        NSLog(@"out %@:%@",holeInf[i],eachHoleInf[i]);
-                    }
-                    //将数据加载到创建的数据库中
-                    [strongSelf.LogDbcon ExecNonQuery:@"INSERT INTO tbl_holeInf(forecasttime,gronum,holcod,holcue,holfla,holgro,holind,hollen,holnam,holenum,holspe,holsta,nowgroups,stan1,stan2,stan3,stan4,usestatus,x,y) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" forParameter:eachHoleInf];
-                    
-                    [holesInf addObject:eachHoleInf];
-                }
-                //
-                //            DataTable *table;// = [[DataTable alloc] init];
-                //            table = [strongSelf.LogDbcon ExecDataTable:@"select *from tbl_holeInf"];
-                //
-                //            NSString *groupValue = [recDic[@"Msg"] objectForKey:@"group"];
-                //            if([(NSNull *)groupValue isEqual: @"null"])//
-                //            {
-                //                //[strongSelf performSegueWithIdentifier:@"jumpToCreateGroup" sender:nil];
-                //                [str logIn];
-                //            }
-                //            else//
-                {
-                    //                ucCusCounts = [recDic[@"Msg"][@"group"][@"cuss"] count] - 1;
-                    //                NSString *curHoleName = recDic[@"Msg"][@"group"][@"hgcod"];
-                    //此处的数据还没有传递到需要的地方去
-                    //                self.customerCount = [recDic[@"Msg"][@"group"][@"cuss"] count] - 1;
-                    //                self.curHoleName = recDic[@"Msg"][@"group"][@"hgcod"];
-                    //
-                    //                if ([curHoleName isEqualToString:@"上九洞"]) {
-                    //                    ucHolePosition = 0;
-                    //                }
-                    //                else if([curHoleName isEqualToString:@"下九洞"])
-                    //                {
-                    //                    ucHolePosition = 1;
-                    //                }
-                    //                else if([curHoleName isEqualToString:@"十八洞"])
-                    //                {
-                    //                    ucHolePosition = 2;
-                    //                }
-                    
-                    //                if(recDic[@"Msg"][@"group"])
                     NSDictionary *grpInfDic = [[NSDictionary alloc] initWithDictionary:recDic[@"Msg"]];
                     NSString *createTim;
                     createTim = [grpInfDic objectForKey:@"group"];

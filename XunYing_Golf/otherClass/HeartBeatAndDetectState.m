@@ -327,14 +327,14 @@ typedef enum eventOrder{
                                 case changeCaddy:
                                     observerName = weakSelf.observerNameArray[_caddy];
                                     //更新相应的数据
+                                    //tbl_taskInfo(evecod text,evetyp text,evesta text,subtim text,result text,everea text,hantim text,oldCaddyCode text,oldcadnum text,oldcadnam text,oldcadempcod text,newCaddyCode text,newcadnum text,newcadnam text,newcadempcod text,oldCartCode text,oldcarnum text,oldcarsea text,newCartCode text,newcarnum text,newcarsea text,jumpHoleCode text,toHoleCode text,destintime text,reqBackTime text,reHoleCode text,mendHoleCode text,ratifyHoleCode text,ratifyinTime text,selectedHoleCode text)
                                     //
-                                    //                            value = [eventDic objectForKey:@"hantim"];
                                     if (value != nil) {
                                         //
                                         newCart = eventDic[@"everes"];
                                         cartValue = [newCart objectForKey:@"newcad"];
                                         if ((NSNull *)cartValue != [NSNull null]) {
-                                            [weakSelf.lcDBCon ExecNonQuery:[NSString stringWithFormat:@"UPDATE tbl_taskInfo SET newCaddyCode = '%@' , result = '%@' , hantim = '%@' where evecod = '%@'",eventDic[@"everes"][@"newcad"][@"cadcod"],eventDic[@"everes"][@"result"],eventDic[@"hantim"],eventDic[@"evecod"]]];
+                                            [weakSelf.lcDBCon ExecNonQuery:[NSString stringWithFormat:@"UPDATE tbl_taskInfo SET newCaddyCode = '%@' , newcadnum = '%@' , newcadnam = '%@' , newcadempcod = '%@' , result = '%@' , hantim = '%@' where evecod = '%@'",eventDic[@"everes"][@"newcad"][@"cadcod"],eventDic[@"everes"][@"newcad"][@"cadnum"],eventDic[@"everes"][@"newcad"][@"cadnam"],eventDic[@"everes"][@"newcad"][@"empcod"],eventDic[@"everes"][@"result"],eventDic[@"hantim"],eventDic[@"evecod"]]];
                                             //更新已经添加的球童
                                             //tbl_addCaddy(cadcod text,cadnam text,cadnum text,cadsex text,empcod text)
                                             [weakSelf.lcDBCon ExecDataTable:[NSString stringWithFormat:@"update tbl_addCaddy set cadcod = '%@',cadnam = '%@',cadnum = '%@',empcod = '%@' where cadcod = '%@'",eventDic[@"everes"][@"newcad"][@"cadcod"],eventDic[@"everes"][@"newcad"][@"cadnam"],eventDic[@"everes"][@"newcad"][@"cadnum"],eventDic[@"everes"][@"newcad"][@"empcod"],eventDic[@"everes"][@"oldcad"][@"cadcod"]]];
@@ -351,14 +351,14 @@ typedef enum eventOrder{
                                     break;
                                 case changeCart:
                                     observerName = weakSelf.observerNameArray[_cart];
-                                    //更新相应的数据
+                                    //更新相应的数据newCartCode text,newcarnum text,newcarsea text
                                     //                            value = [eventDic objectForKey:@"hantim"];
                                     if (value != nil) {
                                         //
                                         newCart = eventDic[@"everes"];
                                         cartValue = [newCart objectForKey:@"newcar"];
                                         if ((NSNull *)cartValue != [NSNull null]) {
-                                            [weakSelf.lcDBCon ExecNonQuery:[NSString stringWithFormat:@"update tbl_taskInfo set newCartCode = '%@' , result = '%@' , hantim = '%@' where evecod = '%@'",eventDic[@"everes"][@"newcar"][@"carcod"],eventDic[@"everes"][@"result"],eventDic[@"hantim"],eventDic[@"evecod"]]];
+                                            [weakSelf.lcDBCon ExecNonQuery:[NSString stringWithFormat:@"update tbl_taskInfo set newCartCode = '%@' , newcarnum = '%@' , newcarsea = '%@' , result = '%@' , hantim = '%@' where evecod = '%@'",eventDic[@"everes"][@"newcar"][@"carcod"],eventDic[@"everes"][@"newcar"][@"carnum"],eventDic[@"everes"][@"newcar"][@"carsea"],eventDic[@"everes"][@"result"],eventDic[@"hantim"],eventDic[@"evecod"]]];
                                             //更新已经添加的球车的数据 tbl_selectCart
                                             //tbl_selectCart(carcod text,carnum text,carsea text)
                                             [weakSelf.lcDBCon ExecDataTable:[NSString stringWithFormat:@"update tbl_selectCart set carcod = '%@',carnum = '%@',carsea = '%@' where carcod = '%@'",eventDic[@"everes"][@"newcar"][@"carcod"],eventDic[@"everes"][@"newcar"][@"carnum"],eventDic[@"everes"][@"newcar"][@"carsea"],eventDic[@"everes"][@"oldcar"][@"carcod"]]];

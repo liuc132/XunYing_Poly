@@ -31,6 +31,7 @@
 @property (strong, nonatomic) DataTable *jumpHoleResult;
 @property (strong, nonatomic) DataTable *holePlanInfo;
 @property (strong, nonatomic) DataTable *cusGroInfEmp;
+@property (strong, nonatomic) DataTable *heartGrpInfo;
 
 @property (nonatomic) NSInteger selectedJumpNum;
 @property (nonatomic) BOOL      whetherSelectHole;
@@ -90,6 +91,7 @@
     self.grpInf         = [[DataTable alloc] init];
     self.holePlanInfo   = [[DataTable alloc] init];
     self.cusGroInfEmp   = [[DataTable alloc] init];
+    self.heartGrpInfo   = [[DataTable alloc] init];
     //
     self.toTaskDetailEnable =   NO;
     //
@@ -100,6 +102,7 @@
     self.holesInf = [self.locDBCon ExecDataTable:@"select *from tbl_holeInf"];
     self.curLocInfo = [self.locDBCon ExecDataTable:@"select *from tbl_locHole"];
     self.grpInf     = [self.locDBCon ExecDataTable:@"select *from tbl_groupInf"];
+    self.heartGrpInfo = [self.locDBCon ExecDataTable:@"select *from tbl_groupHeartInf"];
     //
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getEventFromHeart:) name:@"refreshSuccessJumpHole" object:nil];
     //
@@ -386,13 +389,29 @@
         [alert show];
         return;
     }
-//    self.whetherSelectHole = NO;
+    if (!self.holesInf.Rows.count) {
+        UIAlertView *errAlert = [[UIAlertView alloc] initWithTitle:@"参数异常" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+        [errAlert show];
+    }
+    NSString *requestHoleCode;
+    NSString *coursegroupTag;
+    coursegroupTag = [NSString stringWithFormat:@"%@",self.heartGrpInfo.Rows[0][@"coursegrouptag"]];
+    //获取到相应球洞的code
+    for (NSDictionary *eachHole in self.holesInf.Rows) {
+        if ([eachHole[@"coursegrouptag"] isEqualToString:coursegroupTag]) {
+            if ([eachHole[@"holenum"] integerValue] == (self.selectedJumpNum + 1)) {
+                requestHoleCode = [NSString stringWithFormat:@"%@",eachHole[@"holcod"]];
+                break;
+            }
+        }
+    }
+    
     //获取到mid号码
     NSString *theMid;
     theMid = [GetRequestIPAddress getUniqueID];
     theMid = [NSString stringWithFormat:@"I_IMEI_%@",theMid];
     //组建跳动请求参数
-    NSMutableDictionary *jumpHoleParam = [[NSMutableDictionary alloc] initWithObjectsAndKeys:theMid,@"mid",self.logPerson.Rows[0][@"empCode"],@"code",self.holesInf.Rows[self.selectedJumpNum][@"holcod"],@"aplcod", nil];
+    NSMutableDictionary *jumpHoleParam = [[NSMutableDictionary alloc] initWithObjectsAndKeys:theMid,@"mid",self.logPerson.Rows[0][@"empCode"],@"code",requestHoleCode,@"aplcod", nil];
     //
     NSString *jumpHoleURLStr;
     jumpHoleURLStr = [GetRequestIPAddress getJumpHoleURL];
@@ -412,8 +431,8 @@
                 NSDictionary *allMsg = recDic[@"Msg"];
                 
                 //
-                NSMutableArray *changeCaddyBackInfo = [[NSMutableArray alloc] initWithObjects:allMsg[@"evecod"],@"3",allMsg[@"evesta"],allMsg[@"subtim"],allMsg[@"everes"][@"result"],allMsg[@"everes"][@"everea"],allMsg[@"hantim"],@"",@"",@"",@"",weakSelf.holesInf.Rows[weakSelf.selectedJumpNum][@"holcod"],@"",@"",@"",@"",@"",@"",@"",@"", nil];
-                [weakSelf.locDBCon ExecNonQuery:@"insert into tbl_taskInfo(evecod,evetyp,evesta,subtim,result,everea,hantim,oldCaddyCode,newCaddyCode,oldCartCode,newCartCode,jumpHoleCode,toHoleCode,destintime,reqBackTime,reHoleCode,mendHoleCode,ratifyHoleCode,ratifyinTime,selectedHoleCode) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" forParameter:changeCaddyBackInfo];
+                NSMutableArray *changeCaddyBackInfo = [[NSMutableArray alloc] initWithObjects:allMsg[@"evecod"],@"3",allMsg[@"evesta"],allMsg[@"subtim"],allMsg[@"everes"][@"result"],allMsg[@"everes"][@"everea"],allMsg[@"hantim"],@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",@"",requestHoleCode,@"",@"",@"",@"",@"",@"",@"",@"", nil];
+                [weakSelf.locDBCon ExecNonQuery:@"insert into tbl_taskInfo(evecod,evetyp,evesta,subtim,result,everea,hantim,oldCaddyCode,oldcadnum,oldcadnam,oldcadempcod,newCaddyCode,newcadnum,newcadnam,newcadempcod,oldCartCode,oldcarnum,oldcarsea,newCartCode,newcarnum,newcarsea,jumpHoleCode,toHoleCode,destintime,reqBackTime,reHoleCode,mendHoleCode,ratifyHoleCode,ratifyinTime,selectedHoleCode) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" forParameter:changeCaddyBackInfo];
                 //
                 self.toTaskDetailEnable =   YES;
                 //执行跳转

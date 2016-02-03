@@ -616,7 +616,6 @@ wasOrderedState
                 dispatch_async(dispatch_get_main_queue(), ^{
                     //发送更改请求
                     [HttpTools getHttp:completeStateURLStr forParams:makeHoleCompleteParam success:^(NSData *nsData){
-//                        NSDictionary *recDic = [NSJSONSerialization JSONObjectWithData:nsData options:NSJSONReadingMutableLeaves error:nil];
                         NSDictionary *recDic;
                         recDic = (NSDictionary *)nsData;
                         
