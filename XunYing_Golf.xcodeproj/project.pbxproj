@@ -80,6 +80,7 @@
 		5B9ECB131BAC113600612474 /* ChooseCreateGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B9ECB121BAC113600612474 /* ChooseCreateGroupViewController.m */; };
 		5BA96CA71C045B89009DD1B0 /* ChangeCartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA96CA61C045B89009DD1B0 /* ChangeCartViewController.m */; };
 		5BA96CAB1C0469F1009DD1B0 /* LeaveRestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA96CAA1C0469F1009DD1B0 /* LeaveRestViewController.m */; };
+		5BBD53FE1C72F4F900439910 /* offlineMapDataSK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5BBD53FD1C72F4F800439910 /* offlineMapDataSK.bundle */; };
 		5BC136B31B93EFD500FF1CB1 /* TOUCHkitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BC136B01B93EFD500FF1CB1 /* TOUCHkitView.m */; };
 		5BC136B41B93EFD500FF1CB1 /* TOUCHOverlayWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BC136B21B93EFD500FF1CB1 /* TOUCHOverlayWindow.m */; };
 		5BC6CC811C33660C006B30DC /* subCaddyOrCartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BC6CC801C33660C006B30DC /* subCaddyOrCartView.m */; };
@@ -275,6 +276,7 @@
 		5BA96CA61C045B89009DD1B0 /* ChangeCartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChangeCartViewController.m; path = viewController/ChangeCartViewController.m; sourceTree = "<group>"; };
 		5BA96CA91C0469F1009DD1B0 /* LeaveRestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LeaveRestViewController.h; path = viewController/LeaveRestViewController.h; sourceTree = "<group>"; };
 		5BA96CAA1C0469F1009DD1B0 /* LeaveRestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LeaveRestViewController.m; path = viewController/LeaveRestViewController.m; sourceTree = "<group>"; };
+		5BBD53FD1C72F4F800439910 /* offlineMapDataSK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = offlineMapDataSK.bundle; sourceTree = "<group>"; };
 		5BC136AF1B93EFD500FF1CB1 /* TOUCHkitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOUCHkitView.h; sourceTree = "<group>"; };
 		5BC136B01B93EFD500FF1CB1 /* TOUCHkitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TOUCHkitView.m; sourceTree = "<group>"; };
 		5BC136B11B93EFD500FF1CB1 /* TOUCHOverlayWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOUCHOverlayWindow.h; sourceTree = "<group>"; };
@@ -507,6 +509,7 @@
 		5B11C54A1B8EDEF700382C9B /* offlineMapData */ = {
 			isa = PBXGroup;
 			children = (
+				5BBD53FD1C72F4F800439910 /* offlineMapDataSK.bundle */,
 				5B4000AA1C5AFE31003A6852 /* offlineMapDataS.bundle */,
 				5B4000A81C5AFE26003A6852 /* offlineMapDataN.bundle */,
 			);
@@ -1237,6 +1240,7 @@
 				5B4000A91C5AFE26003A6852 /* offlineMapDataN.bundle in Resources */,
 				5B4000AB1C5AFE31003A6852 /* offlineMapDataS.bundle in Resources */,
 				5B63E1141BAFB10C0034C577 /* createGroup_QRcode.png in Resources */,
+				5BBD53FE1C72F4F900439910 /* offlineMapDataSK.bundle in Resources */,
 				5B11C52F1B8EDD4700382C9B /* Images.xcassets in Resources */,
 				5B63E1181BAFB10C0034C577 /* logInPassword.png in Resources */,
 				5BF0ECA51C21698A00945877 /* noResult.xib in Resources */,

@@ -7,6 +7,7 @@
 //
 
 #import "MoreInterfaceViewController.h"
+#import "ViewController.h"
 
 @interface MoreInterfaceViewController ()
 
@@ -21,6 +22,9 @@
     [super viewDidLoad];
     //
     [self performSegueWithIdentifier:@"showMoreInterfaces" sender:nil];
+    //
+//    [ViewController removeMapView];
+    
 }
 
 

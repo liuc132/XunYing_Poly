@@ -15,5 +15,7 @@
 @property (strong, nonatomic) AGSPoint *GpsPoint;
 @property (nonatomic) BOOL  confirmGetGPS;
 
++ (void)removeMapView;
+
 @end
 
