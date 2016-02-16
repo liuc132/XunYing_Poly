@@ -48,7 +48,7 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" alwaysBounceVertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lS3-BR-h0s">
                                 <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logInLogo.png" translatesAutoresizingMaskIntoConstraints="NO" id="QxI-po-DwH">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logInLogo" translatesAutoresizingMaskIntoConstraints="NO" id="QxI-po-DwH">
                                         <rect key="frame" x="132" y="8" width="60" height="60"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="A5r-93-ZIV"/>
@@ -56,14 +56,14 @@
                                             <constraint firstAttribute="width" secondItem="QxI-po-DwH" secondAttribute="height" multiplier="1:1" id="tUW-jr-Dzl"/>
                                         </constraints>
                                     </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logInCompany-01.png" translatesAutoresizingMaskIntoConstraints="NO" id="atE-uU-d14">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logInCompany" translatesAutoresizingMaskIntoConstraints="NO" id="atE-uU-d14">
                                         <rect key="frame" x="25" y="76" width="275" height="45"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="atE-uU-d14" secondAttribute="height" multiplier="55:9" id="OkH-rh-h5n"/>
                                             <constraint firstAttribute="height" constant="45" id="QGv-kT-Z6d"/>
                                         </constraints>
                                     </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logInAccount.png" translatesAutoresizingMaskIntoConstraints="NO" id="dDm-PS-4Fh">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logInAccount" translatesAutoresizingMaskIntoConstraints="NO" id="dDm-PS-4Fh">
                                         <rect key="frame" x="22" y="195" width="24" height="27"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="24" id="7se-Eg-xtv"/>
@@ -90,7 +90,7 @@
                                             <constraint firstAttribute="height" constant="1" id="nHo-mf-DDT"/>
                                         </constraints>
                                     </view>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logInPassword.png" translatesAutoresizingMaskIntoConstraints="NO" id="vsS-Wt-No9">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logInPassword" translatesAutoresizingMaskIntoConstraints="NO" id="vsS-Wt-No9">
                                         <rect key="frame" x="22" y="254" width="24" height="27"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="27" id="EOV-rf-4L8"/>
@@ -143,7 +143,7 @@
                                             <constraint firstAttribute="width" constant="22" id="EAy-yr-6dH"/>
                                             <constraint firstAttribute="width" secondItem="WUf-l7-GZj" secondAttribute="height" multiplier="22:21" id="i4i-Ip-PHZ"/>
                                         </constraints>
-                                        <state key="normal" image="logInSelected.png"/>
+                                        <state key="normal" image="logInSelected"/>
                                         <connections>
                                             <action selector="forgetPassword:" destination="gmR-ye-79F" eventType="touchUpInside" id="WWR-uD-aVY"/>
                                         </connections>
@@ -243,18 +243,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="createGroup_Main.png" translatesAutoresizingMaskIntoConstraints="NO" id="ZZY-6s-lAC">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="createGroup_Main" translatesAutoresizingMaskIntoConstraints="NO" id="ZZY-6s-lAC">
                                 <rect key="frame" x="0.0" y="20" width="320" height="265"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="ZZY-6s-lAC" secondAttribute="height" multiplier="64:53" id="7eY-3U-dB7"/>
                                 </constraints>
                             </imageView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ykS-Qn-eLh">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ykS-Qn-eLh">
                                 <rect key="frame" x="20" y="301" width="84" height="105"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dsc-zb-Asv">
                                         <rect key="frame" x="12" y="8" width="60" height="60"/>
-                                        <state key="normal" image="createGroup_Mannual.png"/>
+                                        <state key="normal" image="createGroup_Mannual"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                 <integer key="value" value="30"/>
@@ -287,12 +287,12 @@
                                     <constraint firstAttribute="trailing" secondItem="Dsc-zb-Asv" secondAttribute="trailing" constant="12" id="ydL-wu-HqB"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aC7-Up-ndH">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aC7-Up-ndH">
                                 <rect key="frame" x="216" y="301" width="84" height="105"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G62-ZW-jny">
                                         <rect key="frame" x="14" y="8" width="60" height="60"/>
-                                        <state key="normal" image="createGroup_Check.png"/>
+                                        <state key="normal" image="createGroup_Check"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                 <integer key="value" value="30"/>
@@ -323,12 +323,12 @@
                                     <constraint firstItem="tkC-zD-Yiq" firstAttribute="top" secondItem="G62-ZW-jny" secondAttribute="bottom" constant="8" symbolic="YES" id="w0i-Ya-dHD"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="I6z-F8-59l">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I6z-F8-59l">
                                 <rect key="frame" x="118" y="301" width="84" height="105"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Ei-pQ-mzv">
                                         <rect key="frame" x="12" y="8" width="60" height="60"/>
-                                        <state key="normal" image="createGroup_QRcode.png"/>
+                                        <state key="normal" image="createGroup_QRcode"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                 <integer key="value" value="30"/>
@@ -556,6 +556,27 @@
                                                     <action selector="handleHoles:" destination="ILV-jj-esd" eventType="touchUpInside" id="eKi-DS-uxy"/>
                                                 </connections>
                                             </button>
+                                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ksg-bm-nMV">
+                                                <rect key="frame" x="226" y="7" width="86" height="42"/>
+                                                <color key="backgroundColor" red="0.91764705879999997" green="0.91764705879999997" blue="0.91764705879999997" alpha="1" colorSpace="calibratedRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="86" id="Hah-mT-RH2"/>
+                                                    <constraint firstAttribute="height" constant="42" id="OHo-mF-wVj"/>
+                                                    <constraint firstAttribute="width" secondItem="ksg-bm-nMV" secondAttribute="height" multiplier="43:21" id="Rc0-IN-zlZ"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                                <state key="normal" title="十八洞">
+                                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                        <integer key="value" value="10"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="handleHoles:" destination="ILV-jj-esd" eventType="touchUpInside" id="pxW-DN-qaJ"/>
+                                                </connections>
+                                            </button>
                                             <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uCB-tc-htz">
                                                 <rect key="frame" x="117" y="7" width="86" height="42"/>
                                                 <color key="backgroundColor" red="0.91764705882352937" green="0.91764705882352937" blue="0.91764705882352937" alpha="1" colorSpace="calibratedRGB"/>
@@ -575,27 +596,6 @@
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="handleHoles:" destination="ILV-jj-esd" eventType="touchUpInside" id="vkf-E5-fuG"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ksg-bm-nMV">
-                                                <rect key="frame" x="226" y="7" width="86" height="42"/>
-                                                <color key="backgroundColor" red="0.91764705879999997" green="0.91764705879999997" blue="0.91764705879999997" alpha="1" colorSpace="calibratedRGB"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="86" id="Hah-mT-RH2"/>
-                                                    <constraint firstAttribute="height" constant="42" id="OHo-mF-wVj"/>
-                                                    <constraint firstAttribute="width" secondItem="ksg-bm-nMV" secondAttribute="height" multiplier="43:21" id="Rc0-IN-zlZ"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
-                                                <state key="normal" title="十八洞">
-                                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                        <integer key="value" value="10"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                </userDefinedRuntimeAttributes>
-                                                <connections>
-                                                    <action selector="handleHoles:" destination="ILV-jj-esd" eventType="touchUpInside" id="pxW-DN-qaJ"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -914,7 +914,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="listAllTask" rowHeight="90" id="FgQ-Oq-xlk" customClass="TaskCenterTableViewCell">
-                                <rect key="frame" x="0.0" y="28" width="320" height="90"/>
+                                <rect key="frame" x="0.0" y="92" width="320" height="90"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="FgQ-Oq-xlk" id="mxi-zR-JJG">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="89"/>
@@ -6628,7 +6628,7 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="black" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="51C-NK-mTp">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" directionalLockEnabled="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="black" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="51C-NK-mTp">
                                 <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="球洞号" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mOR-tO-4aN">
@@ -7742,10 +7742,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Rb-M8-BMz" customClass="AGSMapView">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Rb-M8-BMz" customClass="AGSMapView">
                                 <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="quN-uz-aEI">
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="quN-uz-aEI">
                                         <rect key="frame" x="271" y="394" width="40" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="0WR-V6-h8c"/>
@@ -8583,10 +8583,10 @@
         <image name="changeCart" width="88" height="80"/>
         <image name="changeCartWhite" width="88" height="80"/>
         <image name="communication" width="80" height="64"/>
-        <image name="createGroup_Check.png" width="150" height="150"/>
-        <image name="createGroup_Main.png" width="1080" height="842"/>
-        <image name="createGroup_Mannual.png" width="150" height="150"/>
-        <image name="createGroup_QRcode.png" width="150" height="150"/>
+        <image name="createGroup_Check" width="75" height="75"/>
+        <image name="createGroup_Main" width="540" height="421"/>
+        <image name="createGroup_Mannual" width="75" height="75"/>
+        <image name="createGroup_QRcode" width="75" height="75"/>
         <image name="curHole" width="82" height="82"/>
         <image name="curNoTask" width="1080" height="842"/>
         <image name="cusGroupInf" width="80" height="64"/>
@@ -8594,11 +8594,11 @@
         <image name="groupCaddy" width="88" height="80"/>
         <image name="groupCar" width="88" height="80"/>
         <image name="introduceHole" width="80" height="64"/>
-        <image name="logInAccount.png" width="44" height="50"/>
-        <image name="logInCompany-01.png" width="750" height="120"/>
-        <image name="logInLogo.png" width="290" height="290"/>
-        <image name="logInPassword.png" width="44" height="50"/>
-        <image name="logInSelected.png" width="44" height="44"/>
+        <image name="logInAccount" width="22" height="25"/>
+        <image name="logInCompany" width="375" height="60"/>
+        <image name="logInLogo" width="145" height="145"/>
+        <image name="logInPassword" width="22" height="25"/>
+        <image name="logInSelected" width="22" height="22"/>
         <image name="mendHoleList" width="44" height="40"/>
         <image name="more" width="80" height="64"/>
         <image name="navBarBack" width="30" height="54"/>
@@ -8612,11 +8612,11 @@
         <image name="taskCum" width="80" height="64"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="KFB-gR-Lkf"/>
+        <segue reference="nHe-lr-bpT"/>
+        <segue reference="T5z-rN-6zQ"/>
+        <segue reference="2jQ-B5-uTJ"/>
+        <segue reference="tq0-Wr-F1g"/>
         <segue reference="YAB-L8-wm4"/>
-        <segue reference="eAv-ry-xts"/>
-        <segue reference="Cwp-q1-4Vu"/>
-        <segue reference="Kil-50-Fft"/>
         <segue reference="d7R-wU-5jQ"/>
         <segue reference="UqS-I3-2ab"/>
     </inferredMetricsTieBreakers>
