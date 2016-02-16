@@ -80,6 +80,10 @@
 		5B9ECB131BAC113600612474 /* ChooseCreateGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B9ECB121BAC113600612474 /* ChooseCreateGroupViewController.m */; };
 		5BA96CA71C045B89009DD1B0 /* ChangeCartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA96CA61C045B89009DD1B0 /* ChangeCartViewController.m */; };
 		5BA96CAB1C0469F1009DD1B0 /* LeaveRestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA96CAA1C0469F1009DD1B0 /* LeaveRestViewController.m */; };
+		5BAAE09E1C63521C001F6697 /* SVIndefiniteAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BAAE0971C63521C001F6697 /* SVIndefiniteAnimatedView.m */; };
+		5BAAE09F1C63521C001F6697 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5BAAE0991C63521C001F6697 /* SVProgressHUD.bundle */; };
+		5BAAE0A01C63521C001F6697 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BAAE09B1C63521C001F6697 /* SVProgressHUD.m */; };
+		5BAAE0A11C63521C001F6697 /* SVRadialGradientLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BAAE09D1C63521C001F6697 /* SVRadialGradientLayer.m */; };
 		5BC136B31B93EFD500FF1CB1 /* TOUCHkitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BC136B01B93EFD500FF1CB1 /* TOUCHkitView.m */; };
 		5BC136B41B93EFD500FF1CB1 /* TOUCHOverlayWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BC136B21B93EFD500FF1CB1 /* TOUCHOverlayWindow.m */; };
 		5BC6CC811C33660C006B30DC /* subCaddyOrCartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BC6CC801C33660C006B30DC /* subCaddyOrCartView.m */; };
@@ -113,7 +117,6 @@
 		5BE650941C3FAED80019EC8E /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BE6508C1C3FAED80019EC8E /* UIWebView+AFNetworking.m */; };
 		5BE650981C3FAEF50019EC8E /* AFNetworkTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BE650971C3FAEF50019EC8E /* AFNetworkTool.m */; };
 		5BE7172E1BB8EDC40080C6F4 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BE7172D1BB8EDC40080C6F4 /* Reachability.m */; };
-		5BEA92711BB1077200EAC9BE /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5BEA926E1BB1077200EAC9BE /* FontAwesome.ttf */; };
 		5BEA92721BB1077200EAC9BE /* NSString+FontAwesome.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BEA92701BB1077200EAC9BE /* NSString+FontAwesome.m */; };
 		5BEC66E61BC7506F001C70FE /* CustomerGroupInfViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BEC66E51BC7506F001C70FE /* CustomerGroupInfViewController.m */; };
 		5BEE08391C190ACC0058508C /* ArcGIS.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5BEE08381C190ACC0058508C /* ArcGIS.bundle */; };
@@ -275,6 +278,13 @@
 		5BA96CA61C045B89009DD1B0 /* ChangeCartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChangeCartViewController.m; path = viewController/ChangeCartViewController.m; sourceTree = "<group>"; };
 		5BA96CA91C0469F1009DD1B0 /* LeaveRestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LeaveRestViewController.h; path = viewController/LeaveRestViewController.h; sourceTree = "<group>"; };
 		5BA96CAA1C0469F1009DD1B0 /* LeaveRestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LeaveRestViewController.m; path = viewController/LeaveRestViewController.m; sourceTree = "<group>"; };
+		5BAAE0961C63521C001F6697 /* SVIndefiniteAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVIndefiniteAnimatedView.h; sourceTree = "<group>"; };
+		5BAAE0971C63521C001F6697 /* SVIndefiniteAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVIndefiniteAnimatedView.m; sourceTree = "<group>"; };
+		5BAAE0991C63521C001F6697 /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
+		5BAAE09A1C63521C001F6697 /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
+		5BAAE09B1C63521C001F6697 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
+		5BAAE09C1C63521C001F6697 /* SVRadialGradientLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVRadialGradientLayer.h; sourceTree = "<group>"; };
+		5BAAE09D1C63521C001F6697 /* SVRadialGradientLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVRadialGradientLayer.m; sourceTree = "<group>"; };
 		5BC136AF1B93EFD500FF1CB1 /* TOUCHkitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOUCHkitView.h; sourceTree = "<group>"; };
 		5BC136B01B93EFD500FF1CB1 /* TOUCHkitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TOUCHkitView.m; sourceTree = "<group>"; };
 		5BC136B11B93EFD500FF1CB1 /* TOUCHOverlayWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOUCHOverlayWindow.h; sourceTree = "<group>"; };
@@ -425,6 +435,7 @@
 		5B11C5151B8EDD4600382C9B = {
 			isa = PBXGroup;
 			children = (
+				5BAAE0951C6351DF001F6697 /* SVProgressHUD */,
 				5B3B669B1C197D1D00C4D557 /* QRCodeReader */,
 				5B52F72A1B9D8A83004BA338 /* framework */,
 				5B52F4171B9D7B44004BA338 /* commonLibrary */,
@@ -828,6 +839,20 @@
 				5BA96CAA1C0469F1009DD1B0 /* LeaveRestViewController.m */,
 			);
 			name = leaveRest;
+			sourceTree = "<group>";
+		};
+		5BAAE0951C6351DF001F6697 /* SVProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				5BAAE0961C63521C001F6697 /* SVIndefiniteAnimatedView.h */,
+				5BAAE0971C63521C001F6697 /* SVIndefiniteAnimatedView.m */,
+				5BAAE0991C63521C001F6697 /* SVProgressHUD.bundle */,
+				5BAAE09A1C63521C001F6697 /* SVProgressHUD.h */,
+				5BAAE09B1C63521C001F6697 /* SVProgressHUD.m */,
+				5BAAE09C1C63521C001F6697 /* SVRadialGradientLayer.h */,
+				5BAAE09D1C63521C001F6697 /* SVRadialGradientLayer.m */,
+			);
+			name = SVProgressHUD;
 			sourceTree = "<group>";
 		};
 		5BB922851B9D593C00B7C936 /* Image */ = {
@@ -1240,10 +1265,10 @@
 				5B11C52F1B8EDD4700382C9B /* Images.xcassets in Resources */,
 				5B63E1181BAFB10C0034C577 /* logInPassword.png in Resources */,
 				5BF0ECA51C21698A00945877 /* noResult.xib in Resources */,
+				5BAAE09F1C63521C001F6697 /* SVProgressHUD.bundle in Resources */,
 				5B63E1131BAFB10C0034C577 /* createGroup_Mannual.png in Resources */,
 				5B7748951C45FDF800E5AAC9 /* ic_launcher120*120.png in Resources */,
 				5B4E33E11BAFE415000693B3 /* ic_launcher.png in Resources */,
-				5BEA92711BB1077200EAC9BE /* FontAwesome.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1296,6 +1321,7 @@
 				5BE650791C3FAEB90019EC8E /* AFURLResponseSerialization.m in Sources */,
 				5B52F4451B9D7C08004BA338 /* UIImage+UICon.m in Sources */,
 				5BC6CC811C33660C006B30DC /* subCaddyOrCartView.m in Sources */,
+				5BAAE0A11C63521C001F6697 /* SVRadialGradientLayer.m in Sources */,
 				5B4E33E81BAFE76C000693B3 /* WaitToPlayTableViewController.m in Sources */,
 				5BF321421C1FFEFD005A0DF6 /* UIImage+ResizeImage.m in Sources */,
 				5B33ACF71C27F6D60073737F /* SlowBallViewController.m in Sources */,
@@ -1303,6 +1329,7 @@
 				5BC136B41B93EFD500FF1CB1 /* TOUCHOverlayWindow.m in Sources */,
 				5BE6508F1C3FAED80019EC8E /* UIAlertView+AFNetworking.m in Sources */,
 				5BA96CAB1C0469F1009DD1B0 /* LeaveRestViewController.m in Sources */,
+				5BAAE0A01C63521C001F6697 /* SVProgressHUD.m in Sources */,
 				5BE650911C3FAED80019EC8E /* UIImageView+AFNetworking.m in Sources */,
 				5B52F4161B9D7973004BA338 /* MainViewController.m in Sources */,
 				5B52F4471B9D7C08004BA338 /* UILabel+UICon.m in Sources */,
@@ -1320,6 +1347,7 @@
 				5B11C5241B8EDD4700382C9B /* main.m in Sources */,
 				5BE650901C3FAED80019EC8E /* UIButton+AFNetworking.m in Sources */,
 				5BF0CE6E1BC6100300009BED /* KxMenu.m in Sources */,
+				5BAAE09E1C63521C001F6697 /* SVIndefiniteAnimatedView.m in Sources */,
 				5B33DDE91C2136AE00C62DF7 /* HeadView.m in Sources */,
 				5B3A14D91BB2486B008AA668 /* PlayProcessViewController.m in Sources */,
 				5B93C8191BBBDD8B0081FBAF /* CurTaskCenterTableViewController.m in Sources */,

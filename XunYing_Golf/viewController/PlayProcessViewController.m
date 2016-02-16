@@ -700,7 +700,18 @@ wasOrderedState
     NSString *planOutTime = self.holePlanInfo.Rows[sender.tag][@"poutim"];
     planOutTime = [NSString stringWithFormat:@"%@",[planOutTime substringFromIndex:11]];
     
-    NSString *subMsg = [NSString stringWithFormat:@" 打球状态   %@ \n计划进入时间   %@\n   标准耗时   %@\n计划离开时间   %@",self.holeStateArray[holeNum],planInTime,standardTime,planOutTime];
+    NSString *subMsg = [NSString stringWithFormat:@" 打球状态    %@ \n计划进入时间   %@\n   标准耗时    %@\n计划离开时间   %@",self.holeStateArray[holeNum],planInTime,standardTime,planOutTime];
+    //
+    if (holeNum > 0) {
+        NSString *holeState;
+        holeState = [NSString stringWithFormat:@"%@",self.holeStateArray[holeNum]];
+        
+        UIAlertView *holStaAlert = [[UIAlertView alloc] initWithTitle:curSelectHoleName message:subMsg delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil , nil];
+        [holStaAlert show];
+        
+        return;
+    }
+    
     //
     UIAlertView *changeHoleStateAlert = [[UIAlertView alloc] initWithTitle:curSelectHoleName message:subMsg delegate:self cancelButtonTitle:@" 取 消 " otherButtonTitles:@"改为被完成", nil];
     changeHoleStateAlert.tag = 1;//到时候改成1

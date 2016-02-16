@@ -20,6 +20,7 @@
 #import "GetRequestIPAddress.h"
 #import "AFHTTPRequestOperationManager.h"
 #import "GetParagram.h"
+#import "SVProgressHUD.h"
 
 extern NSString *CTSettingCopyMyPhoneNumber();
 //extern BOOL allowDownCourt;
@@ -165,6 +166,9 @@ extern NSString *CTSettingCopyMyPhoneNumber();
         //
         [self.activityIndicatorView stopAnimating];
         self.activityIndicatorView.hidden = YES;
+//        [SVProgressHUD show];
+        
+        //
         [[NSNotificationCenter defaultCenter] removeObserver:self];
         //
         [self performSegueWithIdentifier:@"ToMainMapView" sender:nil];
@@ -176,6 +180,8 @@ extern NSString *CTSettingCopyMyPhoneNumber();
         [[NSNotificationCenter defaultCenter] removeObserver:self];
         [self.activityIndicatorView stopAnimating];
         self.activityIndicatorView.hidden = YES;
+//        [SVProgressHUD dismiss];
+        
         [self performSegueWithIdentifier:@"shouldWaitToAllow" sender:nil];
     }
 //    //若没有退出则直接跳转到建组方式的界面（手动，二维码等）
@@ -333,6 +339,8 @@ extern NSString *CTSettingCopyMyPhoneNumber();
     [self.view removeGestureRecognizer:self.tap];
     //当要离开当前界面时候，将启动显示的动画界面移除
     [self.launchImageView removeFromSuperview];
+    //关闭进度图标
+//    [SVProgressHUD dismiss];
     //
 //    [[NSTimer alloc] invalidate];
 #ifdef DEBUG_MODE
@@ -403,6 +411,7 @@ extern NSString *CTSettingCopyMyPhoneNumber();
 
 - (IBAction)settingIPAddr:(UIBarButtonItem *)sender {
     self.activityIndicatorView.hidden = YES;
+//    [SVProgressHUD dismiss];
     
     [self performSegueWithIdentifier:@"settingIPAddress" sender:nil];
 }
@@ -537,6 +546,8 @@ extern NSString *CTSettingCopyMyPhoneNumber();
                 //关闭activityIndicator
                 [self.activityIndicatorView stopAnimating];
                 self.activityIndicatorView.hidden = YES;
+
+//                [SVProgressHUD dismiss];
                 
                 break;
             case 1:
@@ -704,8 +715,10 @@ extern NSString *CTSettingCopyMyPhoneNumber();
 #ifdef DEBUG_MODE
                     NSLog(@"强制登录失败");
 #endif
-                    [weakSelf.activityIndicatorView stopAnimating];
-                    weakSelf.activityIndicatorView.hidden = YES;
+//                    [weakSelf.activityIndicatorView stopAnimating];
+//                    weakSelf.activityIndicatorView.hidden = YES;
+                    [SVProgressHUD dismiss];
+                    
                     UIAlertView *errAlert = [[UIAlertView alloc] initWithTitle:@"网络请求失败" message:nil delegate:weakSelf cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
                     [errAlert show];
                     
@@ -747,6 +760,8 @@ extern NSString *CTSettingCopyMyPhoneNumber();
         NSLog(@"request failled");
         [weakSelf.activityIndicatorView stopAnimating];
         weakSelf.activityIndicatorView.hidden = YES;
+//        [SVProgressHUD dismiss];
+        
         UIAlertView *errAlert = [[UIAlertView alloc] initWithTitle:@"网络请求失败" message:nil delegate:weakSelf cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
         [errAlert show];
         
@@ -822,6 +837,7 @@ extern NSString *CTSettingCopyMyPhoneNumber();
             if ([recDic[@"Code"] integerValue] < 0) {
                 [self.activityIndicatorView stopAnimating];
                 self.activityIndicatorView.hidden = YES;
+//                [SVProgressHUD dismiss];
             }
             
             if([recDic[@"Code"] isEqualToNumber:[NSNumber numberWithInt:-1]])
@@ -905,6 +921,7 @@ extern NSString *CTSettingCopyMyPhoneNumber();
                     //关闭activityIndicator
                     [self.activityIndicatorView stopAnimating];
                     self.activityIndicatorView.hidden = YES;
+//                    [SVProgressHUD dismiss];
                     //
                     dispatch_async(dispatch_get_main_queue(), ^{
                         //执行跳转
@@ -921,6 +938,7 @@ extern NSString *CTSettingCopyMyPhoneNumber();
             //            [self.activityView removeFromSuperview];
             [self.activityIndicatorView stopAnimating];
             self.activityIndicatorView.hidden = YES;
+//            [SVProgressHUD dismiss];
             
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"请求超时" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
             
@@ -938,6 +956,7 @@ extern NSString *CTSettingCopyMyPhoneNumber();
     //
     [self.activityIndicatorView startAnimating];
     self.activityIndicatorView.hidden = NO;
+//    [SVProgressHUD show];
     //
     self.haveGroupNotDown = NO;
     //
@@ -1032,6 +1051,8 @@ extern NSString *CTSettingCopyMyPhoneNumber();
         if ([recDic[@"Code"] integerValue] < 0) {
             [self.activityIndicatorView stopAnimating];
             self.activityIndicatorView.hidden = YES;
+
+//        [SVProgressHUD dismiss];
         }
         //
         if([recDic[@"Code"] isEqualToNumber:[NSNumber numberWithInt:-1]])
@@ -1165,6 +1186,7 @@ extern NSString *CTSettingCopyMyPhoneNumber();
 #endif
         [self.activityIndicatorView stopAnimating];
         self.activityIndicatorView.hidden = YES;
+//        [SVProgressHUD dismiss];
         //
         UIAlertView *netAlert = [[UIAlertView alloc] initWithTitle:@"网络连接异常" message:nil delegate:weakSelf cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
         [netAlert show];
