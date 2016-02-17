@@ -14,6 +14,7 @@
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) CLLocation *getGPSLocation;
+@property (strong, nonatomic) CLLocation *storedGPSLocation;
 
 
 @end
@@ -60,7 +61,11 @@
     CLLocation *curLocation;
     
     //在此选择是传输实际的GPS数据还是模拟的数据
-    curLocation = self.getGPSLocation;
+    if (_storedGPSLocation != _getGPSLocation) {
+        _storedGPSLocation = _getGPSLocation;
+    }
+    
+    curLocation = _storedGPSLocation;
     
     return curLocation;
 }
@@ -68,12 +73,21 @@
 #pragma -mark  didUpdateLocations
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations
 {
-    self.getGPSLocation = [locations lastObject];
+    _getGPSLocation = [locations lastObject];
 }
 
 - (void)stopUpdateLocation
 {
-    [self.locationManager stopUpdatingLocation];
+    [_locationManager stopUpdatingLocation];
 }
+
+- (void)locationManager:(CLLocationManager *)manager didFinishDeferredUpdatesWithError:(NSError *)error
+{
+    
+    NSLog(@"error:%@",error.localizedDescription);
+    
+}
+
+
 
 @end

@@ -522,11 +522,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "XunYing_Golf/otherClass/HeartBeatAndDetectState.m"
-            timestampString = "476113322.091285"
+            timestampString = "477389638.543102"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "536"
-            endingLineNumber = "536"
+            startingLineNumber = "545"
+            endingLineNumber = "545"
             landmarkName = "-timelySend"
             landmarkType = "5">
          </BreakpointContent>
@@ -666,11 +666,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "XunYing_Golf/otherClass/HeartBeatAndDetectState.m"
-            timestampString = "476113322.091285"
+            timestampString = "477389638.543102"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "505"
-            endingLineNumber = "505"
+            startingLineNumber = "514"
+            endingLineNumber = "514"
             landmarkName = "-timelySend"
             landmarkType = "5">
          </BreakpointContent>
@@ -697,54 +697,6 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "XunYing_Golf/otherClass/HeartBeatAndDetectState.m"
-            timestampString = "475827522.332453"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "271"
-            endingLineNumber = "271"
-            landmarkName = "-timelySend"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__37-[HeartBeatAndDetectState timelySend]_block_invoke"
-                  moduleName = "XunYing_Golf"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/liuc/Desktop/lcWorkSpace/SVN%20project/XyGolf/XunYing-Golf_shangB/XunYing_Golf/otherClass/HeartBeatAndDetectState.m"
-                  timestampString = "474946976.791121"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "275"
-                  endingLineNumber = "275"
-                  offsetFromSymbolStart = "3260">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__37-[HeartBeatAndDetectState timelySend]_block_invoke_2"
-                  moduleName = "XunYing_Golf"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/liuc/Desktop/lcWorkSpace/SVN%20project/XyGolf/XunYing-Golf_shangB/XunYing_Golf/otherClass/HeartBeatAndDetectState.m"
-                  timestampString = "474946976.791248"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "277"
-                  endingLineNumber = "277"
-                  offsetFromSymbolStart = "28">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "XunYing_Golf/viewController/LogInViewController.m"
             timestampString = "475989931.309863"
             startingColumnNumber = "9223372036854775807"
@@ -762,11 +714,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "XunYing_Golf/otherClass/HeartBeatAndDetectState.m"
-            timestampString = "476113322.091285"
+            timestampString = "477389638.543102"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "483"
-            endingLineNumber = "483"
+            startingLineNumber = "492"
+            endingLineNumber = "492"
             landmarkName = "-timelySend"
             landmarkType = "5">
          </BreakpointContent>
@@ -1192,11 +1144,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "XunYing_Golf/otherClass/HeartBeatAndDetectState.m"
-            timestampString = "475827522.332453"
+            timestampString = "477389638.543102"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "282"
-            endingLineNumber = "282"
+            startingLineNumber = "291"
+            endingLineNumber = "291"
             landmarkName = "-timelySend"
             landmarkType = "5">
          </BreakpointContent>
@@ -1336,11 +1288,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "XunYing_Golf/otherClass/HeartBeatAndDetectState.m"
-            timestampString = "476113322.091285"
+            timestampString = "477389638.543102"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "557"
-            endingLineNumber = "557"
+            startingLineNumber = "566"
+            endingLineNumber = "566"
             landmarkName = "-timelySend"
             landmarkType = "5">
          </BreakpointContent>
@@ -1352,11 +1304,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "XunYing_Golf/otherClass/HeartBeatAndDetectState.m"
-            timestampString = "476113322.091285"
+            timestampString = "477389638.543102"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "522"
-            endingLineNumber = "522"
+            startingLineNumber = "531"
+            endingLineNumber = "531"
             landmarkName = "-timelySend"
             landmarkType = "5">
          </BreakpointContent>
@@ -1912,11 +1864,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "XunYing_Golf/otherClass/HeartBeatAndDetectState.m"
-            timestampString = "476105013.185545"
+            timestampString = "477389638.543102"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "337"
-            endingLineNumber = "337"
+            startingLineNumber = "346"
+            endingLineNumber = "346"
             landmarkName = "-timelySend"
             landmarkType = "5">
          </BreakpointContent>
@@ -1928,11 +1880,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "XunYing_Golf/otherClass/HeartBeatAndDetectState.m"
-            timestampString = "476113322.091285"
+            timestampString = "477389638.543102"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "361"
-            endingLineNumber = "361"
+            startingLineNumber = "370"
+            endingLineNumber = "370"
             landmarkName = "-timelySend"
             landmarkType = "5">
          </BreakpointContent>
@@ -1992,11 +1944,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "XunYing_Golf/otherClass/HeartBeatAndDetectState.m"
-            timestampString = "476119727.567512"
+            timestampString = "477389638.543102"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "461"
-            endingLineNumber = "461"
+            startingLineNumber = "470"
+            endingLineNumber = "470"
             landmarkName = "-timelySend"
             landmarkType = "5">
          </BreakpointContent>
@@ -2020,7 +1972,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DB/DBCon.m"
@@ -2031,38 +1983,6 @@
             endingLineNumber = "80"
             landmarkName = "-ExecNonQuery:"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[DBCon ExecNonQuery:]"
-                  moduleName = "XunYing_Golf"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/liuc/Desktop/lcWorkSpace/SVN%20project/XyGolf/XunYing_Poly/DB/DBCon.m"
-                  timestampString = "477310047.087754"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "80"
-                  endingLineNumber = "80"
-                  offsetFromSymbolStart = "284">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[DBCon ExecNonQuery:]"
-                  moduleName = "XunYing_Golf"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/liuc/Desktop/lcWorkSpace/SVN%20project/XyGolf/XunYing_Poly/DB/DBCon.m"
-                  timestampString = "477310047.087892"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "80"
-                  endingLineNumber = "80"
-                  offsetFromSymbolStart = "312">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2100,7 +2020,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DB/DBCon.m"
@@ -2111,38 +2031,6 @@
             endingLineNumber = "147"
             landmarkName = "-ExecDataTable:"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[DBCon ExecDataTable:]"
-                  moduleName = "XunYing_Golf"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/liuc/Desktop/lcWorkSpace/SVN%20project/XyGolf/XunYing_Poly/DB/DBCon.m"
-                  timestampString = "477310047.08853"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "147"
-                  endingLineNumber = "147"
-                  offsetFromSymbolStart = "1268">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[DBCon ExecDataTable:]"
-                  moduleName = "XunYing_Golf"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/liuc/Desktop/lcWorkSpace/SVN%20project/XyGolf/XunYing_Poly/DB/DBCon.m"
-                  timestampString = "477310047.088649"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "147"
-                  endingLineNumber = "147"
-                  offsetFromSymbolStart = "1296">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2350,6 +2238,134 @@
             startingLineNumber = "550"
             endingLineNumber = "550"
             landmarkName = "-viewWillAppear:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "XunYing_Golf/viewController/CreateGroupViewController.m"
+            timestampString = "477364444.381614"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "776"
+            endingLineNumber = "776"
+            landmarkName = "-changeSelectedHoleColor:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "XunYing_Golf/otherClass/HeartBeatAndDetectState.m"
+            timestampString = "477389638.543102"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "275"
+            endingLineNumber = "275"
+            landmarkName = "-timelySend"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "XunYing_Golf/otherClass/HeartBeatAndDetectState.m"
+            timestampString = "477389638.543102"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "278"
+            endingLineNumber = "278"
+            landmarkName = "-timelySend"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "XunYing_Golf/GetRequestIPAddress.m"
+            timestampString = "477386064.07189"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
+            landmarkName = "+getUniqueID"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "XunYing_Golf/GetRequestIPAddress.m"
+            timestampString = "477386082.191594"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
+            landmarkName = "+getStoredUniqueID"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "XunYing_Golf/viewController/GetGPSLocationData.m"
+            timestampString = "477388305.796234"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "87"
+            endingLineNumber = "87"
+            landmarkName = "-locationManager:didFinishDeferredUpdatesWithError:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "XunYing_Golf/viewController/GetGPSLocationData.m"
+            timestampString = "477388362.571455"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
+            landmarkName = "-getCurLocation"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "XunYing_Golf/viewController/GetGPSLocationData.m"
+            timestampString = "477388383.38819"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "76"
+            endingLineNumber = "76"
+            landmarkName = "-locationManager:didUpdateLocations:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

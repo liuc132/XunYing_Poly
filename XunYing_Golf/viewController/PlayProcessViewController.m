@@ -156,7 +156,7 @@ typedef enum holeState{
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ForceBackField:) name:@"forceBackField" object:nil];
     //添加通知，接受心跳里边的相应的参数，进而来确定是否切换球场whetherCanSwitchCourse
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getWhetherSwitchCourse:) name:@"whetherCanSwitchCourse" object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getWhetherSwitchCourse:) name:@"whetherCanSwitchCourse" object:nil];
     
 }
 

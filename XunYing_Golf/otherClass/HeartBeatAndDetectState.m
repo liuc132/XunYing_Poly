@@ -233,11 +233,20 @@ typedef enum eventOrder{
             //经度
             //
             //3、获取到GPS数据
-            weakSelf.getGPSLocation = [weakSelf.gpsData getCurLocation];
+            CLLocation *theGetLocation;
             
-            NSString *locx = [NSString stringWithFormat:@"%.10f",self.getGPSLocation.coordinate.longitude];//self.simulationGPSData[startCount][0];模拟数据调用之
+//            weakSelf.getGPSLocation = [weakSelf.gpsData getCurLocation];
+            theGetLocation = [weakSelf.gpsData getCurLocation];
+            
+            NSString *locx;
+            locx = nil;
+            locx = [NSString stringWithFormat:@"%.10f",theGetLocation.coordinate.longitude];
+            //= [NSString stringWithFormat:@"%.10f",self.getGPSLocation.coordinate.longitude];//self.simulationGPSData[startCount][0];模拟数据调用之
             //纬度
-            NSString *locy = [NSString stringWithFormat:@"%.10f",weakSelf.getGPSLocation.coordinate.latitude];//self.simulationGPSData[startCount][1];模拟数据调用之
+            NSString *locy;
+            locy = nil;
+            locy = [NSString stringWithFormat:@"%.10f",theGetLocation.coordinate.latitude];
+            //= [NSString stringWithFormat:@"%.10f",weakSelf.getGPSLocation.coordinate.latitude];//self.simulationGPSData[startCount][1];模拟数据调用之
 #ifdef DEBUG_MODE
             NSLog(@"current locx:%@; locy:%@",locx,locy);
 #endif
@@ -263,7 +272,7 @@ typedef enum eventOrder{
             //start send and handle all what the server sends back
             //巡场和球童这两个角色所传的参数不一样：主要是 组“grocod”不一致，球童需要传该参数，而巡场则不传该参数或者传空
             //construct the parameters for the heartBeat
-            NSMutableDictionary *heartBeatParam = [[NSMutableDictionary alloc] initWithObjectsAndKeys:theMid,@"mid",self.userData.Rows[0][@"job"],@"job",[NSDate date],@"loct",locx,@"locx",locy,@"locy",weakSelf.groupInformation.Rows[0][@"grocod"],@"grocod",@"1",@"gpsType",weakSelf.userData.Rows[0][@"code"],@"bandcode",curDateTime,@"loct",timestampsStr,@"timestamps", nil];
+           __block NSMutableDictionary *heartBeatParam = [[NSMutableDictionary alloc] initWithObjectsAndKeys:theMid,@"mid",self.userData.Rows[0][@"job"],@"job",[NSDate date],@"loct",locx,@"locx",locy,@"locy",weakSelf.groupInformation.Rows[0][@"grocod"],@"grocod",@"1",@"gpsType",weakSelf.userData.Rows[0][@"code"],@"bandcode",curDateTime,@"loct",timestampsStr,@"timestamps", nil];
             //获取到IP地址
             NSString *heartUrl;
             heartUrl = [GetRequestIPAddress getHeartBeatURL];
@@ -482,11 +491,11 @@ typedef enum eventOrder{
                         
                         //通过获取到的coursegrouptag的信息，通知球场及相应的需要刷新的界面选择是否要切换球场
                         NSDictionary *switchCourseWord = [[NSDictionary alloc] initWithObjectsAndKeys:messegaDic[@"groinfo"][@"coursegrouptag"],@"curCourseTag",messegaDic[@"groinfo"][@"statim"],@"startTime", nil];
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"whetherCanSwitchCourse" object:nil userInfo:switchCourseWord];
+//                        [[NSNotificationCenter defaultCenter] postNotificationName:@"whetherCanSwitchCourse" object:nil userInfo:switchCourseWord];
                         switchCourseWord = nil;
                         //
                         NSDictionary *switchCourseWord1 = [[NSDictionary alloc] initWithObjectsAndKeys:messegaDic[@"groinfo"][@"coursegrouptag"],@"curCourseTag1",messegaDic[@"groinfo"][@"statim"],@"startTime1", nil];
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"whetherCanSwitchCourse1" object:nil userInfo:switchCourseWord1];
+//                        [[NSNotificationCenter defaultCenter] postNotificationName:@"whetherCanSwitchCourse1" object:nil userInfo:switchCourseWord1];
                         switchCourseWord1 = nil;
                         //
                         

@@ -150,10 +150,10 @@ typedef NS_ENUM(NSInteger,holePosition) {
     
     //组建客户组，默认的客户人数(1人)以及球洞位置（十八洞）
     self.theSelectedCusCounts = OneCustomer;
-    self.theSelectedHolePosition = north;
+    self.theSelectedHolePosition = none;
     //
     self.oneCustomer.backgroundColor = [UIColor HexString:selectedColor];
-    self.theTop9.backgroundColor   = [UIColor HexString:selectedColor];
+    self.eighteen.backgroundColor   = [UIColor HexString:selectedColor];
     //登录人信息
     self.userData = [self.dbCon ExecDataTable:@"select *from tbl_logPerson"];
     self.allCartsData = [self.dbCon ExecDataTable:@"select *from tbl_cartInf"];
@@ -594,7 +594,7 @@ typedef NS_ENUM(NSInteger,holePosition) {
             break;
     }
     //
-    NSMutableDictionary *createGroupParameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:theMid,@"mid",@"",@"gronum",selectedCus,@"cus",allAddCarts,@"car",@"all",@"hole",allAddCaddies,@"cad",self.userData.Rows[0][@"caddyLogIn"],@"cadShow",self.userData.Rows[0][@"empCode"],@"user",courseTag,@"coursetag", nil];
+    NSMutableDictionary *createGroupParameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:theMid,@"mid",@"",@"gronum",selectedCus,@"cus",allAddCarts,@"car",@"all",@"hole",allAddCaddies,@"cad",self.userData.Rows[0][@"caddyLogIn"],@"cadShow",self.userData.Rows[0][@"empCode"],@"user", nil];
     //
     __weak typeof(self) weakSelf = self;
     //
