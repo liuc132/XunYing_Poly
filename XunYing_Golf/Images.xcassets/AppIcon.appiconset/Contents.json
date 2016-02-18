@@ -9,25 +9,25 @@
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "launcher29-1.png",
+      "filename" : "ic_launcher58.png",
       "scale" : "2x"
     },
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "launcher29-2.png",
+      "filename" : "ic_launcher87.png",
       "scale" : "3x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "launcher40.png",
+      "filename" : "ic_launcher80.png",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "launcher40-1.png",
+      "filename" : "ic_launcher120.png",
       "scale" : "3x"
     },
     {
@@ -39,19 +39,19 @@
     {
       "size" : "57x57",
       "idiom" : "iphone",
-      "filename" : "launcher57-1.png",
+      "filename" : "ic_launcher114.png",
       "scale" : "2x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "launcher60.png",
+      "filename" : "ic_launcher120-1.png",
       "scale" : "2x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "launcher60-1.png",
+      "filename" : "ic_launcher180.png",
       "scale" : "3x"
     }
   ],
