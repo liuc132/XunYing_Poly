@@ -674,6 +674,8 @@ wasOrderedState
         [errAlert show];
         return;
     }
+    //在此处判断当前球洞的状态，判断当前的球洞状态下是否允许操作
+    
     
     //
     NSString *curSelectHoleName = [NSString stringWithFormat:@"%ld号球洞",sender.tag + 1];//当前所在球洞提示
@@ -702,9 +704,17 @@ wasOrderedState
     
     NSString *subMsg = [NSString stringWithFormat:@" 打球状态   %@ \n计划进入时间   %@\n   标准耗时   %@\n计划离开时间   %@",self.holeStateArray[holeNum],planInTime,standardTime,planOutTime];
     //
-    UIAlertView *changeHoleStateAlert = [[UIAlertView alloc] initWithTitle:curSelectHoleName message:subMsg delegate:self cancelButtonTitle:@" 取 消 " otherButtonTitles:@"改为被完成", nil];
-    changeHoleStateAlert.tag = 1;//到时候改成1
-    [changeHoleStateAlert show];
+    if (!holeNum) {
+        UIAlertView *changeHoleStateAlert = [[UIAlertView alloc] initWithTitle:curSelectHoleName message:subMsg delegate:self cancelButtonTitle:@" 取 消 " otherButtonTitles:@"改为被完成", nil];
+        changeHoleStateAlert.tag = 1;//到时候改成1
+        [changeHoleStateAlert show];
+    }
+    else
+    {
+        UIAlertView *otherState = [[UIAlertView alloc] initWithTitle:curSelectHoleName message:subMsg delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
+        [otherState show];
+    }
+    
 }
 
 - (IBAction)refreshCurrentState:(UIBarButtonItem *)sender {

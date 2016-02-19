@@ -186,6 +186,9 @@ typedef enum eventOrder{
 -(void)timelySend
 {
     __weak typeof(self) weakSelf = self;
+    //
+    [_gpsData initGPSLocation];
+    
     dispatch_time_t time = dispatch_time ( DISPATCH_TIME_NOW , 1ull * NSEC_PER_SEC ) ;
     dispatch_after(time,dispatch_get_main_queue(), ^{
         
@@ -231,7 +234,7 @@ typedef enum eventOrder{
             }
             //NSLog(@"longitude:%.8f; latitude:%.8f",self.getGPSLocation.coordinate.longitude,self.getGPSLocation.coordinate.latitude);
             //经度
-            //
+            
             //3、获取到GPS数据
             CLLocation *theGetLocation;
             
@@ -241,11 +244,19 @@ typedef enum eventOrder{
             NSString *locx;
             locx = nil;
             locx = [NSString stringWithFormat:@"%.10f",theGetLocation.coordinate.longitude];
+            
+            if (locx == nil) {
+                locx = [NSString stringWithFormat:@"-1.0"];
+            }
             //= [NSString stringWithFormat:@"%.10f",self.getGPSLocation.coordinate.longitude];//self.simulationGPSData[startCount][0];模拟数据调用之
             //纬度
             NSString *locy;
             locy = nil;
             locy = [NSString stringWithFormat:@"%.10f",theGetLocation.coordinate.latitude];
+            
+            if (locy == nil) {
+                locy = [NSString stringWithFormat:@"-1.0"];
+            }
             //= [NSString stringWithFormat:@"%.10f",weakSelf.getGPSLocation.coordinate.latitude];//self.simulationGPSData[startCount][1];模拟数据调用之
 #ifdef DEBUG_MODE
             NSLog(@"current locx:%@; locy:%@",locx,locy);
@@ -272,7 +283,7 @@ typedef enum eventOrder{
             //start send and handle all what the server sends back
             //巡场和球童这两个角色所传的参数不一样：主要是 组“grocod”不一致，球童需要传该参数，而巡场则不传该参数或者传空
             //construct the parameters for the heartBeat
-           __block NSMutableDictionary *heartBeatParam = [[NSMutableDictionary alloc] initWithObjectsAndKeys:theMid,@"mid",self.userData.Rows[0][@"job"],@"job",[NSDate date],@"loct",locx,@"locx",locy,@"locy",weakSelf.groupInformation.Rows[0][@"grocod"],@"grocod",@"1",@"gpsType",weakSelf.userData.Rows[0][@"code"],@"bandcode",curDateTime,@"loct",timestampsStr,@"timestamps", nil];
+           __block NSMutableDictionary *heartBeatParam = [[NSMutableDictionary alloc] initWithObjectsAndKeys:theMid,@"mid",self.userData.Rows[0][@"job"],@"job",locx,@"locx",locy,@"locy",weakSelf.groupInformation.Rows[0][@"grocod"],@"grocod",@"1",@"gpsType",weakSelf.userData.Rows[0][@"empCode"],@"bandcode",weakSelf.userData.Rows[0][@"cadCode"],@"cadcode",curDateTime,@"loct",timestampsStr,@"timestamps", nil];
             //获取到IP地址
             NSString *heartUrl;
             heartUrl = [GetRequestIPAddress getHeartBeatURL];

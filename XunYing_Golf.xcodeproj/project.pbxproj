@@ -54,6 +54,11 @@
 		5B52F4491B9D7C08004BA338 /* UIView+FramePostion.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B52F43F1B9D7C08004BA338 /* UIView+FramePostion.m */; };
 		5B52F44A1B9D7C08004BA338 /* UIViewController+UICon.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B52F4411B9D7C08004BA338 /* UIViewController+UICon.m */; };
 		5B588E171BE891D900D2B327 /* GetGPSLocationData.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B588E161BE891D900D2B327 /* GetGPSLocationData.m */; };
+		5B5A26FF1C76AD99002A00C6 /* KSCrash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B5A26FE1C76AD99002A00C6 /* KSCrash.framework */; };
+		5B5A27011C76AE06002A00C6 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B5A27001C76AE06002A00C6 /* libc++.tbd */; };
+		5B5A27031C76AE14002A00C6 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B5A27021C76AE14002A00C6 /* libz.tbd */; };
+		5B5A27051C76AE23002A00C6 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B5A27041C76AE23002A00C6 /* SystemConfiguration.framework */; };
+		5B5A27081C76B4C4002A00C6 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B5A27061C76B4C4002A00C6 /* libMobClickLibrary.a */; };
 		5B7AC44B1C0DC38E0027BAD1 /* CaddyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7AC44A1C0DC38E0027BAD1 /* CaddyView.m */; };
 		5B8A04261C7328340000B940 /* launcher120.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B8A04241C7328340000B940 /* launcher120.png */; };
 		5B8A04271C7328340000B940 /* launcher180.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B8A04251C7328340000B940 /* launcher180.png */; };
@@ -224,6 +229,12 @@
 		5B52F7291B9D88A2004BA338 /* XunYingPre.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XunYingPre.h; sourceTree = "<group>"; };
 		5B588E151BE891D900D2B327 /* GetGPSLocationData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GetGPSLocationData.h; path = viewController/GetGPSLocationData.h; sourceTree = "<group>"; };
 		5B588E161BE891D900D2B327 /* GetGPSLocationData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GetGPSLocationData.m; path = viewController/GetGPSLocationData.m; sourceTree = "<group>"; };
+		5B5A26FE1C76AD99002A00C6 /* KSCrash.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = KSCrash.framework; sourceTree = "<group>"; };
+		5B5A27001C76AE06002A00C6 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		5B5A27021C76AE14002A00C6 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		5B5A27041C76AE23002A00C6 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		5B5A27061C76B4C4002A00C6 /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
+		5B5A27071C76B4C4002A00C6 /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
 		5B60FDD51C03212B00D77A44 /* passValueLogInDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = passValueLogInDelegate.h; path = viewController/protocol/passValueLogInDelegate.h; sourceTree = "<group>"; };
 		5B7AC4491C0DC38E0027BAD1 /* CaddyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CaddyView.h; path = viewController/CaddyView.h; sourceTree = "<group>"; };
 		5B7AC44A1C0DC38E0027BAD1 /* CaddyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CaddyView.m; path = viewController/CaddyView.m; sourceTree = "<group>"; };
@@ -351,6 +362,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B5A27051C76AE23002A00C6 /* SystemConfiguration.framework in Frameworks */,
+				5B5A27031C76AE14002A00C6 /* libz.tbd in Frameworks */,
+				5B5A27011C76AE06002A00C6 /* libc++.tbd in Frameworks */,
+				5B5A27081C76B4C4002A00C6 /* libMobClickLibrary.a in Frameworks */,
+				5B5A26FF1C76AD99002A00C6 /* KSCrash.framework in Frameworks */,
 				5BE341E81C3B886B007A3A9C /* libsqlite3.0.tbd in Frameworks */,
 				5BE341E91C3B886B007A3A9C /* libsqlite3.tbd in Frameworks */,
 				5BC7C5221BA1587A00D9072D /* CoreTelephony.framework in Frameworks */,
@@ -682,6 +698,12 @@
 		5B52F72A1B9D8A83004BA338 /* framework */ = {
 			isa = PBXGroup;
 			children = (
+				5B5A27061C76B4C4002A00C6 /* libMobClickLibrary.a */,
+				5B5A27071C76B4C4002A00C6 /* MobClick.h */,
+				5B5A27041C76AE23002A00C6 /* SystemConfiguration.framework */,
+				5B5A27021C76AE14002A00C6 /* libz.tbd */,
+				5B5A27001C76AE06002A00C6 /* libc++.tbd */,
+				5B5A26FE1C76AD99002A00C6 /* KSCrash.framework */,
 				5BE341E61C3B886B007A3A9C /* libsqlite3.0.tbd */,
 				5BE341E71C3B886B007A3A9C /* libsqlite3.tbd */,
 				5BC7C5211BA1587A00D9072D /* CoreTelephony.framework */,
@@ -1457,6 +1479,10 @@
 				);
 				INFOPLIST_FILE = XunYing_Golf/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				OTHER_LDFLAGS = (
 					"-objc",
 					"-framework",
@@ -1487,6 +1513,10 @@
 				);
 				INFOPLIST_FILE = XunYing_Golf/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				OTHER_LDFLAGS = (
 					"-objc",
 					"-framework",

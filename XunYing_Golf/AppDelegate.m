@@ -21,6 +21,8 @@
 #import "GetRequestIPAddress.h"
 #import "GetParagram.h"
 #import "LogInViewController.h"
+//#import <KSCrash/KSCrashInstallationStandard.h>
+#import "MobClick.h"
 
 
 @interface AppDelegate ()<CLLocationManagerDelegate>
@@ -49,8 +51,16 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    //
+//    KSCrashInstallationStandard* installation = [KSCrashInstallationStandard sharedInstance];
+//    installation.url = [NSURL URLWithString:@"https://collector.bughd.com/kscrash?key=c223583ac200d9e06cb44050312b4771"];
+//    [installation install];
+//    [installation sendAllReportsWithCompletion:nil];
     
+    //
+    [MobClick setLogEnabled:YES];  // 打开友盟sdk调试，注意Release发布时需要注释掉此行,减少io消耗
     
+    [MobClick startWithAppkey:UMENG_APPKEY reportPolicy:(ReportPolicy)REALTIME channelId:nil];
     //
     [self initLocalDB];
     // Override point for customization after application launch.
@@ -122,6 +132,9 @@
         });
         
     }
+    
+    
+    
     return YES;
 }
 

@@ -171,7 +171,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 //#warning Incomplete implementation, return the number of sections
-    return 7;
+    return 6;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -189,7 +189,7 @@
         case 3:
         case 4:
         case 5:
-        case 6:
+//        case 6:
             eachSectionRow = 1;
             break;
         default:
@@ -326,21 +326,21 @@
         }
     }
     //球场信息
-    else if (indexPath.section == 3)
-    {
-        //if (cell == nil) {
-            [cell addSubview:courseNameLabel];
-        //}
-    }
+//    else if (indexPath.section == 3)
+//    {
+//        //if (cell == nil) {
+//            [cell addSubview:courseNameLabel];
+//        //}
+//    }
     //球洞信息
-    else if (indexPath.section == 4)
+    else if (indexPath.section == 3)
     {
         //if (cell == nil) {
             [cell addSubview:holeName];
         //}
     }
     //球童信息
-    else if (indexPath.section == 5) {
+    else if (indexPath.section == 4) {
         //将所有的球车视图隐藏，并在下边相应开启
         self.firstCaddyLabel.hidden = YES;
         self.secondCaddyLabel.hidden = YES;
@@ -399,7 +399,7 @@
         
     }
     //球车
-    else if (indexPath.section == 6)
+    else if (indexPath.section == 5)
     {
         //将所有的球车视图隐藏，并在下边相应开启
         self.firstCartLabel.hidden = YES;
@@ -487,19 +487,19 @@
             headerTitle = @"  客户";
             break;
             
-        case 3:
-            headerTitle = @"  球场";
-            break;
+//        case 3:
+//            headerTitle = @"  球场";
+//            break;
             
-        case 4:
+        case 3:
             headerTitle = @"  球洞";
             break;
             
-        case 5:
+        case 4:
             headerTitle = @"  球童";
             break;
             
-        case 6:
+        case 5:
             headerTitle = @"  球车";
             break;
         default:

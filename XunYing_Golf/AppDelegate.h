@@ -20,6 +20,7 @@
 #endif
 
 
+#define UMENG_APPKEY  @"56c67c7ce0f55aef1c0034d2"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
