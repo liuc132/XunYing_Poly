@@ -73,7 +73,16 @@
 #pragma -mark  didUpdateLocations
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations
 {
-    _getGPSLocation = [locations lastObject];
+    //    _getGPSLocation = [locations lastObject];
+    
+    CLLocation *cacheLocation = [locations lastObject];
+    NSDate *eventDate = cacheLocation.timestamp;
+    NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
+    if (fabs(howRecent) < 15.0) {
+        //if the event is recent,do something with it.
+        _getGPSLocation = cacheLocation;
+    }
+    
 }
 
 - (void)stopUpdateLocation

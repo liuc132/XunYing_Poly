@@ -2312,11 +2312,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "XunYing_Golf/viewController/GetGPSLocationData.m"
-            timestampString = "477388305.796234"
+            timestampString = "477759038.802522"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "87"
-            endingLineNumber = "87"
+            startingLineNumber = "96"
+            endingLineNumber = "96"
             landmarkName = "-locationManager:didFinishDeferredUpdatesWithError:"
             landmarkType = "5">
          </BreakpointContent>
