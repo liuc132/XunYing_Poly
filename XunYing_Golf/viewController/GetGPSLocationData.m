@@ -28,6 +28,7 @@
     self.locationManager.delegate = self;
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
 //        self.locationManager.allowsBackgroundLocationUpdates = YES;
+    
     if([[[UIDevice currentDevice] systemVersion] floatValue] >= 8)
     {
         if ([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
@@ -60,6 +61,12 @@
 {
     CLLocation *curLocation;
     
+    if (![CLLocationManager locationServicesEnabled]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"请开启定位允许" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        [alert show];
+    }
+    
+    [_locationManager startUpdatingLocation];
     //在此选择是传输实际的GPS数据还是模拟的数据
     if (_storedGPSLocation != _getGPSLocation) {
         _storedGPSLocation = _getGPSLocation;
@@ -78,9 +85,11 @@
     CLLocation *cacheLocation = [locations lastObject];
     NSDate *eventDate = cacheLocation.timestamp;
     NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
-    if (fabs(howRecent) < 15.0) {
+    if (fabs(howRecent) < 1.0) {
         //if the event is recent,do something with it.
         _getGPSLocation = cacheLocation;
+        
+        [_locationManager stopUpdatingLocation];
     }
     
 }

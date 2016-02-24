@@ -59,6 +59,7 @@
 		5B5A27031C76AE14002A00C6 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B5A27021C76AE14002A00C6 /* libz.tbd */; };
 		5B5A27051C76AE23002A00C6 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B5A27041C76AE23002A00C6 /* SystemConfiguration.framework */; };
 		5B5A27081C76B4C4002A00C6 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B5A27061C76B4C4002A00C6 /* libMobClickLibrary.a */; };
+		5B727B3E1C7A993700028EE5 /* offlineMapDataHHY.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5B727B3D1C7A993700028EE5 /* offlineMapDataHHY.bundle */; };
 		5B7AC44B1C0DC38E0027BAD1 /* CaddyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7AC44A1C0DC38E0027BAD1 /* CaddyView.m */; };
 		5B8A04261C7328340000B940 /* launcher120.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B8A04241C7328340000B940 /* launcher120.png */; };
 		5B8A04271C7328340000B940 /* launcher180.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B8A04251C7328340000B940 /* launcher180.png */; };
@@ -236,6 +237,7 @@
 		5B5A27061C76B4C4002A00C6 /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
 		5B5A27071C76B4C4002A00C6 /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
 		5B60FDD51C03212B00D77A44 /* passValueLogInDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = passValueLogInDelegate.h; path = viewController/protocol/passValueLogInDelegate.h; sourceTree = "<group>"; };
+		5B727B3D1C7A993700028EE5 /* offlineMapDataHHY.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = offlineMapDataHHY.bundle; sourceTree = "<group>"; };
 		5B7AC4491C0DC38E0027BAD1 /* CaddyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CaddyView.h; path = viewController/CaddyView.h; sourceTree = "<group>"; };
 		5B7AC44A1C0DC38E0027BAD1 /* CaddyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CaddyView.m; path = viewController/CaddyView.m; sourceTree = "<group>"; };
 		5B8A04241C7328340000B940 /* launcher120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launcher120.png; sourceTree = "<group>"; };
@@ -495,6 +497,7 @@
 		5B11C54A1B8EDEF700382C9B /* offlineMapData */ = {
 			isa = PBXGroup;
 			children = (
+				5B727B3D1C7A993700028EE5 /* offlineMapDataHHY.bundle */,
 				5BBD53FD1C72F4F800439910 /* offlineMapDataSK.bundle */,
 			);
 			name = offlineMapData;
@@ -1199,6 +1202,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B727B3E1C7A993700028EE5 /* offlineMapDataHHY.bundle in Resources */,
 				5B15560A1C401E4600E059B0 /* XunYing_Golf.entitlements in Resources */,
 				5B11C52D1B8EDD4700382C9B /* Main.storyboard in Resources */,
 				5B11C5321B8EDD4700382C9B /* LaunchScreen.xib in Resources */,

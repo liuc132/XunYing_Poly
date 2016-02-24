@@ -226,13 +226,13 @@ FixedPoint gpsScreenPoint;
 - (void)loadingNorthCourse
 {
     //add tiled layer  step1
-    NSString *path = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapDataSK.bundle/xunying.tpk"];
-    NSLog(@"backgroundlayer:%@",self.backGroundLayer);
+    NSString *path = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapDataSK.bundle/xunying.tpk"];//[[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapDataSK.bundle/xunying.tpk"];
+//    NSLog(@"backgroundlayer:%@",self.backGroundLayer);
     self.backGroundLayer = [AGSLocalTiledLayer localTiledLayerWithPath:path];
     //如果层被合适的初始化了之后，添加到地图
     if(self.backGroundLayer != nil && !self.backGroundLayer.error)
     {
-        NSLog(@"path:%@",[self.backGroundLayer cachePath]);
+//        NSLog(@"path:%@",[self.backGroundLayer cachePath]);
 //        [self.mapView removeMapLayerWithName:@"Local Tiled Layer"];
         [_mapView addMapLayer:self.backGroundLayer withName:@"Local Tiled Layer"];
         
@@ -255,7 +255,7 @@ FixedPoint gpsScreenPoint;
     [_mapView zoomToEnvelope:env animated:YES];
     //
     NSError *hole_error;
-    NSString *holePath = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapDataSK.bundle/xunying_hole.geodatabase"];
+    NSString *holePath = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapDataSK.bundle/xunying_hole.geodatabase"];//[[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapDataSK.bundle/xunying_hole.geodatabase"];
     AGSGDBGeodatabase *gdbXunyinHole = [AGSGDBGeodatabase geodatabaseWithPath:holePath error:&hole_error];
     if(hole_error){
         NSLog(@"fail to open hole.geodatabase");
@@ -268,7 +268,7 @@ FixedPoint gpsScreenPoint;
     }
     //xunying.geodatabase
     NSError *xunyingError;
-    NSString *xunyingPath = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapDataSK.bundle/xunying.geodatabase"];
+    NSString *xunyingPath = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapDataSK.bundle/xunying.geodatabase"];//[[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapDataSK.bundle/xunying.geodatabase"];
     AGSGDBGeodatabase *gdb_xunying = [[AGSGDBGeodatabase alloc]initWithPath:xunyingPath error:&xunyingError];
     //
     if(xunyingError)
@@ -299,7 +299,7 @@ FixedPoint gpsScreenPoint;
 - (void)loadingSouthCourse
 {
     //add tiled layer  step1
-    NSString *path = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapDataSK.bundle/xunying.tpk"];
+    NSString *path = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapDataSK.bundle/xunying.tpk"];//[[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapDataSK.bundle/xunying.tpk"];
     self.backGroundLayer = [AGSLocalTiledLayer localTiledLayerWithPath:path];
     //如果层被合适的初始化了之后，添加到地图
     if(self.backGroundLayer != nil && !self.backGroundLayer.error)
@@ -323,7 +323,7 @@ FixedPoint gpsScreenPoint;
     [_mapView zoomToEnvelope:env animated:YES];
     //
     NSError *hole_error;
-    NSString *holePath = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapDataSK.bundle/xunying_hole.geodatabase"];
+    NSString *holePath = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapDataSK.bundle/xunying_hole.geodatabase"];//[[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapDataSK.bundle/xunying_hole.geodatabase"];
     AGSGDBGeodatabase *gdbXunyinHole = [AGSGDBGeodatabase geodatabaseWithPath:holePath error:&hole_error];
     if(hole_error){
         NSLog(@"fail to open hole.geodatabase");
@@ -336,7 +336,7 @@ FixedPoint gpsScreenPoint;
     }
     //xunying.geodatabase
     NSError *xunyingError;
-    NSString *xunyingPath = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapDataSK.bundle/xunying.geodatabase"];
+    NSString *xunyingPath = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapDataSK.bundle/xunying.geodatabase"];//[[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"offlineMapDataSK.bundle/xunying.geodatabase"];
     AGSGDBGeodatabase *gdb_xunying = [[AGSGDBGeodatabase alloc]initWithPath:xunyingPath error:&xunyingError];
     //
     if(xunyingError)
@@ -443,25 +443,25 @@ FixedPoint gpsScreenPoint;
         self.startPoint = mappoint;
         
     }
-    __weak ViewController *weakSelf = self;
+//    __weak ViewController *weakSelf = self;
     //test query function  从第376行到392行是查询相应的障碍物，并测试了相应的两个障碍物之间的距离，同时如果想要查询一个定位点则通过[self.mapView.locationDisplay mappoint]获取到，在通过组装成AGSGeometry类型，再通过测距（相应的方法是：- (double)distanceFromGeometry:(AGSGeometry *)geometry1 toGeometry:(AGSGeometry *)geometry2）来得到距离结果！
     self.query.whereClause = @"QCM = '7'";
     [self.localFeatureTable queryResultsWithParameters:self.query completion:^(NSArray *results, NSError *err){
 //        NSLog(@"results:%@ and count:%lu",results,(unsigned long)[results count]);
-        static unsigned char totalCount;
-        if(totalCount < [results count])
-            totalCount++;
-        else
-            totalCount = 0;
-        AGSGDBFeature *featureLoc = results[0];
-        AGSGDBFeature *featureLoc1  = results[totalCount];
-        NSLog(@"featureLoc:%@ and totalCount:%d",featureLoc1,totalCount);
-        AGSGeometry *geometry1 = [featureLoc geometry];
-        AGSGeometry *geometry2 = [featureLoc1 geometry];
+//        static unsigned char totalCount;
+//        if(totalCount < [results count])
+//            totalCount++;
+//        else
+//            totalCount = 0;
+//        AGSGDBFeature *featureLoc = results[0];
+//        AGSGDBFeature *featureLoc1  = results[totalCount];
+//        NSLog(@"featureLoc:%@ and totalCount:%d",featureLoc1,totalCount);
+//        AGSGeometry *geometry1 = [featureLoc geometry];
+//        AGSGeometry *geometry2 = [featureLoc1 geometry];
         
 //        [self.geometryEngineLocal distanceFromGeometry:geometry1 toGeometry:geometry2];
-        NSLog(@"the distance is :%f",[weakSelf.geometryEngineLocal distanceFromGeometry:geometry1 toGeometry:geometry2]);
-        NSLog(@"finish measuring the distance");
+//        NSLog(@"the distance is :%f",[weakSelf.geometryEngineLocal distanceFromGeometry:geometry1 toGeometry:geometry2]);
+//        NSLog(@"finish measuring the distance");
         
     }];
     
