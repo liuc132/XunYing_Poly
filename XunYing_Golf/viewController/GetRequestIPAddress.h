@@ -33,7 +33,7 @@
 + (NSString *)getRequestAddDeviceURL;
 + (NSString *)getMakeHoleCompleteStateURL;
 + (NSString *)getGetNeedMendHoleURL;
-
++ (NSString *)getLogUpdateURL;
 
 
 @end

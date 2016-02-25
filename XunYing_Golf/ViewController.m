@@ -245,10 +245,10 @@ FixedPoint gpsScreenPoint;
     }
     //南场地图范围
     AGSSpatialReference *sr = [AGSSpatialReference spatialReferenceWithWKID:3857];
-    AGSEnvelope *env = [AGSEnvelope envelopeWithXmin:11830220.9410906
-                                                ymin:3439691.60124628
-                                                xmax:11832488.6845279
-                                                ymax:3438114.33915628
+    AGSEnvelope *env = [AGSEnvelope envelopeWithXmin:11830339.77269565
+                                                ymin:3438241.601529867
+                                                xmax:11832598.78971369
+                                                ymax:3439664.004374673
                                     spatialReference:sr];
     
     
@@ -313,10 +313,10 @@ FixedPoint gpsScreenPoint;
     }
     //南场地图范围
     AGSSpatialReference *sr = [AGSSpatialReference spatialReferenceWithWKID:3857];
-    AGSEnvelope *env = [AGSEnvelope envelopeWithXmin:11830220.9410906
-                                                ymin:3439691.60124628
-                                                xmax:11832488.6845279
-                                                ymax:3438114.33915628
+    AGSEnvelope *env = [AGSEnvelope envelopeWithXmin:11830339.77269565
+                                                ymin:3438241.601529867
+                                                xmax:11832598.78971369
+                                                ymax:3439664.004374673
                                     spatialReference:sr];
     
     

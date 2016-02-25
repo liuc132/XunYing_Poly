@@ -53,6 +53,7 @@
 		5B52F4481B9D7C08004BA338 /* UITableViewController+UICon.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B52F43D1B9D7C08004BA338 /* UITableViewController+UICon.m */; };
 		5B52F4491B9D7C08004BA338 /* UIView+FramePostion.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B52F43F1B9D7C08004BA338 /* UIView+FramePostion.m */; };
 		5B52F44A1B9D7C08004BA338 /* UIViewController+UICon.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B52F4411B9D7C08004BA338 /* UIViewController+UICon.m */; };
+		5B5709A81C7D9F4400CBB684 /* offlineMapDataSC.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5B5709A71C7D9F4400CBB684 /* offlineMapDataSC.bundle */; };
 		5B588E171BE891D900D2B327 /* GetGPSLocationData.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B588E161BE891D900D2B327 /* GetGPSLocationData.m */; };
 		5B5A26FF1C76AD99002A00C6 /* KSCrash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B5A26FE1C76AD99002A00C6 /* KSCrash.framework */; };
 		5B5A27011C76AE06002A00C6 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B5A27001C76AE06002A00C6 /* libc++.tbd */; };
@@ -61,6 +62,22 @@
 		5B5A27081C76B4C4002A00C6 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B5A27061C76B4C4002A00C6 /* libMobClickLibrary.a */; };
 		5B727B3E1C7A993700028EE5 /* offlineMapDataHHY.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5B727B3D1C7A993700028EE5 /* offlineMapDataHHY.bundle */; };
 		5B7AC44B1C0DC38E0027BAD1 /* CaddyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7AC44A1C0DC38E0027BAD1 /* CaddyView.m */; };
+		5B83CF901C7EDB4F00E1287B /* LogFilesProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B83CF8F1C7EDB4F00E1287B /* LogFilesProcess.m */; };
+		5B83CFB71C7EDF8A00E1287B /* aescrypt.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B83CF951C7EDF8A00E1287B /* aescrypt.c */; };
+		5B83CFB81C7EDF8A00E1287B /* aeskey.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B83CF961C7EDF8A00E1287B /* aeskey.c */; };
+		5B83CFB91C7EDF8A00E1287B /* aestab.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B83CF981C7EDF8A00E1287B /* aestab.c */; };
+		5B83CFBA1C7EDF8A00E1287B /* entropy.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B83CF9C1C7EDF8A00E1287B /* entropy.c */; };
+		5B83CFBB1C7EDF8A00E1287B /* fileenc.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B83CF9E1C7EDF8A00E1287B /* fileenc.c */; };
+		5B83CFBC1C7EDF8A00E1287B /* hmac.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B83CFA01C7EDF8A00E1287B /* hmac.c */; };
+		5B83CFBD1C7EDF8A00E1287B /* prng.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B83CFA21C7EDF8A00E1287B /* prng.c */; };
+		5B83CFBE1C7EDF8A00E1287B /* pwd2key.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B83CFA41C7EDF8A00E1287B /* pwd2key.c */; };
+		5B83CFBF1C7EDF8A00E1287B /* sha1.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B83CFA61C7EDF8A00E1287B /* sha1.c */; };
+		5B83CFC01C7EDF8A00E1287B /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B83CFA91C7EDF8A00E1287B /* Info.plist */; };
+		5B83CFC11C7EDF8A00E1287B /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B83CFAC1C7EDF8A00E1287B /* ioapi.c */; };
+		5B83CFC21C7EDF8A00E1287B /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B83CFAE1C7EDF8A00E1287B /* mztools.c */; };
+		5B83CFC31C7EDF8A00E1287B /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B83CFB01C7EDF8A00E1287B /* unzip.c */; };
+		5B83CFC41C7EDF8A00E1287B /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B83CFB21C7EDF8A00E1287B /* zip.c */; };
+		5B83CFC51C7EDF8A00E1287B /* SSZipArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B83CFB51C7EDF8A00E1287B /* SSZipArchive.m */; };
 		5B8A04261C7328340000B940 /* launcher120.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B8A04241C7328340000B940 /* launcher120.png */; };
 		5B8A04271C7328340000B940 /* launcher180.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B8A04251C7328340000B940 /* launcher180.png */; };
 		5B93C8091BBB938A0081FBAF /* MoreInterfaceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B93C8081BBB938A0081FBAF /* MoreInterfaceViewController.m */; };
@@ -228,6 +245,7 @@
 		5B52F4401B9D7C08004BA338 /* UIViewController+UICon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+UICon.h"; path = "UICategory/UIViewController+UICon.h"; sourceTree = "<group>"; };
 		5B52F4411B9D7C08004BA338 /* UIViewController+UICon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+UICon.m"; path = "UICategory/UIViewController+UICon.m"; sourceTree = "<group>"; };
 		5B52F7291B9D88A2004BA338 /* XunYingPre.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XunYingPre.h; sourceTree = "<group>"; };
+		5B5709A71C7D9F4400CBB684 /* offlineMapDataSC.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = offlineMapDataSC.bundle; sourceTree = "<group>"; };
 		5B588E151BE891D900D2B327 /* GetGPSLocationData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GetGPSLocationData.h; path = viewController/GetGPSLocationData.h; sourceTree = "<group>"; };
 		5B588E161BE891D900D2B327 /* GetGPSLocationData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GetGPSLocationData.m; path = viewController/GetGPSLocationData.m; sourceTree = "<group>"; };
 		5B5A26FE1C76AD99002A00C6 /* KSCrash.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = KSCrash.framework; sourceTree = "<group>"; };
@@ -240,6 +258,43 @@
 		5B727B3D1C7A993700028EE5 /* offlineMapDataHHY.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = offlineMapDataHHY.bundle; sourceTree = "<group>"; };
 		5B7AC4491C0DC38E0027BAD1 /* CaddyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CaddyView.h; path = viewController/CaddyView.h; sourceTree = "<group>"; };
 		5B7AC44A1C0DC38E0027BAD1 /* CaddyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CaddyView.m; path = viewController/CaddyView.m; sourceTree = "<group>"; };
+		5B83CF8E1C7EDB4F00E1287B /* LogFilesProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogFilesProcess.h; path = otherClass/LogFilesProcess.h; sourceTree = "<group>"; };
+		5B83CF8F1C7EDB4F00E1287B /* LogFilesProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogFilesProcess.m; path = otherClass/LogFilesProcess.m; sourceTree = "<group>"; };
+		5B83CF931C7EDF8A00E1287B /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
+		5B83CF941C7EDF8A00E1287B /* aes_via_ace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes_via_ace.h; sourceTree = "<group>"; };
+		5B83CF951C7EDF8A00E1287B /* aescrypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aescrypt.c; sourceTree = "<group>"; };
+		5B83CF961C7EDF8A00E1287B /* aeskey.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aeskey.c; sourceTree = "<group>"; };
+		5B83CF971C7EDF8A00E1287B /* aesopt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aesopt.h; sourceTree = "<group>"; };
+		5B83CF981C7EDF8A00E1287B /* aestab.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aestab.c; sourceTree = "<group>"; };
+		5B83CF991C7EDF8A00E1287B /* aestab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aestab.h; sourceTree = "<group>"; };
+		5B83CF9A1C7EDF8A00E1287B /* brg_endian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brg_endian.h; sourceTree = "<group>"; };
+		5B83CF9B1C7EDF8A00E1287B /* brg_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brg_types.h; sourceTree = "<group>"; };
+		5B83CF9C1C7EDF8A00E1287B /* entropy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = entropy.c; sourceTree = "<group>"; };
+		5B83CF9D1C7EDF8A00E1287B /* entropy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = entropy.h; sourceTree = "<group>"; };
+		5B83CF9E1C7EDF8A00E1287B /* fileenc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fileenc.c; sourceTree = "<group>"; };
+		5B83CF9F1C7EDF8A00E1287B /* fileenc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fileenc.h; sourceTree = "<group>"; };
+		5B83CFA01C7EDF8A00E1287B /* hmac.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hmac.c; sourceTree = "<group>"; };
+		5B83CFA11C7EDF8A00E1287B /* hmac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hmac.h; sourceTree = "<group>"; };
+		5B83CFA21C7EDF8A00E1287B /* prng.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = prng.c; sourceTree = "<group>"; };
+		5B83CFA31C7EDF8A00E1287B /* prng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = prng.h; sourceTree = "<group>"; };
+		5B83CFA41C7EDF8A00E1287B /* pwd2key.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pwd2key.c; sourceTree = "<group>"; };
+		5B83CFA51C7EDF8A00E1287B /* pwd2key.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pwd2key.h; sourceTree = "<group>"; };
+		5B83CFA61C7EDF8A00E1287B /* sha1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sha1.c; sourceTree = "<group>"; };
+		5B83CFA71C7EDF8A00E1287B /* sha1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha1.h; sourceTree = "<group>"; };
+		5B83CFA81C7EDF8A00E1287B /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
+		5B83CFA91C7EDF8A00E1287B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5B83CFAB1C7EDF8A00E1287B /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
+		5B83CFAC1C7EDF8A00E1287B /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
+		5B83CFAD1C7EDF8A00E1287B /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
+		5B83CFAE1C7EDF8A00E1287B /* mztools.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mztools.c; sourceTree = "<group>"; };
+		5B83CFAF1C7EDF8A00E1287B /* mztools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mztools.h; sourceTree = "<group>"; };
+		5B83CFB01C7EDF8A00E1287B /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
+		5B83CFB11C7EDF8A00E1287B /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
+		5B83CFB21C7EDF8A00E1287B /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
+		5B83CFB31C7EDF8A00E1287B /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
+		5B83CFB41C7EDF8A00E1287B /* SSZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSZipArchive.h; sourceTree = "<group>"; };
+		5B83CFB51C7EDF8A00E1287B /* SSZipArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSZipArchive.m; sourceTree = "<group>"; };
+		5B83CFB61C7EDF8A00E1287B /* ZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipArchive.h; sourceTree = "<group>"; };
 		5B8A04241C7328340000B940 /* launcher120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launcher120.png; sourceTree = "<group>"; };
 		5B8A04251C7328340000B940 /* launcher180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launcher180.png; sourceTree = "<group>"; };
 		5B93C8071BBB938A0081FBAF /* MoreInterfaceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MoreInterfaceViewController.h; path = viewController/MoreInterfaceViewController.h; sourceTree = "<group>"; };
@@ -441,6 +496,7 @@
 			isa = PBXGroup;
 			children = (
 				5B1556091C401E4600E059B0 /* XunYing_Golf.entitlements */,
+				5B83CF8D1C7EDB1500E1287B /* logFileProcess */,
 				5BE341E21C3B671A007A3A9C /* getRequestAddr */,
 				5B60FDD41C03207800D77A44 /* protocol */,
 				5B588E141BE8917C00D2B327 /* getGPSLocation */,
@@ -497,6 +553,7 @@
 		5B11C54A1B8EDEF700382C9B /* offlineMapData */ = {
 			isa = PBXGroup;
 			children = (
+				5B5709A71C7D9F4400CBB684 /* offlineMapDataSC.bundle */,
 				5B727B3D1C7A993700028EE5 /* offlineMapDataHHY.bundle */,
 				5BBD53FD1C72F4F800439910 /* offlineMapDataSK.bundle */,
 			);
@@ -644,6 +701,7 @@
 		5B52F4171B9D7B44004BA338 /* commonLibrary */ = {
 			isa = PBXGroup;
 			children = (
+				5B83CF911C7EDF8A00E1287B /* SSZipArchive */,
 				5BD90A2D1C3D03420059D82C /* DeviceIdentifierAddition */,
 				5BD6D67B1BD632D7001524DB /* AFNetworking */,
 				5BF0CE6B1BC60FF500009BED /* Menu */,
@@ -729,6 +787,73 @@
 				5B60FDD51C03212B00D77A44 /* passValueLogInDelegate.h */,
 			);
 			name = protocol;
+			sourceTree = "<group>";
+		};
+		5B83CF8D1C7EDB1500E1287B /* logFileProcess */ = {
+			isa = PBXGroup;
+			children = (
+				5B83CF8E1C7EDB4F00E1287B /* LogFilesProcess.h */,
+				5B83CF8F1C7EDB4F00E1287B /* LogFilesProcess.m */,
+			);
+			name = logFileProcess;
+			sourceTree = "<group>";
+		};
+		5B83CF911C7EDF8A00E1287B /* SSZipArchive */ = {
+			isa = PBXGroup;
+			children = (
+				5B83CF921C7EDF8A00E1287B /* aes */,
+				5B83CFA81C7EDF8A00E1287B /* Common.h */,
+				5B83CFA91C7EDF8A00E1287B /* Info.plist */,
+				5B83CFAA1C7EDF8A00E1287B /* minizip */,
+				5B83CFB41C7EDF8A00E1287B /* SSZipArchive.h */,
+				5B83CFB51C7EDF8A00E1287B /* SSZipArchive.m */,
+				5B83CFB61C7EDF8A00E1287B /* ZipArchive.h */,
+			);
+			path = SSZipArchive;
+			sourceTree = "<group>";
+		};
+		5B83CF921C7EDF8A00E1287B /* aes */ = {
+			isa = PBXGroup;
+			children = (
+				5B83CF931C7EDF8A00E1287B /* aes.h */,
+				5B83CF941C7EDF8A00E1287B /* aes_via_ace.h */,
+				5B83CF951C7EDF8A00E1287B /* aescrypt.c */,
+				5B83CF961C7EDF8A00E1287B /* aeskey.c */,
+				5B83CF971C7EDF8A00E1287B /* aesopt.h */,
+				5B83CF981C7EDF8A00E1287B /* aestab.c */,
+				5B83CF991C7EDF8A00E1287B /* aestab.h */,
+				5B83CF9A1C7EDF8A00E1287B /* brg_endian.h */,
+				5B83CF9B1C7EDF8A00E1287B /* brg_types.h */,
+				5B83CF9C1C7EDF8A00E1287B /* entropy.c */,
+				5B83CF9D1C7EDF8A00E1287B /* entropy.h */,
+				5B83CF9E1C7EDF8A00E1287B /* fileenc.c */,
+				5B83CF9F1C7EDF8A00E1287B /* fileenc.h */,
+				5B83CFA01C7EDF8A00E1287B /* hmac.c */,
+				5B83CFA11C7EDF8A00E1287B /* hmac.h */,
+				5B83CFA21C7EDF8A00E1287B /* prng.c */,
+				5B83CFA31C7EDF8A00E1287B /* prng.h */,
+				5B83CFA41C7EDF8A00E1287B /* pwd2key.c */,
+				5B83CFA51C7EDF8A00E1287B /* pwd2key.h */,
+				5B83CFA61C7EDF8A00E1287B /* sha1.c */,
+				5B83CFA71C7EDF8A00E1287B /* sha1.h */,
+			);
+			path = aes;
+			sourceTree = "<group>";
+		};
+		5B83CFAA1C7EDF8A00E1287B /* minizip */ = {
+			isa = PBXGroup;
+			children = (
+				5B83CFAB1C7EDF8A00E1287B /* crypt.h */,
+				5B83CFAC1C7EDF8A00E1287B /* ioapi.c */,
+				5B83CFAD1C7EDF8A00E1287B /* ioapi.h */,
+				5B83CFAE1C7EDF8A00E1287B /* mztools.c */,
+				5B83CFAF1C7EDF8A00E1287B /* mztools.h */,
+				5B83CFB01C7EDF8A00E1287B /* unzip.c */,
+				5B83CFB11C7EDF8A00E1287B /* unzip.h */,
+				5B83CFB21C7EDF8A00E1287B /* zip.c */,
+				5B83CFB31C7EDF8A00E1287B /* zip.h */,
+			);
+			path = minizip;
 			sourceTree = "<group>";
 		};
 		5B8A04231C73281E0000B940 /* image */ = {
@@ -1208,9 +1333,11 @@
 				5B11C5321B8EDD4700382C9B /* LaunchScreen.xib in Resources */,
 				5B3B66A71C19819600C4D557 /* beep.wav in Resources */,
 				5BEE08391C190ACC0058508C /* ArcGIS.bundle in Resources */,
+				5B83CFC01C7EDF8A00E1287B /* Info.plist in Resources */,
 				5BF0ECA31C2156DD00945877 /* messages.plist in Resources */,
 				5B8A04261C7328340000B940 /* launcher120.png in Resources */,
 				5B8A04271C7328340000B940 /* launcher180.png in Resources */,
+				5B5709A81C7D9F4400CBB684 /* offlineMapDataSC.bundle in Resources */,
 				5BBD53FE1C72F4F900439910 /* offlineMapDataSK.bundle in Resources */,
 				5B11C52F1B8EDD4700382C9B /* Images.xcassets in Resources */,
 				5BEA92711BB1077200EAC9BE /* FontAwesome.ttf in Resources */,
@@ -1234,6 +1361,7 @@
 				5BE650761C3FAEB90019EC8E /* AFSecurityPolicy.m in Sources */,
 				5BE650731C3FAEB90019EC8E /* AFHTTPRequestOperationManager.m in Sources */,
 				5BE650721C3FAEB90019EC8E /* AFHTTPRequestOperation.m in Sources */,
+				5B83CFBA1C7EDF8A00E1287B /* entropy.c in Sources */,
 				5BF321391C1FFD5C005A0DF6 /* CellFrameModel.m in Sources */,
 				5BE650941C3FAED80019EC8E /* UIWebView+AFNetworking.m in Sources */,
 				5B52F4431B9D7C08004BA338 /* NSString+FontAwesome.m in Sources */,
@@ -1248,14 +1376,19 @@
 				5B13BB541C225AA600D1B8D9 /* HaveResultTableViewCell.m in Sources */,
 				5BE6508E1C3FAED80019EC8E /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				5B52F4481B9D7C08004BA338 /* UITableViewController+UICon.m in Sources */,
+				5B83CFC31C7EDF8A00E1287B /* unzip.c in Sources */,
 				5B93C8111BBBBA010081FBAF /* MoreMainTabBarViewController.m in Sources */,
 				5BF3213C1C1FFD5C005A0DF6 /* MessageModel.m in Sources */,
 				5B11C5271B8EDD4700382C9B /* AppDelegate.m in Sources */,
 				5BC76F4F1B9FD74C004ABBAF /* ActivityIndicatorView.m in Sources */,
+				5B83CFBD1C7EDF8A00E1287B /* prng.c in Sources */,
 				5BEA92721BB1077200EAC9BE /* NSString+FontAwesome.m in Sources */,
+				5B83CFC11C7EDF8A00E1287B /* ioapi.c in Sources */,
+				5B83CFB91C7EDF8A00E1287B /* aestab.c in Sources */,
 				5B03A8571C05D24100207D59 /* BackToMainViewController.m in Sources */,
 				5BE650981C3FAEF50019EC8E /* AFNetworkTool.m in Sources */,
 				5B9ECB0E1BABF40900612474 /* CreateGroupViewController.m in Sources */,
+				5B83CFC41C7EDF8A00E1287B /* zip.c in Sources */,
 				5B03A84B1C05A13D00207D59 /* ScoreViewController.m in Sources */,
 				5B33DDEE1C2139EB00C62DF7 /* ChatViewController.m in Sources */,
 				5B3B66A51C197D4000C4D557 /* QRCodeReaderViewController.m in Sources */,
@@ -1268,24 +1401,28 @@
 				5BC6CC811C33660C006B30DC /* subCaddyOrCartView.m in Sources */,
 				5B4E33E81BAFE76C000693B3 /* WaitToPlayTableViewController.m in Sources */,
 				5BF321421C1FFEFD005A0DF6 /* UIImage+ResizeImage.m in Sources */,
+				5B83CFBB1C7EDF8A00E1287B /* fileenc.c in Sources */,
 				5B33ACF71C27F6D60073737F /* SlowBallViewController.m in Sources */,
 				5BF3213A1C1FFD5C005A0DF6 /* Friend.m in Sources */,
 				5BC136B41B93EFD500FF1CB1 /* TOUCHOverlayWindow.m in Sources */,
 				5BE6508F1C3FAED80019EC8E /* UIAlertView+AFNetworking.m in Sources */,
 				5BA96CAB1C0469F1009DD1B0 /* LeaveRestViewController.m in Sources */,
 				5BE650911C3FAED80019EC8E /* UIImageView+AFNetworking.m in Sources */,
+				5B83CFC21C7EDF8A00E1287B /* mztools.c in Sources */,
 				5B52F4161B9D7973004BA338 /* MainViewController.m in Sources */,
 				5B52F4471B9D7C08004BA338 /* UILabel+UICon.m in Sources */,
 				5BA96CA71C045B89009DD1B0 /* ChangeCartViewController.m in Sources */,
 				5BE6508D1C3FAED80019EC8E /* AFNetworkActivityIndicatorManager.m in Sources */,
 				5B93C80D1BBBB39A0081FBAF /* BackMainInterfaceViewController.m in Sources */,
 				5B13BB5D1C22687000D1B8D9 /* CellViewNode.m in Sources */,
+				5B83CFB81C7EDF8A00E1287B /* aeskey.c in Sources */,
 				5BF0738A1C2BCE010063747A /* TaskCenterTableViewCell.m in Sources */,
 				5BEC66E61BC7506F001C70FE /* CustomerGroupInfViewController.m in Sources */,
 				5B4481051BFB25B10085A2E7 /* ChangeCaddyViewController.m in Sources */,
 				5B93C8151BBBBED20081FBAF /* PersonalCenterViewController.m in Sources */,
 				5BE650751C3FAEB90019EC8E /* AFNetworkReachabilityManager.m in Sources */,
 				5B52F42E1B9D7BE3004BA338 /* PinYin.m in Sources */,
+				5B83CFBF1C7EDF8A00E1287B /* sha1.c in Sources */,
 				5B52F42B1B9D7BE3004BA338 /* ChineseString.m in Sources */,
 				5B11C5241B8EDD4700382C9B /* main.m in Sources */,
 				5BE650901C3FAED80019EC8E /* UIButton+AFNetworking.m in Sources */,
@@ -1293,9 +1430,13 @@
 				5B33DDE91C2136AE00C62DF7 /* HeadView.m in Sources */,
 				5B3A14D91BB2486B008AA668 /* PlayProcessViewController.m in Sources */,
 				5B93C8191BBBDD8B0081FBAF /* CurTaskCenterTableViewController.m in Sources */,
+				5B83CFBC1C7EDF8A00E1287B /* hmac.c in Sources */,
 				5BF3213B1C1FFD5C005A0DF6 /* FriendGroup.m in Sources */,
 				5B4B2EE91C27900D0058A713 /* TaskDetailViewController.m in Sources */,
+				5B83CF901C7EDB4F00E1287B /* LogFilesProcess.m in Sources */,
+				5B83CFC51C7EDF8A00E1287B /* SSZipArchive.m in Sources */,
 				5B588E171BE891D900D2B327 /* GetGPSLocationData.m in Sources */,
+				5B83CFBE1C7EDF8A00E1287B /* pwd2key.c in Sources */,
 				5B52F4441B9D7C08004BA338 /* UIColor+UICon.m in Sources */,
 				5B52F4421B9D7C08004BA338 /* NSDate+Con.m in Sources */,
 				5B03A8531C05CF2600207D59 /* ScoreTableViewCell.m in Sources */,
@@ -1308,6 +1449,7 @@
 				5BE650921C3FAED80019EC8E /* UIProgressView+AFNetworking.m in Sources */,
 				5BE6507A1C3FAEB90019EC8E /* AFURLSessionManager.m in Sources */,
 				5BF6DFA51C3A71800028FEB4 /* SettingViewController.m in Sources */,
+				5B83CFB71C7EDF8A00E1287B /* aescrypt.c in Sources */,
 				5BFF02771BD7399500A25D7A /* JumpHoleViewController.m in Sources */,
 				5B52F42D1B9D7BE3004BA338 /* DBCon.m in Sources */,
 				5B9ECB131BAC113600612474 /* ChooseCreateGroupViewController.m in Sources */,

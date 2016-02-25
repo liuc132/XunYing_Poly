@@ -13,6 +13,7 @@
 #import "XunYingPre.h"
 #import "GetRequestIPAddress.h"
 #import "UIColor+UICon.h"
+#include "LogFilesProcess.h"
 
 @interface CustomerGroupInfViewController ()<UIAlertViewDelegate>
 
@@ -630,6 +631,10 @@
 - (void)BackField
 {
     NSLog(@"执行回场");
+    //回场的时候，上传日志文件
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [LogFilesProcess sendTheZipLogFile];
+    });
     //调用回场接口所需要的参数是：mid:移动端AMEI码   grocod:小组code
     self.cusGroupInf = [self.cusGroupDBCon ExecDataTable:@"select *from tbl_groupInf"];
     //先判断数据是否为空，不为空则进行下一步操作

@@ -424,5 +424,22 @@
     return needMendHoleURL;
 }
 
++ (NSString *)getLogUpdateURL
+{
+    NSString *logZipURL;
+    //
+    DataTable *theStoredData;// = [[DataTable alloc] init];
+    theStoredData = [GetRequestIPAddress getStoredData];
+    if (![theStoredData.Rows count]) {
+        logZipURL = @"";
+    }//(interval text,ipAddr text,portNum text)
+    else
+    {
+        logZipURL = [NSString stringWithFormat:@"http://%@:%@%@",theStoredData.Rows[0][@"ipAddr"],theStoredData.Rows[0][@"portNum"],UpdateZipLogFileURL];
+    }
+    //
+    return logZipURL;
+}
+
 
 @end

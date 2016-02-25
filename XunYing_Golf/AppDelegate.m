@@ -23,6 +23,7 @@
 #import "LogInViewController.h"
 //#import <KSCrash/KSCrashInstallationStandard.h>
 #import "MobClick.h"
+#import "LogFilesProcess.h"
 
 
 @interface AppDelegate ()<CLLocationManagerDelegate>
@@ -133,7 +134,11 @@
         
     }
     
-    
+    UIDevice *device = [UIDevice currentDevice];
+    if (![[device model] isEqualToString:@"iPhone Simulator"]) {
+        //test
+        [LogFilesProcess redirectNSLogToDocument];
+    }
     
     return YES;
 }

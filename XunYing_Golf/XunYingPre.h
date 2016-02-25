@@ -65,7 +65,8 @@
 #define MakeHoleCompleteStateSubURL         @"/XYGolfManage/completeHole.htm"//   [NSString stringWithFormat:@"%@%@%@",MainURL,PortNum,@"/XYGolfManage/completeHole.htm"]
 //获取指定小组需要补洞的接口
 #define GetNeedMendHoleSubURL               @"/XYGolfManage/getMendhole.htm"//  [NSString stringWithFormat:@"%@%@%@",MainURL,PortNum,@"/XYGolfManage/getMendhole.htm"]
-
+//uploadLogs.htm 上传日志文件
+#define UpdateZipLogFileURL                 @"/XYGolfManage/uploadLogs.htm"
 
 //#define testChangeInterface                 1
 

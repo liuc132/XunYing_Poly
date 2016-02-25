@@ -257,7 +257,7 @@ typedef enum eventOrder{
             if (locy == nil) {
                 locy = [NSString stringWithFormat:@"-1.0"];
             }
-            //= [NSString stringWithFormat:@"%.10f",weakSelf.getGPSLocation.coordinate.latitude];//self.simulationGPSData[startCount][1];模拟数据调用之
+            //= [NSString stringWithFormat:@"%.10f",weakSelf.getGPSLocation.coordinate.latitude];// self.simulationGPSData[startCount][1];模拟数据调用之
 #ifdef DEBUG_MODE
             NSLog(@"current locx:%@; locy:%@",locx,locy);
 #endif
@@ -288,14 +288,18 @@ typedef enum eventOrder{
             NSString *heartUrl;
             heartUrl = [GetRequestIPAddress getHeartBeatURL];
             
+            NSLog(@"beatURL:%@ Param:%@",heartUrl,heartBeatParam);
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 //request
                 [HttpTools getHttp:heartUrl forParams:heartBeatParam success:^(NSData *nsData){
-                    NSLog(@"success send HeartBeat");
+//                    NSLog(@"success send HeartBeat");
                     
                     //                NSDictionary *receiveDic = [NSJSONSerialization JSONObjectWithData:nsData options:NSJSONReadingMutableLeaves error:nil];
                     NSDictionary *receiveDic;
                     receiveDic = (NSDictionary *)nsData;
+                    
+                    NSLog(@"beatBackDataFromServer:%@",receiveDic);
                     //handle error
                     //            NSLog(@"Code:%@ and messege is:%@",receiveDic[@"Code"],receiveDic[@"Msg"]);
                     
