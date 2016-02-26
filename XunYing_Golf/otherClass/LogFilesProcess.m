@@ -12,6 +12,7 @@
 #import "HttpTools.h"
 #import "GetRequestIPAddress.h"
 #import "AFNetworkTool.h"
+#import "AFURLRequestSerialization.h"
 
 @implementation LogFilesProcess
 
@@ -84,16 +85,14 @@
 {
     NSString *zipFilePath;
     NSString *logFilePath;
+    NSMutableArray *paths = [NSMutableArray array];
     
     zipFilePath = [LogFilesProcess getZipFilePath];
     logFilePath = [LogFilesProcess getLogFilePath];
     
-    NSData *logPath = [NSData dataWithContentsOfFile:logFilePath];
-    NSString *logData = [[NSString alloc] initWithData:logPath encoding:NSUTF8StringEncoding];
-    
-    
-    [SSZipArchive createZipFileAtPath:zipFilePath withContentsOfDirectory:logData];
-    
+    [paths addObject:logFilePath];
+    //创建zip文件
+    [SSZipArchive createZipFileAtPath:zipFilePath withFilesAtPaths:paths];
     
 }
 
@@ -113,12 +112,45 @@
         
         updateLogURLStr = [GetRequestIPAddress getLogUpdateURL];
         
+        NSString *updateName;
+        updateName = [NSString stringWithFormat:@"%@.zip",[LogFilesProcess getLogFileName]];
+        
+//        NSFileManager *defaultManager = [NSFileManager defaultManager];
+        id<AFMultipartFormData> formdata;
+        
+        [formdata appendPartWithFileURL:logZipURL name:@"ins" error:nil];
+//        
+        NSMutableDictionary *updateLogParam = [[NSMutableDictionary alloc] initWithObjectsAndKeys:updateName,@"insFile Name",formdata,@"ins", nil];
+        
+        [HttpTools getHttp:updateLogURLStr forParams:updateLogParam success:^(NSData *nsData) {
+            NSLog(@"success");
+            
+            
+        } failure:^(NSError *err) {
+            NSLog(@"fail");
+            
+            
+        }];
+        
+//        NSFileManager *fm = [NSFileManager defaultManager];
+//        NSArray *arr = [fm contentsOfDirectoryAtPath:zipFilePath error:nil];
+        
+        NSURL *filePath
+        
+        
+//        NSLog(@"");
+        
+//        NSURL *fileURL = [[NSBundle mainBundle] URLForResource:[NSString stringWithFormat:@"%@.zip",[LogFilesProcess getLogFileName]] withExtension:nil];
+//        
+//        NSLog(@"%@",fileURL);
+        
+        
+        
         [AFNetworkTool postUploadWithUrl:updateLogURLStr fileUrl:logZipURL success:^(id responseObject) {
-//            NSLog(@"upload logzipFile success and respond:%@",responseObject);
-//            NSDictionary *recDic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
             
-//            NSLog(@"%@",recDic);
+            NSString *result = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
             
+            NSLog(@"");
             
             
         } fail:^{
