@@ -13,6 +13,7 @@
 #import "GetRequestIPAddress.h"
 #import "AFNetworkTool.h"
 #import "AFURLRequestSerialization.h"
+#import "AFNetworking.h"
 
 @implementation LogFilesProcess
 
@@ -64,7 +65,7 @@
     
     return logFilePath;
 }
-
+///
 + (NSString *)getLogFileName
 {
     NSString *logFileName;
@@ -122,42 +123,98 @@
 //        
         NSMutableDictionary *updateLogParam = [[NSMutableDictionary alloc] initWithObjectsAndKeys:updateName,@"insFile Name",formdata,@"ins", nil];
         
-        [HttpTools getHttp:updateLogURLStr forParams:updateLogParam success:^(NSData *nsData) {
-            NSLog(@"success");
-            
-            
-        } failure:^(NSError *err) {
-            NSLog(@"fail");
-            
-            
-        }];
+//        [HttpTools getHttp:updateLogURLStr forParams:updateLogParam success:^(NSData *nsData) {
+//            NSLog(@"success");
+//            
+//            
+//        } failure:^(NSError *err) {
+//            NSLog(@"fail");
+//            
+//            
+//        }];
         
 //        NSFileManager *fm = [NSFileManager defaultManager];
 //        NSArray *arr = [fm contentsOfDirectoryAtPath:zipFilePath error:nil];
         
-        NSURL *filePath
+//        NSURL *filePath
         
         
 //        NSLog(@"");
         
 //        NSURL *fileURL = [[NSBundle mainBundle] URLForResource:[NSString stringWithFormat:@"%@.zip",[LogFilesProcess getLogFileName]] withExtension:nil];
-//        
+//
 //        NSLog(@"%@",fileURL);
+//        NSArray  *paths  =  NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
+//        NSString *docDir = [paths objectAtIndex:0];
+//        
+//        NSString *fileName = [NSString stringWithFormat:@"%@.zip",[LogFilesProcess getLogFileName]];
+//        
+//        NSString *filePath = [docDir stringByAppendingPathComponent:fileName];
+////        NSArray *array = [[NSArray alloc] initWithContentsOfFile:filePath];
+//        NSLog(@"");
+//        
+        NSURL *zipFileURL = [[NSURL alloc] initFileURLWithPath:[LogFilesProcess getZipFilePath]];
+//
+//        [AFNetworkTool postUploadWithUrl:updateLogURLStr fileUrl:zipFileURL success:^(id responseObject) {
+//            
+//            NSString *result = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+//            
+//            NSLog(@"");
+//            
+//            
+//        } fail:^{
+//            NSLog(@"upload logzipfile fail");
+//            
+//            
+//        }];
         
         
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        //获取到文件
+        NSDictionary *dic = [fileManager attributesOfFileSystemForPath:zipFilePath error:nil];
+        NSDictionary *dic2 = [fileManager attributesOfItemAtPath:zipFilePath error:nil];
+        //
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentDirectory = [paths objectAtIndex:0];
         
-        [AFNetworkTool postUploadWithUrl:updateLogURLStr fileUrl:logZipURL success:^(id responseObject) {
+        NSArray *directoryContent = [fileManager contentsOfDirectoryAtPath:documentDirectory error:nil];
+        
+        for (NSString *fileName in directoryContent) {
+            NSString *logName = [NSString stringWithFormat:@"%@.log",[LogFilesProcess getLogFileName]];
             
-            NSString *result = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+            if ([fileName isEqualToString:logName]) {
+                NSLog(@"");
+            }
+            NSLog(@"");
+        }
+        
+        
+        BOOL fileIsThere;
+        BOOL *isDirectory = [fileManager fileExistsAtPath:zipFilePath isDirectory:&fileIsThere];
+        
+        NSData *contentData = [fileManager contentsAtPath:zipFilePath];
+        
+        
+        
+        NSLog(@"");
+        
+        
+        AFURLSessionManager *uploadSessionManager = [[AFURLSessionManager alloc] init];
+        
+        NSProgress *__autoreleasing *progress;
+        
+        
+        NSURLRequest *upLoadZipRequest = [[NSURLRequest alloc] initWithURL:[[NSURL alloc] initWithString:updateLogURLStr]];
+        
+        
+        [uploadSessionManager uploadTaskWithRequest:upLoadZipRequest fromFile:zipFileURL progress:progress completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
             
             NSLog(@"");
             
-            
-        } fail:^{
-            NSLog(@"upload logzipfile fail");
-            
-            
         }];
+        
+        NSLog(@"");
+        
     });
     
 }

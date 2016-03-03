@@ -53,14 +53,12 @@
 		5B52F4481B9D7C08004BA338 /* UITableViewController+UICon.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B52F43D1B9D7C08004BA338 /* UITableViewController+UICon.m */; };
 		5B52F4491B9D7C08004BA338 /* UIView+FramePostion.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B52F43F1B9D7C08004BA338 /* UIView+FramePostion.m */; };
 		5B52F44A1B9D7C08004BA338 /* UIViewController+UICon.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B52F4411B9D7C08004BA338 /* UIViewController+UICon.m */; };
-		5B5709A81C7D9F4400CBB684 /* offlineMapDataSC.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5B5709A71C7D9F4400CBB684 /* offlineMapDataSC.bundle */; };
 		5B588E171BE891D900D2B327 /* GetGPSLocationData.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B588E161BE891D900D2B327 /* GetGPSLocationData.m */; };
 		5B5A26FF1C76AD99002A00C6 /* KSCrash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B5A26FE1C76AD99002A00C6 /* KSCrash.framework */; };
 		5B5A27011C76AE06002A00C6 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B5A27001C76AE06002A00C6 /* libc++.tbd */; };
 		5B5A27031C76AE14002A00C6 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B5A27021C76AE14002A00C6 /* libz.tbd */; };
 		5B5A27051C76AE23002A00C6 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B5A27041C76AE23002A00C6 /* SystemConfiguration.framework */; };
 		5B5A27081C76B4C4002A00C6 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B5A27061C76B4C4002A00C6 /* libMobClickLibrary.a */; };
-		5B727B3E1C7A993700028EE5 /* offlineMapDataHHY.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5B727B3D1C7A993700028EE5 /* offlineMapDataHHY.bundle */; };
 		5B7AC44B1C0DC38E0027BAD1 /* CaddyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7AC44A1C0DC38E0027BAD1 /* CaddyView.m */; };
 		5B83CF901C7EDB4F00E1287B /* LogFilesProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B83CF8F1C7EDB4F00E1287B /* LogFilesProcess.m */; };
 		5B83CFB71C7EDF8A00E1287B /* aescrypt.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B83CF951C7EDF8A00E1287B /* aescrypt.c */; };
@@ -245,7 +243,6 @@
 		5B52F4401B9D7C08004BA338 /* UIViewController+UICon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+UICon.h"; path = "UICategory/UIViewController+UICon.h"; sourceTree = "<group>"; };
 		5B52F4411B9D7C08004BA338 /* UIViewController+UICon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+UICon.m"; path = "UICategory/UIViewController+UICon.m"; sourceTree = "<group>"; };
 		5B52F7291B9D88A2004BA338 /* XunYingPre.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XunYingPre.h; sourceTree = "<group>"; };
-		5B5709A71C7D9F4400CBB684 /* offlineMapDataSC.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = offlineMapDataSC.bundle; sourceTree = "<group>"; };
 		5B588E151BE891D900D2B327 /* GetGPSLocationData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GetGPSLocationData.h; path = viewController/GetGPSLocationData.h; sourceTree = "<group>"; };
 		5B588E161BE891D900D2B327 /* GetGPSLocationData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GetGPSLocationData.m; path = viewController/GetGPSLocationData.m; sourceTree = "<group>"; };
 		5B5A26FE1C76AD99002A00C6 /* KSCrash.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = KSCrash.framework; sourceTree = "<group>"; };
@@ -255,7 +252,6 @@
 		5B5A27061C76B4C4002A00C6 /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
 		5B5A27071C76B4C4002A00C6 /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
 		5B60FDD51C03212B00D77A44 /* passValueLogInDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = passValueLogInDelegate.h; path = viewController/protocol/passValueLogInDelegate.h; sourceTree = "<group>"; };
-		5B727B3D1C7A993700028EE5 /* offlineMapDataHHY.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = offlineMapDataHHY.bundle; sourceTree = "<group>"; };
 		5B7AC4491C0DC38E0027BAD1 /* CaddyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CaddyView.h; path = viewController/CaddyView.h; sourceTree = "<group>"; };
 		5B7AC44A1C0DC38E0027BAD1 /* CaddyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CaddyView.m; path = viewController/CaddyView.m; sourceTree = "<group>"; };
 		5B83CF8E1C7EDB4F00E1287B /* LogFilesProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogFilesProcess.h; path = otherClass/LogFilesProcess.h; sourceTree = "<group>"; };
@@ -553,8 +549,6 @@
 		5B11C54A1B8EDEF700382C9B /* offlineMapData */ = {
 			isa = PBXGroup;
 			children = (
-				5B5709A71C7D9F4400CBB684 /* offlineMapDataSC.bundle */,
-				5B727B3D1C7A993700028EE5 /* offlineMapDataHHY.bundle */,
 				5BBD53FD1C72F4F800439910 /* offlineMapDataSK.bundle */,
 			);
 			name = offlineMapData;
@@ -1290,7 +1284,7 @@
 				TargetAttributes = {
 					5B11C51D1B8EDD4700382C9B = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = 97YT8J5R3S;
+						DevelopmentTeam = WE9FJ2S58F;
 						SystemCapabilities = {
 							com.apple.Keychain = {
 								enabled = 1;
@@ -1327,7 +1321,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B727B3E1C7A993700028EE5 /* offlineMapDataHHY.bundle in Resources */,
 				5B15560A1C401E4600E059B0 /* XunYing_Golf.entitlements in Resources */,
 				5B11C52D1B8EDD4700382C9B /* Main.storyboard in Resources */,
 				5B11C5321B8EDD4700382C9B /* LaunchScreen.xib in Resources */,
@@ -1337,7 +1330,6 @@
 				5BF0ECA31C2156DD00945877 /* messages.plist in Resources */,
 				5B8A04261C7328340000B940 /* launcher120.png in Resources */,
 				5B8A04271C7328340000B940 /* launcher180.png in Resources */,
-				5B5709A81C7D9F4400CBB684 /* offlineMapDataSC.bundle in Resources */,
 				5BBD53FE1C72F4F900439910 /* offlineMapDataSK.bundle in Resources */,
 				5B11C52F1B8EDD4700382C9B /* Images.xcassets in Resources */,
 				5BEA92711BB1077200EAC9BE /* FontAwesome.ttf in Resources */,
@@ -1547,7 +1539,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -1594,7 +1586,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (
 					"-objc",
@@ -1637,7 +1629,7 @@
 					"c++",
 					"-all_load",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.hongding.XunYing-Golf";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhuimeng.Xunying;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1671,7 +1663,7 @@
 					"c++",
 					"-all_load",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.hongding.XunYing-Golf";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhuimeng.Xunying;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
