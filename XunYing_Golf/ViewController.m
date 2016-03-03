@@ -443,25 +443,25 @@ FixedPoint gpsScreenPoint;
         self.startPoint = mappoint;
         
     }
-    __weak ViewController *weakSelf = self;
+//    __weak ViewController *weakSelf = self;
     //test query function  从第376行到392行是查询相应的障碍物，并测试了相应的两个障碍物之间的距离，同时如果想要查询一个定位点则通过[self.mapView.locationDisplay mappoint]获取到，在通过组装成AGSGeometry类型，再通过测距（相应的方法是：- (double)distanceFromGeometry:(AGSGeometry *)geometry1 toGeometry:(AGSGeometry *)geometry2）来得到距离结果！
     self.query.whereClause = @"QCM = '7'";
     [self.localFeatureTable queryResultsWithParameters:self.query completion:^(NSArray *results, NSError *err){
 //        NSLog(@"results:%@ and count:%lu",results,(unsigned long)[results count]);
-        static unsigned char totalCount;
-        if(totalCount < [results count])
-            totalCount++;
-        else
-            totalCount = 0;
-        AGSGDBFeature *featureLoc = results[0];
-        AGSGDBFeature *featureLoc1  = results[totalCount];
-        NSLog(@"featureLoc:%@ and totalCount:%d",featureLoc1,totalCount);
-        AGSGeometry *geometry1 = [featureLoc geometry];
-        AGSGeometry *geometry2 = [featureLoc1 geometry];
-        
-//        [self.geometryEngineLocal distanceFromGeometry:geometry1 toGeometry:geometry2];
-        NSLog(@"the distance is :%f",[weakSelf.geometryEngineLocal distanceFromGeometry:geometry1 toGeometry:geometry2]);
-        NSLog(@"finish measuring the distance");
+//        static unsigned char totalCount;
+//        if(totalCount < [results count])
+//            totalCount++;
+//        else
+//            totalCount = 0;
+//        AGSGDBFeature *featureLoc = results[0];
+//        AGSGDBFeature *featureLoc1  = results[totalCount];
+//        NSLog(@"featureLoc:%@ and totalCount:%d",featureLoc1,totalCount);
+//        AGSGeometry *geometry1 = [featureLoc geometry];
+//        AGSGeometry *geometry2 = [featureLoc1 geometry];
+//        
+////        [self.geometryEngineLocal distanceFromGeometry:geometry1 toGeometry:geometry2];
+//        NSLog(@"the distance is :%f",[weakSelf.geometryEngineLocal distanceFromGeometry:geometry1 toGeometry:geometry2]);
+//        NSLog(@"finish measuring the distance");
         
     }];
     

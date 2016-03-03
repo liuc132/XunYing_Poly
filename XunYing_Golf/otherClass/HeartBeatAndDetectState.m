@@ -45,6 +45,8 @@ typedef enum eventOrder{
 @property (strong, nonatomic) DBCon *lcDBCon;
 @property (strong, nonatomic) DataTable *groupInformation;
 @property (strong, nonatomic) DataTable *userData;
+
+@property (strong, nonatomic) DataTable *allcusTable;
 //
 @property (strong, nonatomic) CLLocation *getGPSLocation;
 @property (strong, nonatomic) GetGPSLocationData *gpsData;
@@ -71,7 +73,9 @@ typedef enum eventOrder{
     self.lcDBCon = [[DBCon alloc] init];
     self.userData = [[DataTable alloc] init];
     self.groupInformation = [[DataTable alloc] init];
-    
+    self.allcusTable = [[DataTable alloc] init];
+    //
+    self.allcusTable = [_lcDBCon ExecDataTable:@"select *from tbl_CustomersInfo"];
     
 }
 
@@ -233,11 +237,13 @@ typedef enum eventOrder{
             //经度
             //
             //3、获取到GPS数据
-            weakSelf.getGPSLocation = [weakSelf.gpsData getCurLocation];
+//            weakSelf.getGPSLocation = [weakSelf.gpsData getCurLocation];
             
-            NSString *locx = [NSString stringWithFormat:@"%.10f",self.getGPSLocation.coordinate.longitude];//self.simulationGPSData[startCount][0];模拟数据调用之
+            CLLocation *curGetLocation = [weakSelf.gpsData getCurLocation];
+            
+            NSString *locx = [NSString stringWithFormat:@"%.10f",curGetLocation.coordinate.longitude];//[NSString stringWithFormat:@"%.10f",self.getGPSLocation.coordinate.longitude];//self.simulationGPSData[startCount][0];模拟数据调用之
             //纬度
-            NSString *locy = [NSString stringWithFormat:@"%.10f",weakSelf.getGPSLocation.coordinate.latitude];//self.simulationGPSData[startCount][1];模拟数据调用之
+            NSString *locy = [NSString stringWithFormat:@"%.10f",curGetLocation.coordinate.latitude];//[NSString stringWithFormat:@"%.10f",weakSelf.getGPSLocation.coordinate.latitude];//self.simulationGPSData[startCount][1];模拟数据调用之
 #ifdef DEBUG_MODE
             NSLog(@"current locx:%@; locy:%@",locx,locy);
 #endif
@@ -259,11 +265,17 @@ typedef enum eventOrder{
             {
                 timestampsStr = @"";
             }
+            //
+            NSString *courseFieldStr;
+            courseFieldStr = [NSString stringWithFormat:@"%@",self.allcusTable.Rows[0][@"courseTag"]];
+            if ([courseFieldStr isEqualToString:@""]) {
+                courseFieldStr = @"north";
+            }
             //使用模拟数据时，则在此组建地图界面的当前位置点
             //start send and handle all what the server sends back
             //巡场和球童这两个角色所传的参数不一样：主要是 组“grocod”不一致，球童需要传该参数，而巡场则不传该参数或者传空
             //construct the parameters for the heartBeat
-            NSMutableDictionary *heartBeatParam = [[NSMutableDictionary alloc] initWithObjectsAndKeys:theMid,@"mid",self.userData.Rows[0][@"job"],@"job",[NSDate date],@"loct",locx,@"locx",locy,@"locy",weakSelf.groupInformation.Rows[0][@"grocod"],@"grocod",@"1",@"gpsType",weakSelf.userData.Rows[0][@"code"],@"bandcode",curDateTime,@"loct",timestampsStr,@"timestamps", nil];
+            NSMutableDictionary *heartBeatParam = [[NSMutableDictionary alloc] initWithObjectsAndKeys:theMid,@"mid",self.userData.Rows[0][@"job"],@"job",locx,@"locx",locy,@"locy",weakSelf.groupInformation.Rows[0][@"grocod"],@"grocod",@"1",@"gpsType",weakSelf.userData.Rows[0][@"empCode"],@"bandcode",curDateTime,@"loct",timestampsStr,@"timestamps",weakSelf.userData.Rows[0][@"cadCode"],@"cadcode",courseFieldStr,@"coursetag", nil];
             //获取到IP地址
             NSString *heartUrl;
             heartUrl = [GetRequestIPAddress getHeartBeatURL];

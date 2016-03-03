@@ -14,6 +14,7 @@
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) CLLocation *getGPSLocation;
+@property (strong, nonatomic) CLLocation *oldGPSLocation;
 
 
 @end
@@ -59,8 +60,15 @@
 {
     CLLocation *curLocation;
     
+    [_locationManager startUpdatingLocation];
     //在此选择是传输实际的GPS数据还是模拟的数据
-    curLocation = self.getGPSLocation;
+//    curLocation = self.getGPSLocation;
+    
+    if (_oldGPSLocation != _getGPSLocation) {
+        _oldGPSLocation = _getGPSLocation;
+    }
+    
+    curLocation = _oldGPSLocation;
     
     return curLocation;
 }
@@ -68,7 +76,17 @@
 #pragma -mark  didUpdateLocations
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations
 {
-    self.getGPSLocation = [locations lastObject];
+//    self.getGPSLocation = [locations lastObject];
+    
+    CLLocation *cacheLocation = [locations lastObject];
+    NSDate *eventDate = cacheLocation.timestamp;
+    NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
+    if (fabs(howRecent) < 1.0) {
+        //if the event is recent,do something with it.
+        _getGPSLocation = cacheLocation;
+        
+        [_locationManager stopUpdatingLocation];
+    }
 }
 
 - (void)stopUpdateLocation
