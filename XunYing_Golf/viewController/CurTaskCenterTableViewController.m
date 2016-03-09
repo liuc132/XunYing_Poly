@@ -295,17 +295,27 @@
 
 
 - (IBAction)selectTask:(UIBarButtonItem *)sender {
-    //construct Array
-    NSArray *menuItems =
-    @[[KxMenuItem menuItem:@"换球童" image:[UIImage imageNamed:@"changeCaddy.png"] target:self action:@selector(changeCaddy)],
-      [KxMenuItem menuItem:@"换球车" image:[UIImage imageNamed:@"changeCart.png"] target:self action:@selector(changeCart)],
-      [KxMenuItem menuItem:@"跳洞" image:[UIImage imageNamed:@"jumpHole.png"] target:self action:@selector(JumpToHoles)],
-      [KxMenuItem menuItem:@"补洞" image:[UIImage imageNamed:@"mendHole.png"] target:self action:@selector(MendHoles)],
-      [KxMenuItem menuItem:@"离场休息" image:[UIImage imageNamed:@"leaveToRest.png"] target:self action:@selector(leaveToRest)]];
-    
-    [KxMenu showMenuInView:self.view
-                  fromRect:CGRectMake(ScreenWidth-47, self.navigationController.navigationBar.frame.size.height, 30, 30)
-                 menuItems:menuItems];
+    static BOOL dissmissTheSelectViewOrNot = NO;
+    if (!dissmissTheSelectViewOrNot) {
+        dissmissTheSelectViewOrNot = YES;
+        //construct Array
+        NSArray *menuItems =
+        @[[KxMenuItem menuItem:@"换球童" image:[UIImage imageNamed:@"changeCaddy.png"] target:self action:@selector(changeCaddy)],
+          [KxMenuItem menuItem:@"换球车" image:[UIImage imageNamed:@"changeCart.png"] target:self action:@selector(changeCart)],
+          [KxMenuItem menuItem:@"跳洞" image:[UIImage imageNamed:@"jumpHole.png"] target:self action:@selector(JumpToHoles)],
+          [KxMenuItem menuItem:@"补洞" image:[UIImage imageNamed:@"mendHole.png"] target:self action:@selector(MendHoles)],
+          [KxMenuItem menuItem:@"离场休息" image:[UIImage imageNamed:@"leaveToRest.png"] target:self action:@selector(leaveToRest)]];
+        
+        [KxMenu showMenuInView:self.view
+                      fromRect:CGRectMake(ScreenWidth-47, self.navigationController.navigationBar.frame.size.height, 30, 30)
+                     menuItems:menuItems];
+    }
+    else
+    {
+        dissmissTheSelectViewOrNot = NO;
+        //
+        [KxMenu dismissMenu];
+    }
     
     
 }

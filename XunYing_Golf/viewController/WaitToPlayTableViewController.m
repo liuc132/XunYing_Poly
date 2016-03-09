@@ -640,4 +640,13 @@
         [self performSegueWithIdentifier:@"waitDownToLogIn" sender:nil];
     });
 }
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    LogInViewController *logInVC = segue.destinationViewController;
+    if ([segue.identifier isEqualToString:@"waitDownToLogIn"]) {
+        logInVC.whetherBack = YES;
+    }
+}
+
 @end

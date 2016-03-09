@@ -232,7 +232,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         //request
         [HttpTools getHttp:logoutURLStr forParams:self.logOutDicParam success:^(NSData *nsData){
-            NSLog(@"request success");
+//            NSLog(@"request success");
 //            NSDictionary *recDic = [NSJSONSerialization JSONObjectWithData:nsData options:NSJSONReadingMutableLeaves error:nil];
             NSDictionary *recDic;
             recDic = (NSDictionary *)nsData;
@@ -278,4 +278,13 @@
     logOutAlert.tag = 1;
     [logOutAlert show];
 }
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    LogInViewController *logInVC = segue.destinationViewController;
+    if ([segue.identifier isEqualToString:@"backToLogInterface"]) {
+        logInVC.whetherBack = YES;
+    }
+}
+
 @end

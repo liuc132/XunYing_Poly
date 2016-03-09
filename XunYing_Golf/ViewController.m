@@ -409,6 +409,8 @@ FixedPoint gpsScreenPoint;
 //
 -(BOOL)mapView:(AGSMapView *)mapView shouldProcessClickAtPoint:(CGPoint)screen mapPoint:(AGSPoint *)mappoint
 {
+    _chooseHoleView.hidden = YES;
+    //
     [self.graphicLayer removeAllGraphics];
 //    AGSSimpleMarkerSymbol *markSymbol = [[AGSSimpleMarkerSymbol alloc] initWithColor:[UIColor redColor]];
     //
@@ -602,6 +604,7 @@ FixedPoint gpsScreenPoint;
         case 1: //选择球洞
             //此处加载选择球洞的视图
             [self.chooseHoleView setFrame:CGRectMake(10, self.navView.frame.size.height+80, ScreenWidth-20, self.chooseHoleView.frame.size.height)];
+            _chooseHoleView.hidden = NO;
             [self.view addSubview:self.chooseHoleView];
             
             break;
@@ -685,6 +688,8 @@ FixedPoint gpsScreenPoint;
             AGSSimpleFillSymbol *fillSymbolView = [[AGSSimpleFillSymbol alloc] initWithColor:[[UIColor whiteColor] colorWithAlphaComponent:0.15] outlineColor:[UIColor blueColor]];
             AGSGraphic *holeGraphic = [[AGSGraphic alloc] initWithGeometry:curDic[@"Shape"] symbol:fillSymbolView attributes:nil];
             [weakSelf.graphicLayer addGraphic:holeGraphic];
+            //
+            [weakSelf.mapView zoomToGeometry:curDic[@"Shape"] withPadding:120 animated:YES];
             
         }];
         

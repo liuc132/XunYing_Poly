@@ -149,7 +149,7 @@ typedef enum holeState{
         
     });
     //添加通知：当请求成功之后，进行页面数据的刷新
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hadRefreshSuccess:) name:@"refreshSuccess" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hadRefreshSuccess:) name:@"refreshSuccess" object:self];
     //
     self.holePositionArray = [[NSArray alloc] initWithObjects:@"发球台",@"球道",@"果岭", nil];
     self.holeStateArray    = [[NSArray alloc] initWithObjects:@"正常",@"被完成",@"被跳过",@"被挂起",@"非法跳过",@"补打",@"补打完成",@"被补打",@"被预定", nil];
@@ -567,7 +567,7 @@ wasOrderedState
                         }
                     }
                     //通知数据已经更新了
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshSuccess" object:nil userInfo:@{@"hasRefreshed":@"1"}];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshSuccess" object:self userInfo:@{@"hasRefreshed":@"1"}];
                     
                 });
             }
