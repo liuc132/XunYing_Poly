@@ -135,6 +135,7 @@
     }
     
     UIDevice *device = [UIDevice currentDevice];
+    
     if (![[device model] isEqualToString:@"iPhone Simulator"]) {
         //test
         [LogFilesProcess redirectNSLogToDocument];

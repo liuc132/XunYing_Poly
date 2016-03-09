@@ -22,7 +22,7 @@
 @property (strong, nonatomic) DBCon *_dbCon;
 @property (strong, nonatomic) DataTable *userInf;
 @property (strong, nonatomic) DataTable *logCaddy;
-@property (strong, nonatomic) NSMutableDictionary *logOutDicParam;
+//@property (strong, nonatomic) NSMutableDictionary *logOutDicParam;
 @property (strong, nonatomic) UIActivityIndicatorView   *stateIndicator;
 
 - (IBAction)logOutHandle:(UIBarButtonItem *)sender;
@@ -214,7 +214,7 @@
     theMid = [GetRequestIPAddress getUniqueID];
     theMid = [NSString stringWithFormat:@"I_IMEI_%@",theMid];
     //
-    self.logOutDicParam = [[NSMutableDictionary alloc]initWithObjectsAndKeys:theMid,@"mid",self.logCaddy.Rows[0][@"user"],@"username",self.logCaddy.Rows[0][@"password"],@"pwd",@"0",@"panmull", nil];
+    NSMutableDictionary *logOutDicParam = [[NSMutableDictionary alloc]initWithObjectsAndKeys:theMid,@"mid",self.logCaddy.Rows[0][@"user"],@"username",self.logCaddy.Rows[0][@"password"],@"pwd",@"0",@"panmull", nil];
     //
     NSString *logoutURLStr;
     logoutURLStr = [GetRequestIPAddress getLogOutURL];
@@ -231,9 +231,8 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         //request
-        [HttpTools getHttp:logoutURLStr forParams:self.logOutDicParam success:^(NSData *nsData){
-            NSLog(@"request success");
-//            NSDictionary *recDic = [NSJSONSerialization JSONObjectWithData:nsData options:NSJSONReadingMutableLeaves error:nil];
+        [HttpTools getHttp:logoutURLStr forParams:logOutDicParam success:^(NSData *nsData){
+//            NSLog(@"request success");
             NSDictionary *recDic;
             recDic = (NSDictionary *)nsData;
             
@@ -278,4 +277,16 @@
     logOutAlert.tag = 1;
     [logOutAlert show];
 }
+
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    //
+    LogInViewController *logInVC = segue.destinationViewController;
+    if ([segue.identifier isEqualToString:@"backToLogInterface"]) {
+        logInVC.whetherBack = YES;
+    }
+    
+}
+
 @end

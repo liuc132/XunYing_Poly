@@ -88,7 +88,6 @@
 		5B9ECB131BAC113600612474 /* ChooseCreateGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B9ECB121BAC113600612474 /* ChooseCreateGroupViewController.m */; };
 		5BA96CA71C045B89009DD1B0 /* ChangeCartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA96CA61C045B89009DD1B0 /* ChangeCartViewController.m */; };
 		5BA96CAB1C0469F1009DD1B0 /* LeaveRestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA96CAA1C0469F1009DD1B0 /* LeaveRestViewController.m */; };
-		5BBD53FE1C72F4F900439910 /* offlineMapDataSK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5BBD53FD1C72F4F800439910 /* offlineMapDataSK.bundle */; };
 		5BC136B31B93EFD500FF1CB1 /* TOUCHkitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BC136B01B93EFD500FF1CB1 /* TOUCHkitView.m */; };
 		5BC136B41B93EFD500FF1CB1 /* TOUCHOverlayWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BC136B21B93EFD500FF1CB1 /* TOUCHOverlayWindow.m */; };
 		5BC6CC811C33660C006B30DC /* subCaddyOrCartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BC6CC801C33660C006B30DC /* subCaddyOrCartView.m */; };
@@ -135,6 +134,7 @@
 		5BF3213C1C1FFD5C005A0DF6 /* MessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BF321381C1FFD5C005A0DF6 /* MessageModel.m */; };
 		5BF321421C1FFEFD005A0DF6 /* UIImage+ResizeImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BF3213F1C1FFEFD005A0DF6 /* UIImage+ResizeImage.m */; };
 		5BF321431C1FFEFD005A0DF6 /* NSString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BF321411C1FFEFD005A0DF6 /* NSString+Extension.m */; };
+		5BF4ECD31C8E79E500F2CEDA /* offlineMapDataSK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5BF4ECD21C8E79E500F2CEDA /* offlineMapDataSK.bundle */; };
 		5BF6DFA51C3A71800028FEB4 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BF6DFA41C3A71800028FEB4 /* SettingViewController.m */; };
 		5BFF02771BD7399500A25D7A /* JumpHoleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BFF02761BD7399500A25D7A /* JumpHoleViewController.m */; };
 		5BFF027D1BD75F8400A25D7A /* MendHoleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BFF027C1BD75F8400A25D7A /* MendHoleViewController.m */; };
@@ -312,7 +312,6 @@
 		5BA96CA61C045B89009DD1B0 /* ChangeCartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChangeCartViewController.m; path = viewController/ChangeCartViewController.m; sourceTree = "<group>"; };
 		5BA96CA91C0469F1009DD1B0 /* LeaveRestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LeaveRestViewController.h; path = viewController/LeaveRestViewController.h; sourceTree = "<group>"; };
 		5BA96CAA1C0469F1009DD1B0 /* LeaveRestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LeaveRestViewController.m; path = viewController/LeaveRestViewController.m; sourceTree = "<group>"; };
-		5BBD53FD1C72F4F800439910 /* offlineMapDataSK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = offlineMapDataSK.bundle; sourceTree = "<group>"; };
 		5BC136AF1B93EFD500FF1CB1 /* TOUCHkitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOUCHkitView.h; sourceTree = "<group>"; };
 		5BC136B01B93EFD500FF1CB1 /* TOUCHkitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TOUCHkitView.m; sourceTree = "<group>"; };
 		5BC136B11B93EFD500FF1CB1 /* TOUCHOverlayWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOUCHOverlayWindow.h; sourceTree = "<group>"; };
@@ -402,6 +401,7 @@
 		5BF3213F1C1FFEFD005A0DF6 /* UIImage+ResizeImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ResizeImage.m"; sourceTree = "<group>"; };
 		5BF321401C1FFEFD005A0DF6 /* NSString+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Extension.h"; sourceTree = "<group>"; };
 		5BF321411C1FFEFD005A0DF6 /* NSString+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Extension.m"; sourceTree = "<group>"; };
+		5BF4ECD21C8E79E500F2CEDA /* offlineMapDataSK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = offlineMapDataSK.bundle; sourceTree = "<group>"; };
 		5BF6DFA31C3A71800028FEB4 /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingViewController.h; path = viewController/SettingViewController.h; sourceTree = "<group>"; };
 		5BF6DFA41C3A71800028FEB4 /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingViewController.m; path = viewController/SettingViewController.m; sourceTree = "<group>"; };
 		5BFF02751BD7399500A25D7A /* JumpHoleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JumpHoleViewController.h; sourceTree = "<group>"; };
@@ -549,7 +549,7 @@
 		5B11C54A1B8EDEF700382C9B /* offlineMapData */ = {
 			isa = PBXGroup;
 			children = (
-				5BBD53FD1C72F4F800439910 /* offlineMapDataSK.bundle */,
+				5BF4ECD21C8E79E500F2CEDA /* offlineMapDataSK.bundle */,
 			);
 			name = offlineMapData;
 			sourceTree = "<group>";
@@ -1321,6 +1321,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5BF4ECD31C8E79E500F2CEDA /* offlineMapDataSK.bundle in Resources */,
 				5B15560A1C401E4600E059B0 /* XunYing_Golf.entitlements in Resources */,
 				5B11C52D1B8EDD4700382C9B /* Main.storyboard in Resources */,
 				5B11C5321B8EDD4700382C9B /* LaunchScreen.xib in Resources */,
@@ -1330,7 +1331,6 @@
 				5BF0ECA31C2156DD00945877 /* messages.plist in Resources */,
 				5B8A04261C7328340000B940 /* launcher120.png in Resources */,
 				5B8A04271C7328340000B940 /* launcher180.png in Resources */,
-				5BBD53FE1C72F4F900439910 /* offlineMapDataSK.bundle in Resources */,
 				5B11C52F1B8EDD4700382C9B /* Images.xcassets in Resources */,
 				5BEA92711BB1077200EAC9BE /* FontAwesome.ttf in Resources */,
 			);
