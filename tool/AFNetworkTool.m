@@ -142,18 +142,9 @@
     //@"http://localhost/demo/upload.php"
     [manager POST:urlStr parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         
-//        NSURL *fileURL = [[NSBundle mainBundle] URLForResource:@"头像1.png" withExtension:nil];
-        
-        // 要上传保存在服务器中的名称
-        // 使用时间来作为文件名 2014-04-30 14:20:57.png
-        // 让不同的用户信息,保存在不同目录中
-//        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-//        // 设置日期格式
-//        formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
-//        NSString *fileName = [formatter stringFromDate:[NSDate date]];
-        
         //@"image/png"
         [formData appendPartWithFileURL:fileURL name:@"uploadFile" fileName:fileName mimeType:fileTye error:NULL];
+        
         
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (success) {

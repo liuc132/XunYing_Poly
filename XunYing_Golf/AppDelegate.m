@@ -284,11 +284,22 @@
             
             [[NSNotificationCenter defaultCenter] postNotificationName:@"canEnterCreatGrp" object:nil userInfo:requestBackParam];
         }
-        else if ([recDic[@"Code"] integerValue] == -2){
+        else if ([recDic[@"Code"] integerValue] == -4){
+            NSString *errStr;
+            errStr = recDic[@"Msg"];
+            UIAlertView *errAlertV = [[UIAlertView alloc] initWithTitle:errStr message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+            [errAlertV show];
+            //
             
         }
-        else if ([recDic[@"Code"] integerValue] == -4){
-            
+        else if ([recDic[@"Code"] integerValue] == -1){
+            NSString *errStr;
+            errStr = recDic[@"Msg"];
+            UIAlertView *errAlertV = [[UIAlertView alloc] initWithTitle:errStr message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+            [errAlertV show];
+            //requestServerFail
+            NSDictionary *requestBackParam = [[NSDictionary alloc] initWithObjectsAndKeys:@"1",@"requestServerFail", nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"canEnterCreatGrp" object:nil userInfo:requestBackParam];
         }
         else//否则提示错误信息
         {
@@ -296,6 +307,7 @@
             errStr = recDic[@"Msg"];
             UIAlertView *errAlertV = [[UIAlertView alloc] initWithTitle:errStr message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
             [errAlertV show];
+            //
             
         }
         
