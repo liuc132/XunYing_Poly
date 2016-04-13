@@ -138,7 +138,7 @@
     
     if (![[device model] isEqualToString:@"iPhone Simulator"]) {
         //test
-        [LogFilesProcess redirectNSLogToDocument];
+//        [LogFilesProcess redirectNSLogToDocument];
     }
     
     return YES;

@@ -288,7 +288,7 @@ typedef enum eventOrder{
             NSString *heartUrl;
             heartUrl = [GetRequestIPAddress getHeartBeatURL];
             
-            NSLog(@"beatURL:%@ Param:%@",heartUrl,heartBeatParam);
+//            NSLog(@"beatURL:%@ Param:%@",heartUrl,heartBeatParam);
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 //request
@@ -299,7 +299,7 @@ typedef enum eventOrder{
                     NSDictionary *receiveDic;
                     receiveDic = (NSDictionary *)nsData;
                     
-                    NSLog(@"beatBackDataFromServer:%@",receiveDic);
+//                    NSLog(@"beatBackDataFromServer:%@",receiveDic);
                     //handle error
                     //            NSLog(@"Code:%@ and messege is:%@",receiveDic[@"Code"],receiveDic[@"Msg"]);
                     

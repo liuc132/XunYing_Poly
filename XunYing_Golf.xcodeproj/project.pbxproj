@@ -90,6 +90,7 @@
 		5BA96CAB1C0469F1009DD1B0 /* LeaveRestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA96CAA1C0469F1009DD1B0 /* LeaveRestViewController.m */; };
 		5BC136B31B93EFD500FF1CB1 /* TOUCHkitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BC136B01B93EFD500FF1CB1 /* TOUCHkitView.m */; };
 		5BC136B41B93EFD500FF1CB1 /* TOUCHOverlayWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BC136B21B93EFD500FF1CB1 /* TOUCHOverlayWindow.m */; };
+		5BC57AED1CB3703E00580571 /* MyAGSMarkerSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BC57AEC1CB3703E00580571 /* MyAGSMarkerSymbol.m */; };
 		5BC6CC811C33660C006B30DC /* subCaddyOrCartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BC6CC801C33660C006B30DC /* subCaddyOrCartView.m */; };
 		5BC76F4F1B9FD74C004ABBAF /* ActivityIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BC76F4E1B9FD74C004ABBAF /* ActivityIndicatorView.m */; };
 		5BC7C5221BA1587A00D9072D /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BC7C5211BA1587A00D9072D /* CoreTelephony.framework */; };
@@ -316,6 +317,8 @@
 		5BC136B01B93EFD500FF1CB1 /* TOUCHkitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TOUCHkitView.m; sourceTree = "<group>"; };
 		5BC136B11B93EFD500FF1CB1 /* TOUCHOverlayWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TOUCHOverlayWindow.h; sourceTree = "<group>"; };
 		5BC136B21B93EFD500FF1CB1 /* TOUCHOverlayWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TOUCHOverlayWindow.m; sourceTree = "<group>"; };
+		5BC57AEB1CB3703E00580571 /* MyAGSMarkerSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyAGSMarkerSymbol.h; path = viewController/MyAGSMarkerSymbol.h; sourceTree = "<group>"; };
+		5BC57AEC1CB3703E00580571 /* MyAGSMarkerSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyAGSMarkerSymbol.m; path = viewController/MyAGSMarkerSymbol.m; sourceTree = "<group>"; };
 		5BC6CC7F1C33660C006B30DC /* subCaddyOrCartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = subCaddyOrCartView.h; path = viewController/subCaddyOrCartView.h; sourceTree = "<group>"; };
 		5BC6CC801C33660C006B30DC /* subCaddyOrCartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = subCaddyOrCartView.m; path = viewController/subCaddyOrCartView.m; sourceTree = "<group>"; };
 		5BC76F4D1B9FD74C004ABBAF /* ActivityIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ActivityIndicatorView.h; path = viewController/ActivityIndicatorView/ActivityIndicatorView.h; sourceTree = "<group>"; };
@@ -686,6 +689,7 @@
 		5B52F4121B9D75EF004BA338 /* golfMap */ = {
 			isa = PBXGroup;
 			children = (
+				5BC57AEA1CB36FD500580571 /* markSymbolCategory */,
 				5B11C5281B8EDD4700382C9B /* ViewController.h */,
 				5B11C5291B8EDD4700382C9B /* ViewController.m */,
 			);
@@ -983,6 +987,15 @@
 				5B03A8481C05A11C00207D59 /* ScoreView */,
 			);
 			name = personalScore;
+			sourceTree = "<group>";
+		};
+		5BC57AEA1CB36FD500580571 /* markSymbolCategory */ = {
+			isa = PBXGroup;
+			children = (
+				5BC57AEB1CB3703E00580571 /* MyAGSMarkerSymbol.h */,
+				5BC57AEC1CB3703E00580571 /* MyAGSMarkerSymbol.m */,
+			);
+			name = markSymbolCategory;
 			sourceTree = "<group>";
 		};
 		5BC6CC7E1C3365CE006B30DC /* subView */ = {
@@ -1430,6 +1443,7 @@
 				5B588E171BE891D900D2B327 /* GetGPSLocationData.m in Sources */,
 				5B83CFBE1C7EDF8A00E1287B /* pwd2key.c in Sources */,
 				5B52F4441B9D7C08004BA338 /* UIColor+UICon.m in Sources */,
+				5BC57AED1CB3703E00580571 /* MyAGSMarkerSymbol.m in Sources */,
 				5B52F4421B9D7C08004BA338 /* NSDate+Con.m in Sources */,
 				5B03A8531C05CF2600207D59 /* ScoreTableViewCell.m in Sources */,
 				5BD90A331C3D036A0059D82C /* NSString+MD5Addition.m in Sources */,

@@ -24,7 +24,7 @@ typedef struct GPSInf{
 
 GPSPoint currentGPS;
 
-@interface ViewController ()<AGSQueryTaskDelegate,AGSLayerDelegate,AGSCalloutDelegate,UIActionSheetDelegate>
+@interface ViewController ()<AGSQueryTaskDelegate,AGSLayerDelegate,AGSCalloutDelegate,UIActionSheetDelegate,AGSLayerCalloutDelegate>
 
 
 - (IBAction)switchMapFunction:(UISegmentedControl *)sender;
@@ -50,6 +50,10 @@ GPSPoint currentGPS;
 
 @property(strong, nonatomic) AGSMutablePolyline     *route;
 
+@property(strong, nonatomic) AGSGraphic             *mapGraphic;
+
+@property(strong, nonatomic) AGSSketchGraphicsLayer *sketchLayer;
+
 //location
 //@property(strong, nonatomic) CLLocationManager *locationManager;
 
@@ -66,6 +70,16 @@ GPSPoint currentGPS;
 @property (strong, nonatomic) DBCon             *mapDbCon;
 @property (strong, nonatomic) DataTable         *groInfo;
 @property (strong, nonatomic) NSString          *curCourseTag;
+
+
+@property (strong, nonatomic) AGSMutablePolyline *mutablePolyLine;
+
+@property (strong, nonatomic) NSMutableArray     *tapPointArray;
+@property (strong, nonatomic) NSMutableArray     *midPointArray;
+
+
+@property (assign, nonatomic) BOOL               autoCalculateDistanceEnable;
+
 
 - (IBAction)whichButton:(UIButton *)sender;
 
@@ -137,12 +151,16 @@ FixedPoint gpsScreenPoint;
     
     [self switchToCurCourse];
     
-
+    
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ForceBackField:) name:@"forceBackField" object:nil];
     //添加通知，接受心跳里边的相应的参数，进而来确定是否切换球场whetherCanSwitchCourse
     //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getWhetherSwitchCourse:) name:@"whetherCanSwitchCourse" object:nil];
     //
-    
+    self.tapPointArray = [[NSMutableArray alloc] init];
+    self.midPointArray = [[NSMutableArray alloc] init];
+    //
+    self.autoCalculateDistanceEnable = YES;
 }
 
 - (void)ForceBackField:(NSNotification *)sender
@@ -217,9 +235,32 @@ FixedPoint gpsScreenPoint;
     //set the layer delegate to self to check when the layers are loaded. Required to start the gps.
     _mapView.layerDelegate = self;
     
+    _mapView.touchDelegate = self;
+    
     //preparing the gps sketch layer.
     self.gpsSketchLayer = [[AGSSketchGraphicsLayer alloc] initWithGeometry:nil];
     [_mapView addMapLayer:self.gpsSketchLayer withName:@"Sketch layer"];
+    
+    self.sketchLayer = [[AGSSketchGraphicsLayer alloc] initWithGeometry:nil];
+    [_mapView addMapLayer:self.sketchLayer withName:@"Sketch layer Distance"];
+    
+    //add graphicLayer
+    self.graphicLayer = [AGSGraphicsLayer graphicsLayer];
+    [_mapView addMapLayer:self.graphicLayer withName:@"graphic Layer"];
+    
+//    self.mutablePolyLine = [[AGSMutablePolyline alloc] initWithSpatialReference:_mapView.spatialReference];
+//    
+//    [self.mutablePolyLine addPathToPolyline];
+    
+    self.mapView.showMagnifierOnTapAndHold = YES;
+    
+    //we remove the previos part from the sketch layer as we are going to start a new GPS path.
+//    [self.gpsSketchLayer removePartAtIndex:0];
+    
+    //add a new path to the geometry in preparation of adding vertices to the path
+//    [self.gpsSketchLayer addPart];
+    
+//    self.gpsSketchLayer.calloutDelegate = self;
     
 }
 
@@ -284,16 +325,14 @@ FixedPoint gpsScreenPoint;
         
         [_mapView addMapLayer:self.localFeatureTableLayer withName:@"Xunying Fearue Layer"];
     }
-    //add graphicLayer
-    self.graphicLayer = [AGSGraphicsLayer graphicsLayer];
-    [_mapView addMapLayer:self.graphicLayer withName:@"graphic Layer"];
+    
     
     self.queryTask = [[AGSQueryTask alloc] init];
     self.queryTask.delegate = self;
     
 //    self.confirmGetGPS = YES;
     //
-    _mapView.touchDelegate = self;
+//    _mapView.touchDelegate = self;
 }
 
 - (void)loadingSouthCourse
@@ -361,9 +400,8 @@ FixedPoint gpsScreenPoint;
     
 //    self.confirmGetGPS = YES;
     //
-    _mapView.touchDelegate = self;
+//    _mapView.touchDelegate = self;
 }
-
 
 //
 -(BOOL)callout:(AGSCallout *)callout willShowForFeature:(id<AGSFeature>)feature layer:(AGSLayer<AGSHitTestable> *)layer mapPoint:(AGSPoint *)mapPoint
@@ -381,10 +419,11 @@ FixedPoint gpsScreenPoint;
         //give related data
         _mapView.callout.title = [NSString stringWithFormat:@"%@%@%@",featureAttr[@"QCM"],@"号",featureAttr[@"leixing"]];
         
-        _mapView.callout.accessoryButtonHidden = YES;
+        _mapView.callout.accessoryButtonHidden = YES;   
         
         return YES;
     }
+    
     return NO;
 }
 //
@@ -406,70 +445,189 @@ FixedPoint gpsScreenPoint;
         }
     }
 }
+
+- (void)mapView:(AGSMapView *)mapView didClickAtPoint:(CGPoint)screen mapPoint:(AGSPoint *)mappoint features:(NSDictionary *)features
+{
+//    __weak typeof(self) weakSelf = self;
+    if (_autoCalculateDistanceEnable) {
+        
+        [_graphicLayer removeAllGraphics];
+        
+        for (id theLayer in self.mapView.mapLayers) {
+            if ([theLayer isKindOfClass:[AGSSketchGraphicsLayer class]]) {
+                [theLayer removeSelectedPart];
+            }
+            //
+            if ([theLayer isKindOfClass:[AGSGraphicsLayer class]]) {
+                [theLayer removeAllGraphics];
+            }
+            
+        }
+        
+        //
+        
+        id<AGSFeature> theFeature;
+        NSArray *theArray = (NSArray *)features[@"Hole Feature Layer"];
+        theFeature = theArray[0];
+        
+        NSDictionary *theFeatureDic;// = [theFeature allAttributes];
+        
+        theFeatureDic = [theFeature allAttributes];
+        
+        __block NSString *querySQL;
+        querySQL = [NSString stringWithFormat:@"QCM = '%ld' and leixing Not In ('发球台','果岭环','球道')",[theFeatureDic[@"QCM"] integerValue]];
+        //
+        self.query = [AGSQuery query];
+        self.query.whereClause = querySQL;
+        
+        [self.localFeatureTable queryResultsWithParameters:self.query completion:^(NSArray *results, NSError *error) {
+            
+            NSLog(@"results:%@",results);
+            for (AGSGDBFeature *curFeature in results) {
+                NSDictionary *curDic = [curFeature allAttributes];
+                
+                AGSPoint *ObstaclePoint = [[AGSPoint alloc] initWithX:[curDic[@"X"] doubleValue] y:[curDic[@"Y"] doubleValue] spatialReference:self.mapView.spatialReference];
+                //
+                AGSSketchGraphicsLayer *localSketchLayer = [[AGSSketchGraphicsLayer alloc] initWithGeometry:[[AGSMutablePolyline alloc] initWithSpatialReference:self.mapView.spatialReference]];
+                [_mapView addMapLayer:localSketchLayer withName:@"local Sketch layer"];
+                //
+                AGSGraphicsLayer *localgraphicLayer = [AGSGraphicsLayer graphicsLayer];
+                [_mapView addMapLayer:localgraphicLayer withName:@"local graphic Layer"];
+                
+                localSketchLayer.midVertexSymbol = nil;
+                //we remove the previos part from the sketch layer as we are going to start a new GPS path.
+                [localSketchLayer removePartAtIndex:0];
+                
+                //add a new path to the geometry in preparation of adding vertices to the path
+                [localSketchLayer addPart];
+                
+                [localSketchLayer insertVertex:mappoint inPart:0 atIndex:-1];
+                
+                [localSketchLayer insertVertex:ObstaclePoint inPart:0 atIndex:-1];
+                
+                AGSPoint *midPoint = [[AGSPoint alloc] initWithX:((mappoint.x + ObstaclePoint.x)/2) y:((mappoint.y + ObstaclePoint.y)/2) spatialReference:self.mapView.spatialReference];
+                
+                //
+                NSLog(@"the distance:%.0f",[_geometryEngineLocal distanceFromGeometry:curDic[@"Shape"] toGeometry:mappoint]);
+                
+                NSString *distance = [NSString stringWithFormat:@"%.0f",[_geometryEngineLocal distanceFromGeometry:curDic[@"Shape"] toGeometry:mappoint]];
+                
+                AGSCompositeSymbol *cs = [AGSCompositeSymbol compositeSymbol];
+                // create outline
+                AGSSimpleLineSymbol *sls = [AGSSimpleLineSymbol simpleLineSymbol];
+                sls.color = [UIColor greenColor];
+                sls.width = 2;
+                sls.style=AGSSimpleLineSymbolStyleSolid;
+                // create main circle
+                AGSSimpleMarkerSymbol *sms = [AGSSimpleMarkerSymbol simpleMarkerSymbol];
+                sms.color = [UIColor whiteColor];
+                sms.outline = sls;
+                
+                NSInteger strCount = [distance length];
+                
+                if (strCount <= 2) {
+                    sms.size = CGSizeMake(20, 20);
+                }
+                if (strCount == 3) {
+                    sms.size = CGSizeMake(25, 25);
+                }
+                else if(strCount >= 4)
+                    sms.size = CGSizeMake(33, 33);
+                
+                
+                sms.style=AGSSimpleMarkerSymbolStyleCircle;
+                //create text to display the distance
+                AGSTextSymbol *ts = [[AGSTextSymbol alloc] initWithText:[NSString stringWithFormat:@"%@",distance] color:[UIColor blueColor]];
+                ts.backgroundColor = [UIColor whiteColor];
+                ts.vAlignment = AGSTextSymbolVAlignmentMiddle;
+                ts.hAlignment = AGSTextSymbolHAlignmentCenter;
+                ts.fontSize	= 12;
+                //add the symbol to compositeSymbol
+                [cs addSymbol:sms];
+                [cs addSymbol:ts];
+                //create a AGSGraphic
+                AGSGraphic *theGraphic = [[AGSGraphic alloc] initWithGeometry:midPoint symbol:cs attributes:nil];
+                [localgraphicLayer addGraphic:theGraphic];
+                //
+                
+                
+            }
+        }];
+
+    }
+    else
+    {
+//        [_graphicLayer removeAllGraphics];
+        
+        [_tapPointArray addObject:mappoint];
+        //
+        
+        
+        
+        if (_tapPointArray.count >= 2) {
+            
+            NSString *distance = [NSString stringWithFormat:@"%.0f",[mappoint distanceToPoint:_tapPointArray[_tapPointArray.count - 2]]*1.09];
+            NSLog(@"distance:%f",[mappoint distanceToPoint:_tapPointArray[_tapPointArray.count - 2]]);
+            
+            AGSPoint *lastSecondPoint = (AGSPoint *)_tapPointArray[_tapPointArray.count - 2];
+            double _x = (mappoint.x + lastSecondPoint.x)/2;
+            double _y = (mappoint.y + lastSecondPoint.y)/2;
+            
+            AGSPoint *midPoint = [[AGSPoint alloc] initWithX:_x y:_y spatialReference:self.mapView.spatialReference];
+            
+            [_midPointArray addObject:midPoint];
+            
+            AGSCompositeSymbol *cs = [AGSCompositeSymbol compositeSymbol];
+            // create outline
+            AGSSimpleLineSymbol *sls = [AGSSimpleLineSymbol simpleLineSymbol];
+            sls.color = [UIColor greenColor];
+            sls.width = 2;
+            sls.style=AGSSimpleLineSymbolStyleSolid;
+            // create main circle
+            AGSSimpleMarkerSymbol *sms = [AGSSimpleMarkerSymbol simpleMarkerSymbol];
+            sms.color = [UIColor whiteColor];
+            sms.outline = sls;
+            
+            NSInteger strCount = [distance length];
+            
+            if (strCount <= 2) {
+                sms.size = CGSizeMake(20, 20);
+            }
+            if (strCount == 3) {
+                sms.size = CGSizeMake(25, 25);
+            }
+            else if(strCount >= 4)
+                sms.size = CGSizeMake(33, 33);
+            
+            
+            sms.style=AGSSimpleMarkerSymbolStyleCircle;
+            //create text to display the distance
+            AGSTextSymbol *ts = [[AGSTextSymbol alloc] initWithText:[NSString stringWithFormat:@"%@",distance] color:[UIColor blueColor]];
+            ts.backgroundColor = [UIColor whiteColor];
+            ts.vAlignment = AGSTextSymbolVAlignmentMiddle;
+            ts.hAlignment = AGSTextSymbolHAlignmentCenter;
+            ts.fontSize	= 12;
+            //add the symbol to compositeSymbol
+            [cs addSymbol:sms];
+            [cs addSymbol:ts];
+            //create a AGSGraphic
+            AGSGraphic *theGraphic = [[AGSGraphic alloc] initWithGeometry:midPoint symbol:cs attributes:nil];
+            //
+            [self.graphicLayer addGraphic:theGraphic];
+            self.sketchLayer.midVertexSymbol = nil;
+            
+        }
+        
+        [self.sketchLayer insertVertex:mappoint inPart:0 atIndex:-1];
+    }
+    
+}
+
 //
 -(BOOL)mapView:(AGSMapView *)mapView shouldProcessClickAtPoint:(CGPoint)screen mapPoint:(AGSPoint *)mappoint
 {
     //若球洞选择框在界面中，则将相应的界面给隐藏掉
     _chooseHoleView.hidden = YES;
-    //
-    [self.graphicLayer removeAllGraphics];
-//    AGSSimpleMarkerSymbol *markSymbol = [[AGSSimpleMarkerSymbol alloc] initWithColor:[UIColor redColor]];
-    //
-//    AGSSimpleLineSymbol *simpleLineSymbol = [[AGSSimpleLineSymbol alloc] initWithColor:[UIColor blueColor] width:1.0f];
-    //添加标记点
-    /*
-    AGSGraphic *myLineSymbol = [[AGSGraphic alloc] initWithGeometry:mappoint symbol:markSymbol attributes:nil];
-    AGSGraphic *myStartSymbol = [[AGSGraphic alloc] initWithGeometry:self.startPoint symbol:markSymbol attributes:nil];
-    [self.graphicLayer addGraphic:myLineSymbol];
-    [self.graphicLayer addGraphic:myStartSymbol];
-     */
-//    NSLog(@"enter showProcessClickAtPoint");
-    NSLog(@"currentLocation,altitude:%f;latitude:%f;longtitude:%f",currentGPS.altitude,currentGPS.latitude,currentGPS.longtitude);
-    
-    NSLog(@"mappoint  latitude:%f,longitude:%f",mappoint.x,mappoint.y);
-    
-    AGSPoint *gpsPoint = [[AGSPoint alloc]initWithX:currentGPS.latitude y:currentGPS.longtitude spatialReference:[AGSSpatialReference wgs84SpatialReference]];
-//    AGSPoint *gpsPoint = [[AGSPoint alloc]initWithX:mappoint.x y:mappoint.y spatialReference:[AGSSpatialReference webMercatorSpatialReference]];
-    NSLog(@"gpsPoint latitude:%f,longitude:%f",gpsPoint.x,gpsPoint.y);
-    
-    //print current location
-    NSLog(@"curLocation:%@",[_mapView.locationDisplay mapLocation]);
-    
-//    AGSGeometryEngine *geometryEngine = [AGSGeometryEngine defaultGeometryEngine];
-    //如下是手动测距的方法，不过还得继续优化，添加两点之间的连接线，同时标记起点，终点以及把几个点击点给连接起来
-    if(self.startPoint)
-    {
-        NSLog(@"distance:%f",[self.geometryEngineLocal distanceFromGeometry:self.startPoint toGeometry:mappoint]);
-        NSLog(@"startPoint:%@",self.startPoint);
-    }
-    else{
-        self.startPoint = mappoint;
-        
-    }
-//    __weak ViewController *weakSelf = self;
-    //test query function  从第376行到392行是查询相应的障碍物，并测试了相应的两个障碍物之间的距离，同时如果想要查询一个定位点则通过[self.mapView.locationDisplay mappoint]获取到，在通过组装成AGSGeometry类型，再通过测距（相应的方法是：- (double)distanceFromGeometry:(AGSGeometry *)geometry1 toGeometry:(AGSGeometry *)geometry2）来得到距离结果！
-    self.query.whereClause = @"QCM = '7'";
-    [self.localFeatureTable queryResultsWithParameters:self.query completion:^(NSArray *results, NSError *err){
-//        NSLog(@"results:%@ and count:%lu",results,(unsigned long)[results count]);
-//        static unsigned char totalCount;
-//        if(totalCount < [results count])
-//            totalCount++;
-//        else
-//            totalCount = 0;
-//        AGSGDBFeature *featureLoc = results[0];
-//        AGSGDBFeature *featureLoc1  = results[totalCount];
-//        NSLog(@"featureLoc:%@ and totalCount:%d",featureLoc1,totalCount);
-//        AGSGeometry *geometry1 = [featureLoc geometry];
-//        AGSGeometry *geometry2 = [featureLoc1 geometry];
-        
-//        [self.geometryEngineLocal distanceFromGeometry:geometry1 toGeometry:geometry2];
-//        NSLog(@"the distance is :%f",[weakSelf.geometryEngineLocal distanceFromGeometry:geometry1 toGeometry:geometry2]);
-//        NSLog(@"finish measuring the distance");
-        
-    }];
-    
-    
-    
     return YES;
 }
 
@@ -613,11 +771,25 @@ FixedPoint gpsScreenPoint;
     [_mapView.locationDisplay startDataSource];
     _mapView.locationDisplay.autoPanMode = AGSLocationDisplayAutoPanModeDefault;
     _mapView.locationDisplay.wanderExtentFactor = 0.75;
-    //setting the geometry of the gps sketch layer to polyline.
-    self.gpsSketchLayer.geometry = [[AGSMutablePolyline alloc] initWithSpatialReference:_mapView.spatialReference];
     
     //set the midvertex symbol to nil to avoid the default circle symbol appearing in between vertices
+    self.gpsSketchLayer.geometry = [[AGSMutablePolyline alloc] initWithSpatialReference:self.mapView.spatialReference];
     self.gpsSketchLayer.midVertexSymbol = nil;
+    
+    //
+    self.sketchLayer.geometry = [[AGSMutablePolyline alloc] initWithSpatialReference:self.mapView.spatialReference];
+    self.sketchLayer.midVertexSymbol = nil;
+    
+    dispatch_queue_t myQueue = dispatch_queue_create("the queue", NULL);
+    
+    dispatch_async(myQueue, ^{
+    //we remove the previos part from the sketch layer as we are going to start a new GPS path.
+    [self.sketchLayer removePartAtIndex:0];
+    
+    //add a new path to the geometry in preparation of adding vertices to the path
+    [self.sketchLayer addPart];
+    
+    });
     
 }
 #pragma -mark switchMapFunction
@@ -632,7 +804,25 @@ FixedPoint gpsScreenPoint;
     switch (index) {
         case 0: //自动测距
             [self.chooseHoleView removeFromSuperview];
+            //
+//            if (!_sketchLayer) {
+//                self.sketchLayer = [[AGSSketchGraphicsLayer alloc] initWithGeometry:[[AGSMutablePolyline alloc] initWithSpatialReference:self.mapView.spatialReference]];
+//                [_mapView addMapLayer:self.sketchLayer withName:@"My Sketch layer"];
+//            }
+            //
+            [_mapView removeMapLayerWithName:@"My Sketch layer"];
             
+            
+            //we remove the previos part from the sketch layer as we are going to start a new GPS path.
+//            [self.sketchLayer removePartAtIndex:0];
+//            
+//            //add a new path to the geometry in preparation of adding vertices to the path
+//            [self.sketchLayer addPart];
+            
+            [_midPointArray removeAllObjects];
+            [_tapPointArray removeAllObjects];
+            
+            self.autoCalculateDistanceEnable = YES;
             
             break;
             //
@@ -642,12 +832,35 @@ FixedPoint gpsScreenPoint;
             _chooseHoleView.hidden = NO;
             [self.view addSubview:self.chooseHoleView];
             
+            [_sketchLayer removeSelectedPart];
+            [_graphicLayer removeAllGraphics];
+            
+            self.autoCalculateDistanceEnable = NO;
+            
             break;
             //
         case 2: //手动测距
             [self.chooseHoleView removeFromSuperview];
+            //
+            if (!_sketchLayer) {
+                self.sketchLayer = [[AGSSketchGraphicsLayer alloc] initWithGeometry:[[AGSMutablePolyline alloc] initWithSpatialReference:self.mapView.spatialReference]];
+                [_mapView addMapLayer:self.sketchLayer withName:@"My Sketch layer"];
+                
+                
+            }
+            //
+            [_mapView removeMapLayerWithName:@"local Sketch layer"];
+            [_mapView removeMapLayerWithName:@"local graphic Layer"];
+                        //we remove the previos part from the sketch layer as we are going to start a new GPS path.
+            [self.sketchLayer removePartAtIndex:0];
             
+            //add a new path to the geometry in preparation of adding vertices to the path
+            [self.sketchLayer addPart];
             
+            [_midPointArray removeAllObjects];
+            [_tapPointArray removeAllObjects];
+            
+            self.autoCalculateDistanceEnable = NO;
             
             break;
             
